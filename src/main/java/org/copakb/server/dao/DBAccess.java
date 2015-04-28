@@ -13,6 +13,8 @@ import java.util.Properties;
 
 /**
  * Created by vincekyi on 4/16/15.
+ * NOT BEING USED
+ * HIBERNATE PROVIDES DATABASE ACCESS, SO THIS IS UNNECESSARY
  */
 public class DBAccess {
 
