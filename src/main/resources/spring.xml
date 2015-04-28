@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+       <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+             destroy-method="close">
+              <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+              <property name="url" value="@url@" />
+              <property name="username" value="@username@" />
+              <property name="password" value="@password@" />
+              <property name="maxActive" value="@maxConnections@" />
+       </bean>
+
+
+    <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                <value>org.copakb.server.dao.model.Peptide</value>
+                <value>org.copakb.server.dao.model.Spectrum</value>
+                <value>org.copakb.server.dao.model.LibraryModule</value>
+                <value>org.copakb.server.dao.model.Species</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <!--<prop key="mapping">org.copakb.server.dao.model.Spectrum</prop>-->
+                <!--<prop key="mapping">org.copakb.server.dao.model.Peptide</prop>-->
+            </props>
+        </property>
+    </bean>
+
+    <bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+
+    <bean id="peptideDAO" class="org.copakb.server.dao.PeptideDAOImpl">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+</beans>
