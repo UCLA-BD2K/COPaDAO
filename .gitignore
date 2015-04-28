@@ -1,0 +1,6 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+src/test/java/TestEnvironment.java
+.idea/libraries
+.idea/workspace.xml
+.idea/dataSources.local.xml

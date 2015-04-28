@@ -19,7 +19,7 @@ public class Peptide {
     private String peptide_sequence;
     private double molecular_weight;
     private int sequence_length;
-    private Set<Spectrum> spectra = new HashSet<Spectrum>(0);
+    private Set<Spectrum> spectra = new HashSet<>(0);
 
     public Peptide(String peptide_sequence, double mol_weight, int sequence_length) {
         this.peptide_sequence = peptide_sequence;
@@ -90,7 +90,8 @@ public class Peptide {
     public String toString(){
         String spectraList = "spectra: ";
         for(Spectrum s: spectra){
-            spectraList+="\n"+s.getPtm_sequence()+", xcorr: "+s.getXcorr()+", module: "+s.getModule().getLib_mod()+", species: "+s.getModule().getSpecies().getSpecies_name();
+            spectraList+="\n"+s.getPtm_sequence()+", xcorr: "+s.getXcorr()+", module: "+s.getModule().getLib_mod()+", species: "+s.getModule().getSpecies().getSpecies_name()+
+            ", ptm: "+s.getPtm().getPtm_type();
         }
         return "ID: "+Integer.toString(this.getPeptide_id())+"\n"+"sequence: "+this.getPeptide_sequence()+"\n"+spectraList+"\n**";
     }

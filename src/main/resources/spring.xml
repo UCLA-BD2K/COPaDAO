@@ -9,7 +9,7 @@
               <property name="url" value="@url@" />
               <property name="username" value="@username@" />
               <property name="password" value="@password@" />
-              <property name="maxActive" value="@maxConnections@" />
+              <property name="maxActive" value="4" />
        </bean>
 
 
@@ -21,6 +21,7 @@
                 <value>org.copakb.server.dao.model.Spectrum</value>
                 <value>org.copakb.server.dao.model.LibraryModule</value>
                 <value>org.copakb.server.dao.model.Species</value>
+                <value>org.copakb.server.dao.model.PTM_type</value>
             </list>
         </property>
         <property name="hibernateProperties">

@@ -11,10 +11,7 @@ import java.util.List;
 public class TestEnvironment {
 
     public static void main(String []args){
-//        System.out.println("Hello World!");
-//        System.out.println(System.getProperty("user.dir"));
-//        DBAccess db = DBAccess.getInstance();
-//        System.out.println(db.query("select count(*) from peptide"));
+
 
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 
@@ -32,10 +29,6 @@ public class TestEnvironment {
             System.out.println("Peptide "+p);
         }
 
-        Peptide p1 = peptideDAO.searchById(1);
-        //System.out.println(p1);
-        //System.out.println(peptideDAO.searchBySequence("DAVSGMGVIVHIIEK"));
-        //System.out.println(peptideDAO.searchBySpecId(1));
 
         //close resources
         context.close();
