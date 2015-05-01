@@ -30,7 +30,7 @@ public class Species {
 
     @Id
     @Column(name="species_id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     public int getSpecies_id() {
         return species_id;
     }

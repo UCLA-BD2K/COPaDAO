@@ -21,11 +21,11 @@ public class Spectrum {
     private double fdr;
     private double precursor_mz;
     private double th_precursor_mz;
-    private int ptm_type;
+    private PTM_type ptm;
     private String rawfile_id;
     private Peptide peptide;
 
-    public Spectrum(String ptm_sequence, int charge_state, LibraryModule module, double xcorr, double delta_cn, double zscore, double fdr, double precursor_mz, double th_precursor_mz, int ptm_type, String rawfile_id, Peptide peptide) {
+    public Spectrum(String ptm_sequence, int charge_state, LibraryModule module, double xcorr, double delta_cn, double zscore, double fdr, double precursor_mz, double th_precursor_mz, PTM_type ptm, String rawfile_id, Peptide peptide) {
         this.ptm_sequence = ptm_sequence;
         this.charge_state = charge_state;
         this.module = module;
@@ -35,7 +35,7 @@ public class Spectrum {
         this.fdr = fdr;
         this.precursor_mz = precursor_mz;
         this.th_precursor_mz = th_precursor_mz;
-        this.ptm_type = ptm_type;
+        this.ptm = ptm;
         this.rawfile_id = rawfile_id;
         this.peptide = peptide;
     }
@@ -47,7 +47,7 @@ public class Spectrum {
 
     @Id
     @Column(name="spectrum_id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     public int getSpectrum_id() {
         return spectrum_id;
     }
@@ -96,7 +96,7 @@ public class Spectrum {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "peptide_id", nullable = false)
+    @JoinColumn(name = "peptide_id")
     public Peptide getPeptide() {
         return peptide;
     }
@@ -150,13 +150,14 @@ public class Spectrum {
         this.th_precursor_mz = th_precursor_mz;
     }
 
-    @Column(name = "ptm_type")
-    public int getPtm_type() {
-        return ptm_type;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ptm_type")
+    public PTM_type getPtm() {
+        return ptm;
     }
 
-    public void setPtm_type(int ptm_type) {
-        this.ptm_type = ptm_type;
+    public void setPtm(PTM_type ptm) {
+        this.ptm = ptm;
     }
 
     @Column(name = "rawfileid")
