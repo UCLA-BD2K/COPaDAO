@@ -1,7 +1,5 @@
 package org.copakb.server.dao.model;
 
-
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,6 +34,7 @@ public class Peptide {
     }
 
     public Peptide() {
+        //default
     }
 
 

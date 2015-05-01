@@ -5,6 +5,7 @@ package org.copakb.server.dao.model;
  */
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,12 +14,14 @@ public class Species {
 
     private int species_id;
     private String species_name;
-    private Set<LibraryModule> modules;
+    private Set<LibraryModule> modules = new HashSet<LibraryModule>(0);
+    private Set<ProteinCurrent> proteinCurrents = new HashSet<ProteinCurrent>(0);
 
-    public Species(int species_id, String species_name, Set<LibraryModule> modules) {
+    public Species(int species_id, String species_name, Set<LibraryModule> modules, Set<ProteinCurrent> proteinCurrents) {
         this.species_id = species_id;
         this.species_name = species_name;
         this.modules = modules;
+        this.proteinCurrents = proteinCurrents;
     }
 
     public Species(){
@@ -52,5 +55,15 @@ public class Species {
 
     public void setModules(Set<LibraryModule> modules) {
         this.modules = modules;
+    }
+
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "species")
+    public Set<ProteinCurrent> getProteinCurrents() {
+        return proteinCurrents;
+    }
+
+    public void setProteinCurrents(Set<ProteinCurrent> proteinCurrents) {
+        this.proteinCurrents = proteinCurrents;
     }
 }

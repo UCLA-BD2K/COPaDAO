@@ -1,4 +1,3 @@
-import org.copakb.server.dao.DBAccess;
 import org.copakb.server.dao.PeptideDAO;
 import org.copakb.server.dao.model.Peptide;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -20,19 +19,20 @@ public class TestEnvironment {
 
         PeptideDAO peptideDAO = context.getBean(PeptideDAO.class);
 
-        Peptide peptide = new Peptide("AAAAA", 123.45, 5);
+        //Peptide peptide = new Peptide("AAAAA", 123.45, 5);
 
         //peptideDAO.addPeptide(peptide);
 
         //System.out.println("Peptide::"+peptide);
-
+        //Protein_Current s = new Protein_Current();
+        //PTM d = new PTM("w",3,'e',"w","w","w","w",s);
         List<Peptide> list = peptideDAO.list();
 
         for(Peptide p : list){
             System.out.println("Peptide "+p);
         }
 
-        Peptide p1 = peptideDAO.searchById(1);
+        //Peptide p1 = peptideDAO.searchById(1);
         //System.out.println(p1);
         //System.out.println(peptideDAO.searchBySequence("DAVSGMGVIVHIIEK"));
         //System.out.println(peptideDAO.searchBySpecId(1));
