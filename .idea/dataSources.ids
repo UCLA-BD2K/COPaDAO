@@ -147,6 +147,7 @@
       <foreign-key name="species_id" columns="species_id" ref-table="Species" ref-schema="" ref-catalog="copa_v1" ref-columns="species_id" update-rule="0" delete-rule="3" deferrability="2"/>
       <exported-key name="fk_Spectrum_Library_Module1" table="Spectrum" schema="" catalog="copa_v1" columns="mod_id"/>
       <exported-key name="fk_Protein_Peptide_Library_Module1" table="Spectrum_Protein" schema="" catalog="copa_v1" columns="mod_id"/>
+      <index name="lib_mod_index" unique="true" columns="lib_mod"/>
       <index name="species_id_idx" unique="false" columns="species_id"/>
     </table>
     <table name="PTM" schema="" catalog="copa_v1" type="TABLE">
@@ -246,13 +247,13 @@
       <column name="mod_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="ptm_type" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="rawfileid" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
-      <column name="reverse" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7"/>
+      <column name="reverse" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
       <primary-key name="PRIMARY" columns="spectrum_id"/>
       <foreign-key name="fk_Spectrum_Library_Module1" columns="mod_id" ref-table="Library_Module" ref-schema="" ref-catalog="copa_v1" ref-columns="mod_id" update-rule="0" delete-rule="0" deferrability="2"/>
       <foreign-key name="fk_Spectrum_Peptide1" columns="peptide_id" ref-table="Peptide" ref-schema="" ref-catalog="copa_v1" ref-columns="peptide_id" update-rule="0" delete-rule="3" deferrability="2"/>
       <foreign-key name="fk_Spectrum_PTM_type1" columns="ptm_type" ref-table="PTM_type" ref-schema="" ref-catalog="copa_v1" ref-columns="ptm_type" update-rule="0" delete-rule="3" deferrability="2"/>
       <exported-key name="fk_Spectrum_id" table="Spectrum_Protein" schema="" catalog="copa_v1" columns="spectrum_id"/>
-      <index name="seq_charge_mod" unique="true" columns="mod_id,peptide_id,charge_state"/>
+      <index name="seq_charge_mod" unique="true" columns="mod_id,ptm_sequence,charge_state"/>
       <index name="fk_Spectrum_Library_Module1_idx" unique="false" columns="mod_id"/>
       <index name="fk_Spectrum_Peptide1_idx" unique="false" columns="peptide_id"/>
       <index name="fk_Spectrum_PTM_type1_idx" unique="false" columns="ptm_type"/>

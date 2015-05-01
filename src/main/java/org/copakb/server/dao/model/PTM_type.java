@@ -4,11 +4,15 @@ package org.copakb.server.dao.model;
  * Created by vincekyi on 4/28/15.
  */
 
+import org.hibernate.annotations.SQLInsert;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "PTM_type")
+@SQLInsert(sql="INSERT IGNORE INTO PTM_type (mass, modification, residues, ptm_type) VALUES (?, ?, ?, ?)")
+
 public class PTM_type {
 
     private int ptm_type;
@@ -27,11 +31,14 @@ public class PTM_type {
     }
 
     public PTM_type() {
+        this.ptm_type = 0;
+        this.modification = null;
+        this.residues = null;
+        this.mass = 0;
     }
 
     @Id
     @Column(name="ptm_type")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     public int getPtm_type() {
         return ptm_type;
     }
@@ -67,7 +74,7 @@ public class PTM_type {
         this.mass = mass;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ptm")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ptm", cascade = CascadeType.PERSIST)
     public Set<Spectrum> getSpectra() {
         return spectra;
     }

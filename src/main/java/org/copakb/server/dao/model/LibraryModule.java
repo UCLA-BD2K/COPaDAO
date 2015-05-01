@@ -99,4 +99,20 @@ public class LibraryModule {
     public void setSpecies(Species species) {
         this.species = species;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LibraryModule that = (LibraryModule) o;
+
+        return mod_id == that.mod_id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return mod_id;
+    }
 }

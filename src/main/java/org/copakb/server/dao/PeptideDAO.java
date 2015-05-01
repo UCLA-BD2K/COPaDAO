@@ -10,13 +10,20 @@ import java.util.List;
  */
 public interface PeptideDAO {
 
-    public void addPeptide(Peptide p);
+    public int addPeptide(Peptide p);
 
     public List<Peptide> list();
+
+    public List<Peptide> limitedList(int start, int length);
 
     public Peptide searchById(Integer peptide_id);
 
     public Peptide searchBySequence(String peptide_sequence);
 
     public Spectrum searchBySpecId(Integer id);
+
+    public int addSpectrum(Spectrum s);
+
+    public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge);
+
 }

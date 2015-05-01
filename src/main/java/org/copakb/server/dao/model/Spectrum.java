@@ -47,7 +47,7 @@ public class Spectrum {
 
     @Id
     @Column(name="spectrum_id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     public int getSpectrum_id() {
         return spectrum_id;
     }
@@ -96,7 +96,7 @@ public class Spectrum {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "peptide_id", nullable = false)
+    @JoinColumn(name = "peptide_id")
     public Peptide getPeptide() {
         return peptide;
     }
@@ -151,7 +151,7 @@ public class Spectrum {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ptm_type", nullable = false)
+    @JoinColumn(name = "ptm_type")
     public PTM_type getPtm() {
         return ptm;
     }

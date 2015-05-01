@@ -2,6 +2,8 @@ package org.copakb.server.dao.model;
 
 
 
+import org.hibernate.annotations.SQLInsert;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,10 +14,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Peptide")
+@SQLInsert(sql="INSERT IGNORE INTO Peptide (molecular_weight, peptide_sequence, sequence_length, peptide_id) VALUES (?, ?, ?, 0)")
 public class Peptide {
 // http://www.mkyong.com/hibernate/hibernate-one-to-many-relationship-example-annotation/
 
-    private int peptide_id;
+    private int peptide_id=0;
     private String peptide_sequence;
     private double molecular_weight;
     private int sequence_length;
@@ -27,8 +30,7 @@ public class Peptide {
         this.sequence_length = sequence_length;
     }
 
-    public Peptide(int peptide_id, String peptide_sequence, double mol_weight, int sequence_length, Set<Spectrum> spectra) {
-        this.peptide_id = peptide_id;
+    public Peptide(String peptide_sequence, double mol_weight, int sequence_length, Set<Spectrum> spectra) {
         this.peptide_sequence = peptide_sequence;
         this.molecular_weight = mol_weight;
         this.sequence_length = sequence_length;
@@ -41,7 +43,7 @@ public class Peptide {
 
     @Id
     @Column(name="peptide_id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     public int getPeptide_id() {
         return peptide_id;
     }
@@ -77,7 +79,7 @@ public class Peptide {
         this.sequence_length = sequence_length;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "peptide")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "peptide", cascade=CascadeType.ALL)
     public Set<Spectrum> getSpectra() {
         return spectra;
     }
@@ -89,9 +91,11 @@ public class Peptide {
     @Override
     public String toString(){
         String spectraList = "spectra: ";
-        for(Spectrum s: spectra){
-            spectraList+="\n"+s.getPtm_sequence()+", xcorr: "+s.getXcorr()+", module: "+s.getModule().getLib_mod()+", species: "+s.getModule().getSpecies().getSpecies_name()+
-            ", ptm: "+s.getPtm().getPtm_type();
+        if(spectra!=null) {
+            for (Spectrum s : spectra) {
+                spectraList += "\n" + s.getPtm_sequence() + ", xcorr: " + s.getXcorr() + ", module: " + s.getModule().getLib_mod() + ", species: " + s.getModule().getSpecies().getSpecies_name() +
+                        ", ptm: " + s.getPtm().getPtm_type();
+            }
         }
         return "ID: "+Integer.toString(this.getPeptide_id())+"\n"+"sequence: "+this.getPeptide_sequence()+"\n"+spectraList+"\n**";
     }
