@@ -52,7 +52,7 @@ public class TestPeptideDAO {
     public void testAddExistingPeptide(){
         PeptideDAO peptideDAO = context.getBean(PeptideDAO.class);
 
-        Peptide newPep = new Peptide("DAVSGMGVIVHIIEK", 0.01, 15, null);
+        Peptide newPep = new Peptide("DAVSGMGVIVHIIEK", 0.01, 15);
         try {
             peptideDAO.addPeptide(newPep);
             assert(false);

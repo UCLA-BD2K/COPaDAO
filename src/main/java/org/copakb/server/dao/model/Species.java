@@ -58,7 +58,7 @@ public class Species {
     }
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "species")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "species")
     public Set<ProteinCurrent> getProteinCurrents() {
         return proteinCurrents;
     }

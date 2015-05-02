@@ -177,7 +177,7 @@ public class ProteinCurrent {
         this.wiki_link = wiki_link;
     }
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "proteinCurrent")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "proteinCurrent")
     public Set<ProteinGene> getProtein_genes() {
         return protein_genes;
     }

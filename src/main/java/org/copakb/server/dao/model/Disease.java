@@ -28,7 +28,6 @@ public class Disease {
 
     @Id
     @Column(name = "DOID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getDOID() {
         return DOID;
     }

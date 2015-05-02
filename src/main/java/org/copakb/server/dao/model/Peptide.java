@@ -40,7 +40,7 @@ public class Peptide {
 
     @Id
     @Column(name="peptide_id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     public int getPeptide_id() {
         return peptide_id;
     }

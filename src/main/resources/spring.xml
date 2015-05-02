@@ -22,6 +22,18 @@
                 <value>org.copakb.server.dao.model.LibraryModule</value>
                 <value>org.copakb.server.dao.model.Species</value>
                 <value>org.copakb.server.dao.model.PTM_type</value>
+                <value>org.copakb.server.dao.model.Disease</value>
+                <value>org.copakb.server.dao.model.DiseaseGene</value>
+                <value>org.copakb.server.dao.model.Gene</value>
+                <value>org.copakb.server.dao.model.HPA</value>
+                <value>org.copakb.server.dao.model.ProteinCurrent</value>
+                <value>org.copakb.server.dao.model.ProteinGene</value>
+                <value>org.copakb.server.dao.model.GOProtein</value>
+                <value>org.copakb.server.dao.model.GoTerms</value>
+                <value>org.copakb.server.dao.model.ProteinHistory</value>
+                <value>org.copakb.server.dao.model.Version</value>
+                <value>org.copakb.server.dao.model.PTM</value>
+                <value>org.copakb.server.dao.model.SpectrumProtein</value>
             </list>
         </property>
         <property name="hibernateProperties">
