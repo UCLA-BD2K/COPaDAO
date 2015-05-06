@@ -7,6 +7,9 @@ import java.io.Serializable;
  * Created by Kevin on 4/30/2015.
  */
 
+//TODO get rid of Protein_Gene object
+// No need for middle-man table
+
 @Entity
 @Table(name = "Protein_Gene")
 public class ProteinGene implements Serializable{

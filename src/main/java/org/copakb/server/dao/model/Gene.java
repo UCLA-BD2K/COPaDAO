@@ -25,7 +25,6 @@ public class Gene {
 
     @Id
     @Column(name = "gene_name")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String getGene_name() {
         return gene_name;
     }
@@ -41,7 +40,7 @@ public class Gene {
         this.disease_genes = disease_genes;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "proteinCurrent")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
     public Set<ProteinGene> getProtein_genes() {
         return protein_genes;
     }

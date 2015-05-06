@@ -8,6 +8,11 @@ import javax.persistence.*;
 /**
  * Created by Kevin on 5/1/2015.
  */
+
+//Todo reevaluate need for this table
+    //can be merged with spectrum table
+@Entity
+@Table(name = "Spectrum_Protein")
 public class SpectrumProtein {
     private String protein_acc;
     private Spectrum spectrum;
@@ -39,7 +44,6 @@ public class SpectrumProtein {
 
     @Id
     @Column(name = "protein_acc")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String getProtein_acc() {
         return protein_acc;
     }
@@ -47,7 +51,7 @@ public class SpectrumProtein {
         this.protein_acc = protein_acc;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "spectrum_id", nullable = false)
     public Spectrum getSpectrum() {
         return spectrum;

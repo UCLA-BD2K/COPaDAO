@@ -26,9 +26,10 @@ public class ProteinCurrent {
     private String ENSG_ID;
     private Species species;
     private String wiki_link;
-    private Set<ProteinGene> protein_genes = new HashSet<ProteinGene>(0);
-    private Set<PTM> PTMs = new HashSet<PTM>(0);
-    private Set<HPA> HPAs = new HashSet<HPA>(0);
+    private Set<ProteinGene> protein_genes;
+    private Set<GOProtein> goProteins;
+    private Set<PTM> PTMs;
+    private Set<HPA> HPAs;
 
     public ProteinCurrent(String sequence, String protein_name, String chromosome, double molecular_weight, String transmembrane_domain, String cytoplasmatic_domain, String noncytoplasmatic_domain, String signal_peptide, String ref_kb_id, String keywords, String feature_table, String ENSG_ID, Species species, String wiki_link, Set<ProteinGene> protein_genes, Set<PTM> PTMs, Set<HPA> HPAs) {
         this.sequence = sequence;
@@ -56,7 +57,6 @@ public class ProteinCurrent {
 
     @Id
     @Column(name = "protein_acc")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String getProtein_acc() {
         return protein_acc;
     }
@@ -177,7 +177,7 @@ public class ProteinCurrent {
         this.wiki_link = wiki_link;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "proteinCurrent")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
     public Set<ProteinGene> getProtein_genes() {
         return protein_genes;
     }
@@ -185,7 +185,7 @@ public class ProteinCurrent {
         this.protein_genes = protein_genes;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "proteinCurrent")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
     public Set<PTM> getPTMs() {
         return PTMs;
     }
@@ -193,11 +193,20 @@ public class ProteinCurrent {
         this.PTMs = PTMs;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "proteinCurrent")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
     public Set<HPA> getHPAs() {
         return HPAs;
     }
     public void setHPAs(Set<HPA> HPAs) {
         this.HPAs = HPAs;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
+    public Set<GOProtein> getGoProteins() {
+        return goProteins;
+    }
+
+    public void setGoProteins(Set<GOProtein> goProteins) {
+        this.goProteins = goProteins;
     }
 }

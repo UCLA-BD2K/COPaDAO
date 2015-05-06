@@ -1,6 +1,7 @@
 package org.copakb.server.dao.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by vincekyi on 4/19/15.
@@ -24,6 +25,7 @@ public class Spectrum {
     private PTM_type ptm;
     private String rawfile_id;
     private Peptide peptide;
+    private Set<SpectrumProtein> spectrumProtein;
 
     public Spectrum(String ptm_sequence, int charge_state, LibraryModule module, double xcorr, double delta_cn, double zscore, double fdr, double precursor_mz, double th_precursor_mz, PTM_type ptm, String rawfile_id, Peptide peptide) {
         this.ptm_sequence = ptm_sequence;
@@ -95,7 +97,7 @@ public class Spectrum {
     }
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "peptide_id")
     public Peptide getPeptide() {
         return peptide;
@@ -167,6 +169,15 @@ public class Spectrum {
 
     public void setRawfile_id(String rawfile_id) {
         this.rawfile_id = rawfile_id;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "spectrum")
+    public Set<SpectrumProtein> getSpectrumProtein() {
+        return spectrumProtein;
+    }
+
+    public void setSpectrumProtein(Set<SpectrumProtein> spectrumProtein) {
+        this.spectrumProtein = spectrumProtein;
     }
 
     @Override

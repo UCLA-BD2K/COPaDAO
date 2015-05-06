@@ -40,8 +40,6 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
                 <prop key="hibernate.show_sql">false</prop>
-                <!--<prop key="mapping">org.copakb.server.dao.model.Spectrum_Table_Table</prop>-->
-                <!--<prop key="mapping">org.copakb.server.dao.model.Peptide_Table_Table</prop>-->
             </props>
         </property>
     </bean>
@@ -51,6 +49,10 @@
     </bean>
 
     <bean id="peptideDAO" class="org.copakb.server.dao.PeptideDAOImpl">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+
+    <bean id="proteinDAO" class="org.copakb.server.dao.ProteinDAOImpl">
         <property name="sessionFactory" ref="hibernateSessionFactory" />
     </bean>
 </beans>

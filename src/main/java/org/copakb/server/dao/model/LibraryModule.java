@@ -35,7 +35,7 @@ public class LibraryModule {
 
     @Id
     @Column(name="mod_id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     public int getMod_id() {
         return mod_id;
     }

@@ -13,7 +13,7 @@ public class Disease {
     private String name;
     private String description;
     private String heart_disease;
-    private Set<DiseaseGene> disease_genes = new HashSet<DiseaseGene>(0);
+    private Set<DiseaseGene> disease_genes;
 
     public Disease(String name, String description, String heart_disease, Set<DiseaseGene> diseaseGenes) {
         this.name = name;

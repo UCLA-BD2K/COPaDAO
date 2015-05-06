@@ -54,7 +54,7 @@ public class Version {
         this.description = description;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "version")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "version")
     public Set<ProteinHistory> getProteinHistories() {
         return proteinHistories;
     }

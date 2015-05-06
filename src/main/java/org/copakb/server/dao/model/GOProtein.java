@@ -1,33 +1,37 @@
 package org.copakb.server.dao.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by Kevin on 5/1/2015.
  */
 
+//TODO get rid of GO_Protein object
+    // No need for middle-man table
+
 @Entity
 @Table(name = "GO_Protein")
-public class GOProtein {
-    private String protein_acc;
+public class GOProtein implements Serializable{
+    private ProteinCurrent proteinCurrent;
     private GoTerms goTerm;
 
-    public GOProtein(String protein_acc, GoTerms goTerm) {
-        this.protein_acc = protein_acc;
+    public GOProtein(ProteinCurrent proteinCurrent, GoTerms goTerm) {
+        this.proteinCurrent = proteinCurrent;
         this.goTerm = goTerm;
     }
 
     public GOProtein() {
         //default
     }
-
     @Id
-    @Column(name = "protein_acc")
-    public String getProtein_acc() {
-        return protein_acc;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "protein_acc")
+    public ProteinCurrent getProteinCurrent() {
+        return proteinCurrent;
     }
-    public void setProtein_acc(String protein_acc) {
-        this.protein_acc = protein_acc;
+    public void setProteinCurrent(ProteinCurrent proteinCurrent) {
+        this.proteinCurrent = proteinCurrent;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
