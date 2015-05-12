@@ -12,12 +12,15 @@ import javax.persistence.*;
 public class GoTerms {
     private int GO_accession;
     private String Terms;
-    private Set<GOProtein> GOProteins = new HashSet<GOProtein>(0);
+    private Set<ProteinCurrent> proteins;
 
-    public GoTerms(int GO_accession, String terms, Set<GOProtein> GOProteins) {
+    public GoTerms(int GO_accession, String terms, Set<ProteinCurrent> proteins) {
         this.GO_accession = GO_accession;
         Terms = terms;
-        this.GOProteins = GOProteins;
+        this.proteins = proteins;
+    }
+
+    public GoTerms() {
     }
 
     @Id
@@ -37,11 +40,17 @@ public class GoTerms {
         Terms = terms;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "goTerm")
-    public Set<GOProtein> getGOProteins() {
-        return GOProteins;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "GO_Protein", joinColumns = {
+            @JoinColumn(name = "GO_accession", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "protein_acc",
+                    nullable = false, updatable = false) })
+    public Set<ProteinCurrent> getProteins() {
+        return proteins;
     }
-    public void setGOProteins(Set<GOProtein> GOProteins) {
-        this.GOProteins = GOProteins;
+
+    public void setProteins(Set<ProteinCurrent> proteins) {
+        this.proteins = proteins;
     }
 }

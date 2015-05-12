@@ -11,12 +11,13 @@ import java.util.Set;
 @Table(name = "Gene")
 public class Gene {
     private String gene_name;
-    private Set<DiseaseGene> disease_genes = new HashSet<DiseaseGene>(0);
-    private Set<ProteinGene> protein_genes = new HashSet<ProteinGene>(0);
+    private Set<Disease> diseases;
+    private Set<ProteinCurrent> proteins;
 
-    public Gene(Set<ProteinGene> protein_genes, Set<DiseaseGene> disease_genes) {
-        this.protein_genes = protein_genes;
-        this.disease_genes = disease_genes;
+    public Gene(String gene_name, Set<Disease> diseases, Set<ProteinCurrent> proteins) {
+        this.gene_name = gene_name;
+        this.diseases = diseases;
+        this.proteins = proteins;
     }
 
     public Gene() {
@@ -32,19 +33,29 @@ public class Gene {
         this.gene_name = gene_name;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "gene")
-    public Set<DiseaseGene> getDisease_genes() {
-        return disease_genes;
-    }
-    public void setDisease_genes(Set<DiseaseGene> disease_genes) {
-        this.disease_genes = disease_genes;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "Disease_Gene", joinColumns = {
+            @JoinColumn(name = "gene_name", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "DOID",
+                    nullable = false, updatable = false) })
+    public Set<Disease> getDiseases() {
+        return diseases;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
-    public Set<ProteinGene> getProtein_genes() {
-        return protein_genes;
+    public void setDiseases(Set<Disease> diseases) {
+        this.diseases = diseases;
     }
-    public void setProtein_genes(Set<ProteinGene> protein_genes) {
-        this.protein_genes = protein_genes;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "Protein_Gene", joinColumns = {
+            @JoinColumn(name = "gene_name", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "protein_acc",
+                    nullable = false, updatable = false) })
+    public Set<ProteinCurrent> getProteins() {
+        return proteins;
+    }
+
+    public void setProteins(Set<ProteinCurrent> proteins) {
+        this.proteins = proteins;
     }
 }

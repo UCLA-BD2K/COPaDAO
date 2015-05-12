@@ -25,6 +25,10 @@ public class DiseaseGene implements Serializable{
         this.pubmed_title = pubmed_title;
         this.pubmed_author = pubmed_author;
     }
+
+    public DiseaseGene() {
+    }
+
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DOID", nullable = false)

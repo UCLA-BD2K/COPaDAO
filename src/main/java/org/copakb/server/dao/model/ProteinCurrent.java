@@ -1,7 +1,6 @@
     package org.copakb.server.dao.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -26,12 +25,13 @@ public class ProteinCurrent {
     private String ENSG_ID;
     private Species species;
     private String wiki_link;
-    private Set<ProteinGene> protein_genes;
-    private Set<GOProtein> goProteins;
+    private Set<Gene> genes;
+    private Set<GoTerms> goTerms;
     private Set<PTM> PTMs;
     private Set<HPA> HPAs;
 
-    public ProteinCurrent(String sequence, String protein_name, String chromosome, double molecular_weight, String transmembrane_domain, String cytoplasmatic_domain, String noncytoplasmatic_domain, String signal_peptide, String ref_kb_id, String keywords, String feature_table, String ENSG_ID, Species species, String wiki_link, Set<ProteinGene> protein_genes, Set<PTM> PTMs, Set<HPA> HPAs) {
+    public ProteinCurrent(String protein_acc, String sequence, String protein_name, String chromosome, double molecular_weight, String transmembrane_domain, String cytoplasmatic_domain, String noncytoplasmatic_domain, String signal_peptide, String ref_kb_id, String keywords, String feature_table, String ENSG_ID, Species species, String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs, Set<HPA> HPAs) {
+        this.protein_acc = protein_acc;
         this.sequence = sequence;
         this.protein_name = protein_name;
         this.chromosome = chromosome;
@@ -46,7 +46,8 @@ public class ProteinCurrent {
         this.ENSG_ID = ENSG_ID;
         this.species = species;
         this.wiki_link = wiki_link;
-        this.protein_genes = protein_genes;
+        this.genes = genes;
+        this.goTerms = goTerms;
         this.PTMs = PTMs;
         this.HPAs = HPAs;
     }
@@ -177,12 +178,17 @@ public class ProteinCurrent {
         this.wiki_link = wiki_link;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
-    public Set<ProteinGene> getProtein_genes() {
-        return protein_genes;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "Protein_Gene", joinColumns = {
+            @JoinColumn(name = "protein_acc", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "gene_name",
+                    nullable = false, updatable = false) })
+    public Set<Gene> getGenes() {
+        return genes;
     }
-    public void setProtein_genes(Set<ProteinGene> protein_genes) {
-        this.protein_genes = protein_genes;
+
+    public void setGenes(Set<Gene> genes) {
+        this.genes = genes;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
@@ -201,12 +207,16 @@ public class ProteinCurrent {
         this.HPAs = HPAs;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
-    public Set<GOProtein> getGoProteins() {
-        return goProteins;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "GO_Protein", joinColumns = {
+            @JoinColumn(name = "protein_acc", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "GO_accession",
+                    nullable = false, updatable = false) })
+    public Set<GoTerms> getGoTerms() {
+        return goTerms;
     }
 
-    public void setGoProteins(Set<GOProtein> goProteins) {
-        this.goProteins = goProteins;
+    public void setGoTerms(Set<GoTerms> goTerms) {
+        this.goTerms = goTerms;
     }
 }

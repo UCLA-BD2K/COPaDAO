@@ -13,13 +13,14 @@ public class Disease {
     private String name;
     private String description;
     private String heart_disease;
-    private Set<DiseaseGene> disease_genes;
+    private Set<Gene> genes;
 
-    public Disease(String name, String description, String heart_disease, Set<DiseaseGene> diseaseGenes) {
+    public Disease(int DOID, String name, String description, String heart_disease, Set<Gene> genes) {
+        this.DOID = DOID;
         this.name = name;
         this.description = description;
         this.heart_disease = heart_disease;
-        this.disease_genes = disease_genes;
+        this.genes = genes;
     }
 
     public Disease() {
@@ -31,6 +32,7 @@ public class Disease {
     public int getDOID() {
         return DOID;
     }
+
     public void setDOID(int DOID) {
         this.DOID = DOID;
     }
@@ -39,6 +41,7 @@ public class Disease {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -47,6 +50,7 @@ public class Disease {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -55,15 +59,22 @@ public class Disease {
     public String getHeart_disease() {
         return heart_disease;
     }
+
     public void setHeart_disease(String heart_disease) {
         this.heart_disease = heart_disease;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "disease")
-    public Set<DiseaseGene> getDisease_genes() {
-        return disease_genes;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "Disease_Gene", joinColumns = {
+            @JoinColumn(name = "DOID", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "gene_name",
+                    nullable = false, updatable = false) })
+    public Set<Gene> getGenes() {
+        return genes;
     }
-    public void setDisease_genes(Set<DiseaseGene> disease_genes) {
-        this.disease_genes = disease_genes;
+
+    public void setGenes(Set<Gene> genes) {
+        this.genes = genes;
     }
 }
