@@ -11,11 +11,15 @@ import java.util.Set;
 @Table(name = "Gene")
 public class Gene {
     private String gene_name;
+    private String ensembl_id;
+    private Set<HPA> hpas;
     private Set<Disease> diseases;
     private Set<ProteinCurrent> proteins;
 
-    public Gene(String gene_name, Set<Disease> diseases, Set<ProteinCurrent> proteins) {
+    public Gene(String gene_name, String ensembl_id, Set<HPA> hpas, Set<Disease> diseases, Set<ProteinCurrent> proteins) {
         this.gene_name = gene_name;
+        this.ensembl_id = ensembl_id;
+        this.hpas = hpas;
         this.diseases = diseases;
         this.proteins = proteins;
     }
@@ -26,12 +30,16 @@ public class Gene {
 
     @Id
     @Column(name = "gene_name")
-    public String getGene_name() {
-        return gene_name;
-    }
-    public void setGene_name(String gene_name) {
-        this.gene_name = gene_name;
-    }
+    public String getGene_name() { return gene_name; }
+    public void setGene_name(String gene_name) { this.gene_name = gene_name; }
+
+    @Column(name = "ensembl_id")
+    public String getEnsembl_id() { return ensembl_id; }
+    public void setEnsembl_id(String ensembl_id) { this.ensembl_id = ensembl_id; }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensembl_id")
+    public Set<HPA> getHpas() { return hpas; }
+    public void setHpas(Set<HPA> hpas1) { this.hpas = hpas1; }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Disease_Gene", joinColumns = {

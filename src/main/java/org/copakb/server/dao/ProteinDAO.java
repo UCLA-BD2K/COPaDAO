@@ -2,6 +2,9 @@ package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.GoTerms;
 import org.copakb.server.dao.model.ProteinCurrent;
+import org.copakb.server.dao.model.Species;
+
+import java.util.List;
 
 import java.util.Set;
 
@@ -10,7 +13,19 @@ import java.util.Set;
  */
 public interface ProteinDAO {
 
+    public List<ProteinCurrent> list();
+
+    public void addProteinCurrent(ProteinCurrent prot);
+
+    public int addSpecies(Species spec);
+
     public ProteinCurrent searchByID(String uniprotID);
+
+    public ProteinCurrent searchByName(String proteinName);
+
+    public ProteinCurrent searchByRef(String refKbId);
+
+    public ProteinCurrent searchByEnsg(String ensgID);
 
     public ProteinCurrent getProteinWithGoTerms(String uniprotID);
 

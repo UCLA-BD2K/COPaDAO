@@ -28,9 +28,8 @@ public class ProteinCurrent {
     private Set<Gene> genes;
     private Set<GoTerms> goTerms;
     private Set<PTM> PTMs;
-    private Set<HPA> HPAs;
 
-    public ProteinCurrent(String protein_acc, String sequence, String protein_name, String chromosome, double molecular_weight, String transmembrane_domain, String cytoplasmatic_domain, String noncytoplasmatic_domain, String signal_peptide, String ref_kb_id, String keywords, String feature_table, String ENSG_ID, Species species, String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs, Set<HPA> HPAs) {
+    public ProteinCurrent(String protein_acc, String sequence, String protein_name, String chromosome, double molecular_weight, String transmembrane_domain, String cytoplasmatic_domain, String noncytoplasmatic_domain, String signal_peptide, String ref_kb_id, String keywords, String feature_table, String ENSG_ID, Species species, String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs) {
         this.protein_acc = protein_acc;
         this.sequence = sequence;
         this.protein_name = protein_name;
@@ -49,7 +48,6 @@ public class ProteinCurrent {
         this.genes = genes;
         this.goTerms = goTerms;
         this.PTMs = PTMs;
-        this.HPAs = HPAs;
     }
 
     public ProteinCurrent() {
@@ -162,7 +160,7 @@ public class ProteinCurrent {
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "species_id",nullable = false)
+    @JoinColumn(name = "species_id", nullable = false)
     public Species getSpecies() {
         return species;
     }
@@ -199,14 +197,6 @@ public class ProteinCurrent {
         this.PTMs = PTMs;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
-    public Set<HPA> getHPAs() {
-        return HPAs;
-    }
-    public void setHPAs(Set<HPA> HPAs) {
-        this.HPAs = HPAs;
-    }
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "GO_Protein", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false) },
@@ -218,5 +208,21 @@ public class ProteinCurrent {
 
     public void setGoTerms(Set<GoTerms> goTerms) {
         this.goTerms = goTerms;
+    }
+
+    @Override
+    public String toString(){
+        /*if(spectra!=null)
+            for(Spectrum s: spectra){
+                spectraList+="\n"+s.getPtm_sequence()+", xcorr: "+s.getXcorr();
+                if(s.getModule()!=null)
+                    spectraList+=", module: "+s.getModule().getLib_mod()+", species: "+s.getModule().getSpecies().getSpecies_name();
+            }*/
+        String acc = this.getProtein_acc();
+        String seq = this.getSequence();
+        String name = this.getProtein_name();
+        int specID = this.getSpecies().getSpecies_id();
+        String specName = this.getSpecies().getSpecies_name();
+        return "Acc: " + acc + "\nSequence: " + seq + "\nName: " + name + "\nSpecies ID: " + specID + "\nSpecies Name: " + specName + "\n**";
     }
 }

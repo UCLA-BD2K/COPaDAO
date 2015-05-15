@@ -14,8 +14,8 @@ public class Species {
 
     private int species_id;
     private String species_name;
-    private Set<LibraryModule> modules = new HashSet<LibraryModule>(0);
-    private Set<ProteinCurrent> proteinCurrents = new HashSet<ProteinCurrent>(0);
+    private Set<LibraryModule> modules;
+    private Set<ProteinCurrent> proteinCurrents;
 
     public Species(int species_id, String species_name, Set<LibraryModule> modules, Set<ProteinCurrent> proteinCurrents) {
         this.species_id = species_id;

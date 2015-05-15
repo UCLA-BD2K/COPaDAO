@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Table(name = "HPA")
 public class HPA {
     private int HPA_id;
-    private ProteinCurrent proteinCurrent;
     private String ensembl_id;
     private String main_sub_cellular;
     private String additional_sub_cellular;
@@ -19,8 +18,7 @@ public class HPA {
     private String ihc_summary;
     private String ihc_heart_expression;
 
-    public HPA(ProteinCurrent proteinCurrent, String ensembl_id, String main_sub_cellular, String additional_sub_cellular, String sub_cellular_image, String ihc_image, String ihc_summary, String ihc_heart_expression) {
-        this.proteinCurrent = proteinCurrent;
+    public HPA(String ensembl_id, String main_sub_cellular, String additional_sub_cellular, String sub_cellular_image, String ihc_image, String ihc_summary, String ihc_heart_expression) {
         this.ensembl_id = ensembl_id;
         this.main_sub_cellular = main_sub_cellular;
         this.additional_sub_cellular = additional_sub_cellular;
@@ -42,15 +40,6 @@ public class HPA {
     }
     public void setHPA_id(int HPA_id) {
         this.HPA_id = HPA_id;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "protein_acc", nullable = false)
-    public ProteinCurrent getProteinCurrent() {
-        return proteinCurrent;
-    }
-    public void setProteinCurrent(ProteinCurrent proteinCurrent) {
-        this.proteinCurrent = proteinCurrent;
     }
 
     @Column(name = "ensembl_id")
