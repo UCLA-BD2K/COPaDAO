@@ -24,8 +24,13 @@ public class Species {
         this.proteinCurrents = proteinCurrents;
     }
 
-    public Species(){
+    public Species(int species_id, String species_name) {
+        this.species_id = species_id;
+        this.species_name = species_name;
+    }
 
+    public Species() {
+        //default
     }
 
     @Id

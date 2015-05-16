@@ -1,8 +1,6 @@
 package org.copakb.server.dao;
 
-import org.copakb.server.dao.model.GoTerms;
-import org.copakb.server.dao.model.ProteinCurrent;
-import org.copakb.server.dao.model.Species;
+import org.copakb.server.dao.model.*;
 
 import java.util.List;
 
@@ -15,7 +13,9 @@ public interface ProteinDAO {
 
     public List<ProteinCurrent> list();
 
-    public void addProteinCurrent(ProteinCurrent prot);
+    public List<ProteinCurrent> limitedList(int start, int length);
+
+    public String addProteinCurrent(ProteinCurrent prot);
 
     public int addSpecies(Species spec);
 
@@ -27,7 +27,15 @@ public interface ProteinDAO {
 
     public ProteinCurrent searchByEnsg(String ensgID);
 
-    public ProteinCurrent getProteinWithGoTerms(String uniprotID);
-
     public ProteinCurrent getProteinWithGenes(String uniprotID);
+    public ProteinGene searchByGeneName(String name);
+    public String addGene(ProteinGene g);
+
+    public ProteinCurrent getProteinWithGoTerms(String uniprotID);
+    public GoTerms searchByGOAccession(int GO_accession);
+//    public String addGoTerm(GoTerms g);
+
+    public ProteinCurrent getProteinWithPTMs(String uniprotID);
+    public PTM searchByPTMType(String ptm_type);
+    public String addPTM(PTM p);
 }

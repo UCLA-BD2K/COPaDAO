@@ -29,7 +29,12 @@ public class ProteinCurrent {
     private Set<GoTerms> goTerms;
     private Set<PTM> PTMs;
 
-    public ProteinCurrent(String protein_acc, String sequence, String protein_name, String chromosome, double molecular_weight, String transmembrane_domain, String cytoplasmatic_domain, String noncytoplasmatic_domain, String signal_peptide, String ref_kb_id, String keywords, String feature_table, String ENSG_ID, Species species, String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs) {
+    public ProteinCurrent(String protein_acc, String sequence, String protein_name,
+                          String chromosome, double molecular_weight, String transmembrane_domain,
+                          String cytoplasmatic_domain, String noncytoplasmatic_domain,
+                          String signal_peptide, String ref_kb_id, String keywords,
+                          String feature_table, String ENSG_ID, Species species,
+                          String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs) {
         this.protein_acc = protein_acc;
         this.sequence = sequence;
         this.protein_name = protein_name;
@@ -50,8 +55,32 @@ public class ProteinCurrent {
         this.PTMs = PTMs;
     }
 
-    public ProteinCurrent() {
+    public ProteinCurrent(String protein_acc, String sequence, String protein_name,
+                          String chromosome, double molecular_weight, String transmembrane_domain,
+                          String cytoplasmatic_domain, String noncytoplasmatic_domain,
+                          String signal_peptide, String ref_kb_id, String keywords,
+                          String feature_table, String ENSG_ID, Species species,
+                          String wiki_link) {
+        this.protein_acc = protein_acc;
+        this.sequence = sequence;
+        this.protein_name = protein_name;
+        this.chromosome = chromosome;
+        this.molecular_weight = molecular_weight;
+        this.transmembrane_domain = transmembrane_domain;
+        this.cytoplasmatic_domain = cytoplasmatic_domain;
+        this.noncytoplasmatic_domain = noncytoplasmatic_domain;
+        this.signal_peptide = signal_peptide;
+        this.ref_kb_id = ref_kb_id;
+        this.keywords = keywords;
+        this.feature_table = feature_table;
+        this.ENSG_ID = ENSG_ID;
+        this.species = species;
+        this.wiki_link = wiki_link;
 
+    }
+
+    public ProteinCurrent() {
+        //default
     }
 
     @Id

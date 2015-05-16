@@ -100,4 +100,17 @@ public class PTM {
     public void setDb_source(String db_source) {
         this.db_source = db_source;
     }
+
+    @Override
+    public String toString() {
+        String result = "protein_acc: " + getProteinCurrent().getProtein_acc() + "\n" +
+                "ptm_type: " + getPtm_type() + "\n" +
+                "ptm_site_code: " + getPtm_site_code() + "\n" +
+                "PMIDS: " + getPMIDS() + "\n" +
+                "kinases: " + getKinases() + "\n" +
+                "source: " + getSource() + "\n" +
+                "db_source: " + getDb_source();
+
+        return result;
+    }
 }

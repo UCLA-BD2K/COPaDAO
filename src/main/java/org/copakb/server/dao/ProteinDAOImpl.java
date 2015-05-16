@@ -30,12 +30,24 @@ public class ProteinDAOImpl implements ProteinDAO {
         return proteinList;
     }
 
-    public void addProteinCurrent(ProteinCurrent p) throws HibernateException{
+    public List<ProteinCurrent> limitedList(int start, int length) {
+        Session session = this.sessionFactory.openSession();
+        List<ProteinCurrent> proteinList = session.createCriteria(ProteinCurrent.class).setFirstResult(start).setMaxResults(length).list();
+        session.close();
+        return proteinList;
+    }
+
+    public String addProteinCurrent(ProteinCurrent p) throws HibernateException {
+        String result = "";
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        session.save(p);
+
+        result = String.valueOf(session.save(p));
+
         tx.commit();
         session.close();
+
+        return result;
 
     }
 
@@ -196,6 +208,51 @@ public class ProteinDAOImpl implements ProteinDAO {
         return protein;
     }
 
+    public GoTerms searchByGOAccession(int GO_accession) {
+        Session session = this.sessionFactory.openSession();
+        GoTerms go = null;
+
+        Transaction tx = session.beginTransaction();
+        try {
+            go = (GoTerms)session.get(GoTerms.class, GO_accession);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }finally{
+            session.close();
+        }
+        return go;
+    }
+//
+//    public String addGoTerm(GoTerms g) throws HibernateException {
+//        String result = "";
+//
+//        PTM existingPTM = searchByPTMType(g.getGO_accession());
+//        if(existingPTM != null)
+//            return existingPTM.getPtm_type();
+//
+//        ProteinCurrent protein = this.searchByID(p.getProteinCurrent().getProtein_acc());
+//        if(protein == null) {
+//            String protein_id = this.addProteinCurrent(p.getProteinCurrent());
+//            p.getProteinCurrent().setProtein_acc(protein_id);
+//        } else{
+//            p.setProteinCurrent(protein);
+//        }
+//
+//        Session session = this.sessionFactory.openSession();
+//        Transaction tx = session.beginTransaction();
+//        result = String.valueOf(session.save(p));
+//
+//        tx.commit();
+//        session.close();
+//
+//        return result;
+//    }
+
+
+
     public ProteinCurrent getProteinWithGenes(String uniprotID){
         Session session = this.sessionFactory.openSession();
         ProteinCurrent protein = null;
@@ -214,6 +271,114 @@ public class ProteinDAOImpl implements ProteinDAO {
             session.close();
         }
         return protein;
+    }
+
+
+
+    public ProteinGene searchByGeneName(String name) {
+        Session session = this.sessionFactory.openSession();
+        ProteinGene gene = null;
+
+        Transaction tx = session.beginTransaction();
+        try {
+            gene = (ProteinGene)session.get(Gene.class, name);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }finally{
+            session.close();
+        }
+        return gene;
+    }
+
+    public String addGene(ProteinGene g) throws HibernateException {
+        String result = "";
+
+        ProteinGene existingGene = searchByGeneName(g.getGene().getGene_name());
+        if(existingGene != null)
+            return existingGene.getGene().getGene_name();
+
+        ProteinCurrent protein = this.searchByID(g.getProteinCurrent().getProtein_acc());
+        if(protein == null) {
+            String protein_id = this.addProteinCurrent(g.getProteinCurrent());
+            g.getProteinCurrent().setProtein_acc(protein_id);
+        } else{
+            g.setProteinCurrent(protein);
+        }
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        result = String.valueOf(session.save(g));
+
+        tx.commit();
+        session.close();
+
+        return result;
+    }
+
+    public ProteinCurrent getProteinWithPTMs(String uniprotID) {
+        Session session = this.sessionFactory.openSession();
+        ProteinCurrent protein = null;
+        Transaction tx = session.beginTransaction();
+
+        try {
+            protein = (ProteinCurrent)session.get(ProteinCurrent.class, uniprotID);
+            Hibernate.initialize(protein.getPTMs());
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+
+        return protein;
+    }
+
+    public PTM searchByPTMType(String ptm_type) {
+        Session session = this.sessionFactory.openSession();
+        PTM ptm = null;
+
+        Transaction tx = session.beginTransaction();
+        try {
+            ptm = (PTM)session.get(PTM.class, ptm_type);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }finally{
+            session.close();
+        }
+        return ptm;
+    }
+
+    public String addPTM(PTM p) throws HibernateException {
+        String result = "";
+
+        PTM existingPTM = searchByPTMType(p.getPtm_type());
+        if(existingPTM != null)
+            return existingPTM.getPtm_type();
+
+        ProteinCurrent protein = this.searchByID(p.getProteinCurrent().getProtein_acc());
+        if(protein == null) {
+            String protein_id = this.addProteinCurrent(p.getProteinCurrent());
+            p.getProteinCurrent().setProtein_acc(protein_id);
+        } else{
+            p.setProteinCurrent(protein);
+        }
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        result = String.valueOf(session.save(p));
+
+        tx.commit();
+        session.close();
+
+        return result;
     }
 
 }
