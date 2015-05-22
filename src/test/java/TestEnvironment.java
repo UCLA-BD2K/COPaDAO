@@ -30,18 +30,19 @@ public class TestEnvironment {
 
 
         ProteinDAO proteinDAO = context.getBean(ProteinDAO.class);
-        /*Set<LibraryModule> modules = new HashSet<>(Arrays.asList(new LibraryModule(), new LibraryModule()));
+
+        Set<LibraryModule> modules = new HashSet<>(Arrays.asList(new LibraryModule(), new LibraryModule()));
         //Set<ProteinCurrent> proteinCurrents = new HashSet<>(Arrays.asList(new ProteinCurrent(), new ProteinCurrent()));
-        Species spec = new Species(1, "Human", null, null);
+        Species spec = new Species(1, "", null, null);
         Gene gene1 = new Gene();
         gene1.setGene_name("name123");
         /*Set<Gene> genes = new HashSet<>(Arrays.asList(gene1));
         Set<GoTerms> goTerms = new HashSet<>(Arrays.asList(new GoTerms(1, "", null), new GoTerms(2, "", null)));
         PTM ptm1 = new PTM("type", 14, 'C', "", "", "", "", new ProteinCurrent());
         PTM ptm2 = new PTM("type2", 16, 'K', "", "", "", "", new ProteinCurrent());
-        Set<PTM> PTMs = new HashSet<>(Arrays.asList(ptm1, ptm2));
-        ProteinCurrent protein = new ProteinCurrent("P25", "", "", null, 0.0, null, null, null, null, null, null, null, null, spec, null, null, null, null);
-        */
+        Set<PTM> PTMs = new HashSet<>(Arrays.asList(ptm1, ptm2));*/
+        //ProteinCurrent protein = new ProteinCurrent("P47", "", "", null, 0.0, null, null, null, null, null, null, null, null, spec, null, null, null, null);
+
         //ProteinCurrent protein = new ProteinCurrent("identification");
         //proteinDAO.addProteinCurrent(protein);
 
@@ -49,23 +50,30 @@ public class TestEnvironment {
         //ProteinCurrent s = new ProteinCurrent();
         //PTM d = new PTM("w",3,'e',"w","w","w","w",s);
 
-        List<ProteinCurrent> list = proteinDAO.list();
+        /*List<ProteinCurrent> list = proteinDAO.list();
 
         for(ProteinCurrent p : list){
             System.out.println("Protein "+p);
-        }
+        }*/
 
         //Peptide p1 = peptideDAO.searchById(1);
         //System.out.println(p1);
 
-        Species spec1 = new Species(3,"Mouse", null, null);
-        proteinDAO.addSpecies(spec1);
+        //System.out.println("" + proteinDAO.searchByID("P1"));
+        //System.out.println("" + proteinDAO.searchByName("Example"));
+        //System.out.println("" + proteinDAO.searchByRef("test8"));
 
-        System.out.println("" + proteinDAO.searchByID("P1"));
-        System.out.println("" + proteinDAO.searchByName("Example"));
-        System.out.println("" + proteinDAO.searchByRef("test8"));
-        System.out.println("" + proteinDAO.getProteinWithGoTerms("Example"));
-        System.out.println("" + proteinDAO.getProteinWithGenes("Example"));
+        // Test code for GoProtein search
+        List<GOProtein> listOfGO= proteinDAO.getProteinListWithGoTerms("P1");
+        for (GOProtein goProtein : listOfGO) {
+            System.out.println("" + goProtein.getProteinCurrent().getProtein_acc() + "\t" + goProtein.getGoTerm());
+        }
+
+        // Test code for ProteinGene search
+        /*List<ProteinGene> listOfGene = proteinDAO.getProteinWithGenes("P22");
+        for (ProteinGene proteinGene : listOfGene) {
+            System.out.println("" + proteinGene.getProteinCurrent().getProtein_acc() + "\t" + proteinGene.getGene());
+        }*/
 
         //close resources
         context.close();
