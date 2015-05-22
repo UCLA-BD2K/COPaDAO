@@ -241,12 +241,6 @@ public class ProteinCurrent {
 
     @Override
     public String toString(){
-        /*if(spectra!=null)
-            for(Spectrum s: spectra){
-                spectraList+="\n"+s.getPtm_sequence()+", xcorr: "+s.getXcorr();
-                if(s.getModule()!=null)
-                    spectraList+=", module: "+s.getModule().getLib_mod()+", species: "+s.getModule().getSpecies().getSpecies_name();
-            }*/
         String acc = this.getProtein_acc();
         String seq = this.getSequence();
         String name = this.getProtein_name();

@@ -27,15 +27,17 @@ public interface ProteinDAO {
 
     public ProteinCurrent searchByEnsg(String ensgID);
 
-    public ProteinCurrent getProteinWithGenes(String uniprotID);
+    public List<ProteinGene> getProteinListWithGenes(String uniprotID);
     public ProteinGene searchByGeneName(String name);
     public String addGene(ProteinGene g);
 
-    public ProteinCurrent getProteinWithGoTerms(String uniprotID);
+    public List<GOProtein> getProteinListWithGoTerms(String uniprotID);
     public GoTerms searchByGOAccession(int GO_accession);
-//    public String addGoTerm(GoTerms g);
+//  public String addGoTerm(GoTerms g);
 
     public ProteinCurrent getProteinWithPTMs(String uniprotID);
     public PTM searchByPTMType(String ptm_type);
     public String addPTM(PTM p);
+
+
 }
