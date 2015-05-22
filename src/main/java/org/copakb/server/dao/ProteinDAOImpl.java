@@ -256,43 +256,26 @@ public class ProteinDAOImpl implements ProteinDAO {
      * Searches for proteins in the database with the given uniprot ID and
      * matches it with all the relevant GO terms
      * @param uniprotID Uniprot ID of the protein as given by www.uniprot.org
-     * @return List of all of the matching GOProteins, each of which consists of a ProteinCurrent object
-     * and a relevant GOTerm object
+     * @return Project object with defined GO terms
      */
-    public List<GOProtein> getProteinListWithGoTerms(String uniprotID){
+    public ProteinCurrent getProteinWithGoTerms(String uniprotID){
         Session session = this.sessionFactory.openSession();
-
-        //Criteria criteria = session.createCriteria(GOProtein.class);
-        DetachedCriteria detachedCriteria = DetachedCriteria.forClass (GOProtein.class).createCriteria("proteinCurrent");
-
+        ProteinCurrent protein = null;
         Transaction tx = session.beginTransaction();
-        try {
 
-            detachedCriteria.add (Restrictions.eq ("protein_acc", uniprotID));
-            //Criterion c = Restrictions.eq("proteinCurrent", uniprotID);
-            //criteria.add(c);
-            //
-            Criteria criteria = detachedCriteria.getExecutableCriteria(session);
-            List<GOProtein> results = criteria.list();
-            if(results == null)
-            {
-                System.out.println("GO TERM LIST IS NULL AND EMPTY");
-            }
-            else
-            {
-                System.out.println("GO TERM SIZE: " + results.size());
-            }
+        try {
+            protein = (ProteinCurrent)session.get(ProteinCurrent.class, uniprotID);
+            Hibernate.initialize(protein.getGoTerms());
             tx.commit();
-            if(results.isEmpty())
-                return null;
-            return results;
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
             return null;
-        }finally{
+        } finally {
             session.close();
         }
+
+        return protein;
     }
 
     /**
@@ -348,43 +331,26 @@ public class ProteinDAOImpl implements ProteinDAO {
      * Searches for proteins in the database with the given uniprot ID and
      * matches it with all the relevant gene information
      * @param uniprotID Uniprot ID of the protein as given by www.uniprot.org
-     * @return List of all of the matching ProteinGene, each of which consists of a ProteinCurrent object
-     * and a relevant Gene object
+     * @return Protein object with defined gene information
      */
-    public List<ProteinGene> getProteinListWithGenes(String uniprotID){
+    public ProteinCurrent getProteinWithGenes(String uniprotID){
         Session session = this.sessionFactory.openSession();
         ProteinCurrent protein = null;
-
-        //Criteria criteria = session.createCriteria(GOProtein.class);
-        DetachedCriteria detachedCriteria = DetachedCriteria.forClass (ProteinGene.class).createCriteria("proteinCurrent");
-
         Transaction tx = session.beginTransaction();
+
         try {
-            detachedCriteria.add (Restrictions.eq ("protein_acc", uniprotID));
-            //Criterion c = Restrictions.eq("proteinCurrent", uniprotID);
-            //criteria.add(c);
-            //
-            Criteria criteria = detachedCriteria.getExecutableCriteria(session);
-            List<ProteinGene> results = criteria.list();
-            if(results == null)
-            {
-                System.out.println("GENE TERM LIST IS NULL AND EMPTY");
-            }
-            else
-            {
-                System.out.println("GENE TERM SIZE: " + results.size());
-            }
+            protein = (ProteinCurrent)session.get(ProteinCurrent.class, uniprotID);
+            Hibernate.initialize(protein.getGenes());
             tx.commit();
-            if(results.isEmpty())
-                return null;
-            return results;
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
             return null;
-        }finally{
+        } finally {
             session.close();
         }
+
+        return protein;
     }
 
     /**
@@ -466,6 +432,7 @@ public class ProteinDAOImpl implements ProteinDAO {
         return protein;
     }
 
+    // TODO: Should return a list of PTMs because there can be multiple (b.c of indexing etc)
     /**
      * Returns PTM object
      * @param ptm_type ptm type

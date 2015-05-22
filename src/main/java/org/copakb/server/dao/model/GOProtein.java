@@ -7,11 +7,11 @@ import java.io.Serializable;
  * Created by Kevin on 5/1/2015.
  */
 
-//TODO get rid of GO_Protein object
-    // No need for middle-man table
+// TODO: Can be deleted; NOT CURRENTLY USED
 
 @Entity
 @Table(name = "GO_Protein")
+@Deprecated
 public class GOProtein implements Serializable{
     private ProteinCurrent proteinCurrent;
     private GoTerms goTerm;
