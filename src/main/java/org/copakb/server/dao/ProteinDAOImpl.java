@@ -42,6 +42,12 @@ public class ProteinDAOImpl implements ProteinDAO {
         return proteinList;
     }
 
+    /**
+     * Searches a limited list of ProteinCurrent objects from the database
+     * @param start beginning index for list
+     * @param length number of Protein Currents to be returned
+     * @return partial list of specified length of ProteinCurrent objects beginning at the start index
+     */
     public List<ProteinCurrent> limitedList(int start, int length) {
         Session session = this.sessionFactory.openSession();
         List<ProteinCurrent> proteinList = session.createCriteria(ProteinCurrent.class).setFirstResult(start).setMaxResults(length).list();
@@ -49,6 +55,35 @@ public class ProteinDAOImpl implements ProteinDAO {
         return proteinList;
     }
 
+    /**
+     * Adds a ProteinCurrent object to the database
+     * @param p object to be added
+     * @return Uniprot ID of p if successful, empty string otherwise
+     * @throws HibernateException
+     */
+    public String addProteinCurrent(ProteinCurrent p) throws HibernateException{
+        String uniprot = "";
+        try {
+            Session session = this.sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+            uniprot = (String) session.save(p);
+            tx.commit();
+            session.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return uniprot;
+    }
+
+    /**
+     * Add a species to the database and to the each of the protein objects listed under the Species object
+     * @param sp defined species object with name, id, and list of relevant proteins
+     * @return species id if successful, -1 otherwise
+     * @throws HibernateException
+     */
     public int addSpecies(Species sp) throws HibernateException {
         int result = -1;
         // look for relevant species
@@ -79,30 +114,11 @@ public class ProteinDAOImpl implements ProteinDAO {
         return result;
     }
 
-
     /**
-     * Adds a ProteinCurrent object to the database
-     * @param p object to be added
-     * @return Uniprot ID of p if successful, empty string otherwise
-     * @throws HibernateException
+     * Searches for a species object by checking species names
+     * @param name name of species
+     * @return species object that matches the given name
      */
-    public String addProteinCurrent(ProteinCurrent p) throws HibernateException{
-        String uniprot = "";
-        try {
-            Session session = this.sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
-            uniprot = (String) session.save(p);
-            tx.commit();
-            session.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return uniprot;
-    }
-
     public Species searchSpecies(String name) {
         Session session = this.sessionFactory.openSession();
 
@@ -279,6 +295,11 @@ public class ProteinDAOImpl implements ProteinDAO {
         }
     }
 
+    /**
+     * Searches for proteins in the database with the given GO accession ID
+     * @param GO_accession GO accession of the protein as automatically defined in the database entries
+     * @return GOTerms object which includes all of the relevant proteins and terms
+     */
     public GoTerms searchByGOAccession(int GO_accession) {
         Session session = this.sessionFactory.openSession();
         GoTerms go = null;
@@ -366,6 +387,11 @@ public class ProteinDAOImpl implements ProteinDAO {
         }
     }
 
+    /**
+     * Searches for an object in the database with the given gene name
+     * @param name Gene name of the protein
+     * @return ProteinGene object that contains the gene information, disease relevance, and relevant proteins
+     */
     public ProteinGene searchByGeneName(String name) {
         Session session = this.sessionFactory.openSession();
         ProteinGene gene = null;
@@ -384,6 +410,12 @@ public class ProteinDAOImpl implements ProteinDAO {
         return gene;
     }
 
+    /**
+     * Add gene information to all relevant protein objects
+     * @param g defined ProteinGene to be added
+     * @return gene name if successful, empty string otherwise
+     * @throws HibernateException
+     */
     public String addGene(ProteinGene g) throws HibernateException {
         String result = "";
 
@@ -409,6 +441,11 @@ public class ProteinDAOImpl implements ProteinDAO {
         return result;
     }
 
+    /**
+     * Search for protein and PTM information
+     * @param uniprotID Uniprot ID of the protein as given by www.uniprot.org
+     * @return ProteinCurrent object with the PTM defined
+     */
     public ProteinCurrent getProteinWithPTMs(String uniprotID) {
         Session session = this.sessionFactory.openSession();
         ProteinCurrent protein = null;
@@ -429,6 +466,11 @@ public class ProteinDAOImpl implements ProteinDAO {
         return protein;
     }
 
+    /**
+     * Returns PTM object
+     * @param ptm_type ptm type
+     * @return PTM object
+     */
     public PTM searchByPTMType(String ptm_type) {
         Session session = this.sessionFactory.openSession();
         PTM ptm = null;
@@ -447,6 +489,12 @@ public class ProteinDAOImpl implements ProteinDAO {
         return ptm;
     }
 
+    /**
+     * Add PTM information to all relevant protein objects
+     * @param p defined PTM object to be added
+     * @return PTM type if successful, empty string otherwise
+     * @throws HibernateException
+     */
     public String addPTM(PTM p) throws HibernateException {
         String result = "";
 
