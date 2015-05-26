@@ -356,15 +356,15 @@ public class ProteinDAOImpl implements ProteinDAO {
     /**
      * Searches for an object in the database with the given gene name
      * @param name Gene name of the protein
-     * @return ProteinGene object that contains the gene information, disease relevance, and relevant proteins
+     * @return Gene object that contains the gene information, disease relevance, and relevant proteins
      */
-    public ProteinGene searchByGeneName(String name) {
+    public Gene searchByGeneName(String name) {
         Session session = this.sessionFactory.openSession();
-        ProteinGene gene = null;
+        Gene gene = null;
 
         Transaction tx = session.beginTransaction();
         try {
-            gene = (ProteinGene)session.get(Gene.class, name);
+            gene = (Gene)session.get(Gene.class, name);
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -378,28 +378,32 @@ public class ProteinDAOImpl implements ProteinDAO {
 
     /**
      * Add gene information to all relevant protein objects
-     * @param g defined ProteinGene to be added
+     * @param g defined Gene to be added
      * @return gene name if successful, empty string otherwise
      * @throws HibernateException
      */
-    public String addGene(ProteinGene g) throws HibernateException {
-        String result = "";
-
-        ProteinGene existingGene = searchByGeneName(g.getGene().getGene_name());
-        if(existingGene != null)
-            return existingGene.getGene().getGene_name();
-
-        ProteinCurrent protein = this.searchByID(g.getProteinCurrent().getProtein_acc());
-        if(protein == null) {
-            String protein_id = this.addProteinCurrent(g.getProteinCurrent());
-            g.getProteinCurrent().setProtein_acc(protein_id);
-        } else{
-            g.setProteinCurrent(protein);
-        }
-
+    public String addGene(Gene g) throws HibernateException {
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        result = String.valueOf(session.save(g));
+
+        String result = "";
+
+        Gene existingGene = searchByGeneName(g.getGene_name());
+        if(existingGene != null)
+            return existingGene.getGene_name();
+
+        Set<ProteinCurrent> listofProteinCurrent = g.getProteins();
+
+        for (ProteinCurrent p : listofProteinCurrent) {
+            ProteinCurrent existingProtein = this.searchByID(p.getProtein_acc());
+            if (existingProtein == null) {
+                String protein_id = this.addProteinCurrent(p);
+                p.setProtein_acc(protein_id);
+            } else {
+                p = existingProtein;
+            }
+            result = String.valueOf(session.save(g));
+        }
 
         tx.commit();
         session.close();

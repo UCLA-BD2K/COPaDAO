@@ -28,8 +28,8 @@ public interface ProteinDAO {
     public ProteinCurrent searchByEnsg(String ensgID);
 
     public ProteinCurrent getProteinWithGenes(String uniprotID);
-    public ProteinGene searchByGeneName(String name);
-    public String addGene(ProteinGene g);
+    public Gene searchByGeneName(String name);
+    public String addGene(Gene g);
 
     public ProteinCurrent getProteinWithGoTerms(String uniprotID);
     public GoTerms searchByGOAccession(int GO_accession);

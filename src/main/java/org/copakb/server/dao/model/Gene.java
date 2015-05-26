@@ -66,4 +66,12 @@ public class Gene {
     public void setProteins(Set<ProteinCurrent> proteins) {
         this.proteins = proteins;
     }
+
+    @Override
+    public String toString() {
+        String result = "gene_name: " + gene_name + "\n" +
+                        "ensembl_id: " + ensembl_id + "\n";
+
+        return result;
+    }
 }
