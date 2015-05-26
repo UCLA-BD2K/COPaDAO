@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "Protein_Gene")
+@Deprecated
 public class ProteinGene implements Serializable{
     private ProteinCurrent proteinCurrent;
     private Gene gene;
