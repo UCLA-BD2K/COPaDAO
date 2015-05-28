@@ -63,17 +63,29 @@ public class TestEnvironment {
         //System.out.println("" + proteinDAO.searchByName("Example"));
         //System.out.println("" + proteinDAO.searchByRef("test8"));
 
-        // Test code for GoProtein search
-        List<GOProtein> listOfGO= proteinDAO.getProteinListWithGoTerms("P1");
-        for (GOProtein goProtein : listOfGO) {
-            System.out.println("" + goProtein.getProteinCurrent().getProtein_acc() + "\t" + goProtein.getGoTerm());
+        // Test code for GoTerms search
+        ProteinCurrent protein= proteinDAO.getProteinWithGoTerms("P1");
+        Set<GoTerms> listofGo= protein.getGoTerms();
+        for (GoTerms goTerm : listofGo) {
+            System.out.println("" + goTerm.getGO_accession() + "\t" + goTerm.getTerms());
         }
 
         // Test code for ProteinGene search
-        /*List<ProteinGene> listOfGene = proteinDAO.getProteinWithGenes("P22");
-        for (ProteinGene proteinGene : listOfGene) {
-            System.out.println("" + proteinGene.getProteinCurrent().getProtein_acc() + "\t" + proteinGene.getGene());
-        }*/
+        ProteinCurrent prote = proteinDAO.getProteinWithGenes("P22");
+        Set<Gene> listofGene = prote.getGenes();
+        for (Gene gene : listofGene) {
+            System.out.println("" + gene.toString());
+        }
+
+        // TODO: Hibernate needs to be re-mapped so that it reflects multiple spectrumprotein for one proteincurrent
+
+        // Test code for SpectrumProtein search
+        ProteinCurrent prot = proteinDAO.getProteinWithSpectra("P1");
+        Set<SpectrumProtein> listofSpectra = prot.getSpectra();
+        System.out.println(listofSpectra.size());
+        for (SpectrumProtein specProt : listofSpectra) {
+            System.out.println("" + specProt.getProtein_acc() + "\t" + specProt.getPrevAA() + "\t" + specProt.getNextAA());
+        }
 
         //close resources
         context.close();

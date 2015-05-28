@@ -9,8 +9,6 @@ import javax.persistence.*;
  * Created by Kevin on 5/1/2015.
  */
 
-//Todo reevaluate need for this table
-    //can be merged with spectrum table
 @Entity
 @Table(name = "Spectrum_Protein")
 public class SpectrumProtein {

@@ -28,13 +28,14 @@ public class ProteinCurrent {
     private Set<Gene> genes;
     private Set<GoTerms> goTerms;
     private Set<PTM> PTMs;
+    private Set<SpectrumProtein> spectra;
 
     public ProteinCurrent(String protein_acc, String sequence, String protein_name,
                           String chromosome, double molecular_weight, String transmembrane_domain,
                           String cytoplasmatic_domain, String noncytoplasmatic_domain,
                           String signal_peptide, String ref_kb_id, String keywords,
                           String feature_table, String ENSG_ID, Species species,
-                          String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs) {
+                          String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs, Set<SpectrumProtein> spectra) {
         this.protein_acc = protein_acc;
         this.sequence = sequence;
         this.protein_name = protein_name;
@@ -53,6 +54,7 @@ public class ProteinCurrent {
         this.genes = genes;
         this.goTerms = goTerms;
         this.PTMs = PTMs;
+        this.spectra = spectra;
     }
 
     public ProteinCurrent(String protein_acc, String sequence, String protein_name,
@@ -213,31 +215,27 @@ public class ProteinCurrent {
     public Set<Gene> getGenes() {
         return genes;
     }
-
     public void setGenes(Set<Gene> genes) {
         this.genes = genes;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
-    public Set<PTM> getPTMs() {
-        return PTMs;
-    }
-    public void setPTMs(Set<PTM> PTMs) {
-        this.PTMs = PTMs;
-    }
+    public Set<PTM> getPTMs() { return PTMs; }
+    public void setPTMs(Set<PTM> PTMs) { this.PTMs = PTMs; }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "GO_Protein", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "GO_accession",
                     nullable = false, updatable = false) })
-    public Set<GoTerms> getGoTerms() {
-        return goTerms;
-    }
+    public Set<GoTerms> getGoTerms() { return goTerms; }
+    public void setGoTerms(Set<GoTerms> goTerms) { this.goTerms = goTerms; }
 
-    public void setGoTerms(Set<GoTerms> goTerms) {
-        this.goTerms = goTerms;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "protein_acc")
+    public Set<SpectrumProtein> getSpectra() {
+        return spectra;
     }
+    public void setSpectra(Set<SpectrumProtein> spectra) { this.spectra = spectra; }
 
     @Override
     public String toString(){

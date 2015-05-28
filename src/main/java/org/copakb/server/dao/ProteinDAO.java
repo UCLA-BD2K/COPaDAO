@@ -39,5 +39,12 @@ public interface ProteinDAO {
     public PTM searchByPTMType(String ptm_type);
     public String addPTM(PTM p);
 
+    public ProteinCurrent getProteinWithSpectra(String uniprotID);
+    // Not necessary because both accessed by uniprot ID
+    // public SpectrumProtein searchBySpectrumProtein(String uniprotID);
+    // Not necessary because both accessed by uniprot ID (SpectrumProtein and ProteinCurrent)
+    // SpectrumProtein does not inherently contain ProteinCurrent object, but just the same reference
+    // public String addSpectrumProtein(SpectrumProtein p);
+
 
 }

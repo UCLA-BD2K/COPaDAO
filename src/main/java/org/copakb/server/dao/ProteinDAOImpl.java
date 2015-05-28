@@ -491,4 +491,82 @@ public class ProteinDAOImpl implements ProteinDAO {
         return result;
     }
 
+    /**
+     * Search for protein and spectrum information
+     * @param uniprotID Uniprot ID of the protein as given by www.uniprot.org
+     * @return ProteinCurrent object with the set of spectra defined
+     */
+    public ProteinCurrent getProteinWithSpectra(String uniprotID) {
+        Session session = this.sessionFactory.openSession();
+        ProteinCurrent protein = null;
+        Transaction tx = session.beginTransaction();
+
+        try {
+            protein = (ProteinCurrent)session.get(ProteinCurrent.class, uniprotID);
+            Hibernate.initialize(protein.getSpectra());
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+
+        return protein;
+    }
+
+    // TODO: maybe the ID for SpectrumProtein should be proteinId because there can be multiple spectrum mapping to the same uniprot ID
+    /**
+     * Not sure if necessary
+     * @param uniprotID
+     * @return
+     */
+    public SpectrumProtein searchBySpectrumProtein(String uniprotID) {
+        Session session = this.sessionFactory.openSession();
+        SpectrumProtein protein = null;
+
+        Transaction tx = session.beginTransaction();
+        try {
+            protein = (SpectrumProtein)session.get(SpectrumProtein.class, uniprotID);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }finally{
+            session.close();
+        }
+        return protein;
+    }
+
+    /**
+     * Not sure if necessary
+     * @param p
+     * @return
+     */
+    public String addSpectrumProtein(SpectrumProtein p) {
+        String result = "";
+
+        SpectrumProtein existingSpectra = searchBySpectrumProtein(p.getProtein_acc());
+        if(existingSpectra != null)
+            return existingSpectra.getProtein_acc();
+
+        ProteinCurrent protein = this.searchByID(p.getProtein_acc());
+        if(protein == null) { // cannot add because SpectrumProtein does not inherently contain a protein
+            String protein_id = this.addProteinCurrent(null);
+        } else{
+        }
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        result = String.valueOf(session.save(p));
+
+        tx.commit();
+        session.close();
+
+        return result;
+    }
+
+
 }
