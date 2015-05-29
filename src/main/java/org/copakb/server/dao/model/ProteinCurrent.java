@@ -22,7 +22,6 @@ public class ProteinCurrent {
     private String ref_kb_id;
     private String keywords;
     private String feature_table;
-    private String ENSG_ID;
     private Species species;
     private String wiki_link;
     private Set<Gene> genes;
@@ -34,7 +33,7 @@ public class ProteinCurrent {
                           String chromosome, double molecular_weight, String transmembrane_domain,
                           String cytoplasmatic_domain, String noncytoplasmatic_domain,
                           String signal_peptide, String ref_kb_id, String keywords,
-                          String feature_table, String ENSG_ID, Species species,
+                          String feature_table, Species species,
                           String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs, Set<SpectrumProtein> spectra) {
         this.protein_acc = protein_acc;
         this.sequence = sequence;
@@ -48,7 +47,6 @@ public class ProteinCurrent {
         this.ref_kb_id = ref_kb_id;
         this.keywords = keywords;
         this.feature_table = feature_table;
-        this.ENSG_ID = ENSG_ID;
         this.species = species;
         this.wiki_link = wiki_link;
         this.genes = genes;
@@ -61,7 +59,7 @@ public class ProteinCurrent {
                           String chromosome, double molecular_weight, String transmembrane_domain,
                           String cytoplasmatic_domain, String noncytoplasmatic_domain,
                           String signal_peptide, String ref_kb_id, String keywords,
-                          String feature_table, String ENSG_ID, Species species,
+                          String feature_table, Species species,
                           String wiki_link) {
         this.protein_acc = protein_acc;
         this.sequence = sequence;
@@ -75,7 +73,6 @@ public class ProteinCurrent {
         this.ref_kb_id = ref_kb_id;
         this.keywords = keywords;
         this.feature_table = feature_table;
-        this.ENSG_ID = ENSG_ID;
         this.species = species;
         this.wiki_link = wiki_link;
 
@@ -182,13 +179,6 @@ public class ProteinCurrent {
         this.feature_table = feature_table;
     }
 
-    @Column(name = "ENSG_ID")
-    public String getENSG_ID() {
-        return ENSG_ID;
-    }
-    public void setENSG_ID(String ENSG_ID) {
-        this.ENSG_ID = ENSG_ID;
-    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "species_id", nullable = false)

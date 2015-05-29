@@ -229,26 +229,30 @@ public class ProteinDAOImpl implements ProteinDAO {
      * @return ProteinCurrent object that contains the given Ensembl ID
      */
     public ProteinCurrent searchByEnsg(String ENSG_ID){
-        Session session = this.sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(ProteinCurrent.class);
-
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion c = Restrictions.eq("ENSG_ID", ENSG_ID);
-            criteria.add(c);
-            List<ProteinCurrent> results = criteria.list();
-            tx.commit();
-            if(results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        }finally{
-            session.close();
-        }
+        //ENSG is no longer part of ProteinCurrent table
+        //Todo rewrite function accordingly
+        return null;
+//        Session session = this.sessionFactory.openSession();
+//
+//        Criteria criteria = session.createCriteria(ProteinCurrent.class);
+//
+//        Transaction tx = session.beginTransaction();
+//        try {
+//            Criterion c = Restrictions.eq("ENSG_ID", ENSG_ID);
+//            criteria.add(c);
+//            List<ProteinCurrent> results = criteria.list();
+//            tx.commit();
+//            if(results.isEmpty())
+//                return null;
+//            return results.get(0);
+//        } catch (Exception e) {
+//            tx.rollback();
+//            e.printStackTrace();
+//            return null;
+//        }finally{
+//            session.close();
+//        }
     }
 
 

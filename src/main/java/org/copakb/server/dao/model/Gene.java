@@ -74,4 +74,15 @@ public class Gene {
 
         return result;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Gene gene = (Gene) o;
+
+        return !(ensembl_id != null ? !ensembl_id.equals(gene.ensembl_id) : gene.ensembl_id != null);
+
+    }
 }
