@@ -520,52 +520,17 @@ public class ProteinDAOImpl implements ProteinDAO {
         return protein;
     }
 
-    // TODO: maybe the ID for SpectrumProtein should be proteinId because there can be multiple spectrum mapping to the same uniprot ID
     /**
-     * Not sure if necessary
-     * @param uniprotID
-     * @return
+     * Add SpectrumProtein object
+     * @param p defined SpectrumProtein object to be added
+     * @return Auto-generated ID if successful, -1 otherwise
+     * @throws HibernateException
      */
-    public SpectrumProtein searchBySpectrumProtein(String uniprotID) {
-        Session session = this.sessionFactory.openSession();
-        SpectrumProtein protein = null;
-
-        Transaction tx = session.beginTransaction();
-        try {
-            protein = (SpectrumProtein)session.get(SpectrumProtein.class, uniprotID);
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        }finally{
-            session.close();
-        }
-        return protein;
-    }
-
-    /**
-     * Not sure if necessary
-     * @param p
-     * @return
-     */
-    public String addSpectrumProtein(SpectrumProtein p) {
-        String result = "";
-
-        SpectrumProtein existingSpectra = searchBySpectrumProtein(p.getProtein_acc());
-        if(existingSpectra != null)
-            return existingSpectra.getProtein_acc();
-
-        ProteinCurrent protein = this.searchByID(p.getProtein_acc());
-        if(protein == null) { // cannot add because SpectrumProtein does not inherently contain a protein
-            String protein_id = this.addProteinCurrent(null);
-        } else{
-        }
-
+    public int addSpectrumProtein(SpectrumProtein p) throws HibernateException{
+        int result = -1;
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        result = String.valueOf(session.save(p));
-
+        result = (int)session.save(p);
         tx.commit();
         session.close();
 

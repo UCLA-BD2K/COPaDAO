@@ -21,12 +21,12 @@ public class TestEnvironment {
 
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 
-        /*PeptideDAO peptideDAO = context.getBean(PeptideDAO.class);
-        //Peptide peptide = new Peptide(7, "AAAAABCD", 123.45, 5, null);
+        PeptideDAO peptideDAO = context.getBean(PeptideDAO.class);
+        /*//Peptide peptide = new Peptide(7, "AAAAABCD", 123.45, 5, null);
         //peptideDAO.addPeptide(peptide);
         List<Peptide> list = peptideDAO.list();
-        System.out.println(peptideDAO.searchBySequence("DAVSGMGVIVHIIEK"));
-        //System.out.println(peptideDAO.searchBySpecId(1));*/
+        System.out.println(peptideDAO.searchBySequence("DAVSGMGVIVHIIEK"));*/
+        //System.out.println(peptideDAO.searchBySpecId(2));
 
 
         ProteinDAO proteinDAO = context.getBean(ProteinDAO.class);
@@ -71,13 +71,11 @@ public class TestEnvironment {
         }
 
         // Test code for ProteinGene search
-        ProteinCurrent prote = proteinDAO.getProteinWithGenes("P22");
+        ProteinCurrent prote = proteinDAO.getProteinWithGenes("P1");
         Set<Gene> listofGene = prote.getGenes();
         for (Gene gene : listofGene) {
             System.out.println("" + gene.toString());
         }
-
-        // TODO: Hibernate needs to be re-mapped so that it reflects multiple spectrumprotein for one proteincurrent
 
         // Test code for SpectrumProtein search
         ProteinCurrent prot = proteinDAO.getProteinWithSpectra("P1");

@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Spectrum_Protein")
 public class SpectrumProtein {
+    private int spec_protein_id;
     private String protein_acc;
     private Spectrum spectrum;
     private LibraryModule libraryModule;
@@ -41,13 +42,18 @@ public class SpectrumProtein {
     }
 
     @Id
-    @Column(name = "protein_acc")
-    public String getProtein_acc() {
-        return protein_acc;
+    @Column(name="spec_protein_id")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    public int getSpectrumProtein_id() {
+        return spec_protein_id;
     }
-    public void setProtein_acc(String protein_acc) {
-        this.protein_acc = protein_acc;
+    public void setSpectrumProtein_id(int spec_protein_id) {
+        this.spec_protein_id = spec_protein_id;
     }
+
+    @Column(name = "protein_acc" , insertable = false, updatable = false)
+    public String getProtein_acc() {return protein_acc;}
+    public void setProtein_acc(String protein_acc) {this.protein_acc = protein_acc;}
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "spectrum_id", nullable = false)
