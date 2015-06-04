@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:c="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
              destroy-method="close">
@@ -54,5 +59,26 @@
 
     <bean id="proteinDAO" class="org.copakb.server.dao.ProteinDAOImpl">
         <property name="sessionFactory" ref="hibernateSessionFactory" />
+    </bean>
+
+    <!-- MongoDB config 10.44.115.51 -->
+    <mongo:mongo host="10.44.115.51" port="27017" />
+    <!--<mongo:db-factory id="mongoDbFactory" dbname="Analysis-Test" mongo-ref="mongo" username="dbadmin" password="peptidemsms"/>-->
+
+    <bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
+        <constructor-arg name="username" value="dbadmin" />
+        <constructor-arg name="password" value="peptidemsms" />
+    </bean>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongo" />
+        <constructor-arg name="databaseName" value="Analysis-Test" />
+        <constructor-arg name="userCredentials" ref="mongoCredentials" />
+        <property name="writeConcern" value="FSYNC_SAFE"/>
+        <!--<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />-->
+    </bean>
+
+    <bean id="reportDAO" class="org.copakb.server.dao.ReportDAOImpl">
+        <constructor-arg name="mongoOps" ref="mongoTemplate"/>
     </bean>
 </beans>
