@@ -1,8 +1,12 @@
 package org.copakb.server.dao.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /**
  * Created by Kevin on 5/28/2015.
  */
+
+@Document
 public class ScanPeptide {
     private String mzFile;
     private int scan;

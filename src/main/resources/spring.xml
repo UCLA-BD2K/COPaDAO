@@ -61,24 +61,39 @@
         <property name="sessionFactory" ref="hibernateSessionFactory" />
     </bean>
 
-    <!-- MongoDB config 10.44.115.51 -->
-    <mongo:mongo host="10.44.115.51" port="27017" />
-    <!--<mongo:db-factory id="mongoDbFactory" dbname="Analysis-Test" mongo-ref="mongo" username="dbadmin" password="peptidemsms"/>-->
+    <!--http://stackoverflow.com/questions/17893293/spring-mongodb-xml-configuration-with-credentials-fails-->
 
-    <bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
-        <constructor-arg name="username" value="dbadmin" />
-        <constructor-arg name="password" value="peptidemsms" />
-    </bean>
+    <!-- MongoDB config 10.44.115.51 -->
+    <!--<mongo:mongo host="10.44.115.51" port="27017" />-->
+    <!--&lt;!&ndash;<mongo:db-factory id="mongoDbFactory" dbname="Analysis-Test" mongo-ref="mongo" username="dbadmin" password="peptidemsms"/>&ndash;&gt;-->
+
+    <!--<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">-->
+        <!--<constructor-arg name="username" value="dbadmin" />-->
+        <!--<constructor-arg name="password" value="peptidemsms" />-->
+    <!--</bean>-->
+
+    <!--<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">-->
+        <!--<constructor-arg ref="mongo" />-->
+        <!--<constructor-arg name="databaseName" value="Analysis-Test" />-->
+        <!--<constructor-arg name="userCredentials" ref="mongoCredentials" />-->
+        <!--<property name="writeConcern" value="FSYNC_SAFE"/>-->
+        <!--&lt;!&ndash;<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />&ndash;&gt;-->
+    <!--</bean>-->
+
+    <!--<bean id="reportDAO" class="org.copakb.server.dao.ReportDAOImpl">-->
+        <!--<constructor-arg name="mongoOps" ref="mongoTemplate"/>-->
+    <!--</bean>-->
+
+    <mongo:mongo host="10.44.115.51" port="27017" id="mongo" />
+    <mongo:db-factory dbname="Analysis-Test" mongo-ref="mongo" id="mongoDbFactory" />
 
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg ref="mongo" />
-        <constructor-arg name="databaseName" value="Analysis-Test" />
-        <constructor-arg name="userCredentials" ref="mongoCredentials" />
-        <property name="writeConcern" value="FSYNC_SAFE"/>
-        <!--<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />-->
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
     </bean>
 
     <bean id="reportDAO" class="org.copakb.server.dao.ReportDAOImpl">
         <constructor-arg name="mongoOps" ref="mongoTemplate"/>
     </bean>
+
+
 </beans>

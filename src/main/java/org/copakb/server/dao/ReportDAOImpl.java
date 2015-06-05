@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.apache.commons.lang3.RandomStringUtils;
 
+
+import java.util.Iterator;
+
 /**
  * Created by Kevin on 5/28/2015.
  */
@@ -38,6 +41,19 @@ public class ReportDAOImpl implements ReportDAO {
     @Override
     public ReportProtein searchProtein(String token, String uniprotID) {
         //http://docs.spring.io/spring-data/data-mongo/docs/1.4.0.RC1/reference/html/mongo.repositories.html
+//        Query query = new Query(Criteria.where("_id").is(token));
+//
+//        Report report = this.mongoOps.findOne(query, Report.class, REPORT_COLLECTION);
+//
+//        System.out.println(report);
+//
+//
+//            for (Iterator<ReportProtein> iter = report.getReportProteins().iterator(); iter.hasNext();) {
+//                ReportProtein protein = iter.next();
+//                if (protein.getiPI() == uniprotID)
+//                    return protein;
+//            }
+
         return null;
     }
 

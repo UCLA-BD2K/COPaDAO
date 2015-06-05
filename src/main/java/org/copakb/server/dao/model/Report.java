@@ -1,14 +1,15 @@
 package org.copakb.server.dao.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Kevin on 5/28/2015.
  */
 
-
+@Document(collection = "Reports")
 public class Report {
     //mongodb ID
     @Id
@@ -18,18 +19,18 @@ public class Report {
     private String mzFile;
     private String libModule;
     private String searchFilter;
-    private String idProteins;
-    private Set<ReportProtein> reportProteins;
+    private String iDProteins;
+    private List<ReportProtein> reportProteins;
 
     public Report(String id, String taskID, String mzFile, String libModule,
                   String searchFilter, String idProteins,
-                  Set<ReportProtein> reportProteins) {
+                  List<ReportProtein> reportProteins) {
         Id = id;
         this.taskID = taskID;
         this.mzFile = mzFile;
         this.libModule = libModule;
         this.searchFilter = searchFilter;
-        this.idProteins = idProteins;
+        this.iDProteins = idProteins;
         this.reportProteins = reportProteins;
     }
 
@@ -40,7 +41,11 @@ public class Report {
         this.mzFile = mzFile;
         this.libModule = libModule;
         this.searchFilter = searchFilter;
-        this.idProteins = idProteins;
+        this.iDProteins = idProteins;
+    }
+
+    public Report() {
+        //default
     }
 
     public String getId() {
@@ -84,18 +89,18 @@ public class Report {
     }
 
     public String getIdProteins() {
-        return idProteins;
+        return iDProteins;
     }
 
     public void setIdProteins(String idProteins) {
-        this.idProteins = idProteins;
+        this.iDProteins = idProteins;
     }
 
-    public Set<ReportProtein> getReportProteins() {
+    public List<ReportProtein> getReportProteins() {
         return reportProteins;
     }
 
-    public void setReportProteins(Set<ReportProtein> reportProteins) {
+    public void setReportProteins(List<ReportProtein> reportProteins) {
         this.reportProteins = reportProteins;
     }
 
@@ -105,7 +110,7 @@ public class Report {
                         "mzFile: " + mzFile + "\n" +
                         "libModule: " + libModule + "\n" +
                         "searchFilter: " + searchFilter + "\n" +
-                        "idProteins: " + idProteins + "\n";
+                        "iDProteins: " + iDProteins + "\n";
 
         return result;
     }
