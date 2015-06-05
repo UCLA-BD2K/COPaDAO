@@ -227,7 +227,7 @@ public class ProteinCurrent {
     }
     public void setSpectra(Set<SpectrumProtein> spectra) { this.spectra = spectra; }
 
-    @Override
+    /*@Override
     public String toString(){
         String acc = this.getProtein_acc();
         String seq = this.getSequence();
@@ -235,5 +235,5 @@ public class ProteinCurrent {
         int specID = this.getSpecies().getSpecies_id();
         String specName = this.getSpecies().getSpecies_name();
         return "Acc: " + acc + "\nSequence: " + seq + "\nName: " + name + "\nSpecies ID: " + specID + "\nSpecies Name: " + specName + "\n**";
-    }
+    }*/
 }

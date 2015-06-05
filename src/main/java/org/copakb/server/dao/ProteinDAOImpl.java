@@ -16,6 +16,7 @@ import java.util.Set;
 /**
  * Created by vincekyi on 5/2/15.
  */
+
 public class ProteinDAOImpl implements ProteinDAO {
 
     private SessionFactory sessionFactory;
@@ -536,6 +537,5 @@ public class ProteinDAOImpl implements ProteinDAO {
 
         return result;
     }
-
 
 }

@@ -53,4 +53,9 @@ public class GoTerms {
     public void setProteins(Set<ProteinCurrent> proteins) {
         this.proteins = proteins;
     }
+
+    @Override
+    public String toString() {
+        return "GO Accession: " + GO_accession + "\tTerms: " + Terms;
+    }
 }

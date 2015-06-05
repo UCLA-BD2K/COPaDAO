@@ -1,7 +1,9 @@
 package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.*;
+import org.springframework.stereotype.Controller;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 import java.util.Set;
