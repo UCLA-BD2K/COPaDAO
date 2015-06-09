@@ -35,7 +35,8 @@ public interface ProteinDAO {
 
     public ProteinCurrent getProteinWithGoTerms(String uniprotID);
     public GoTerms searchByGOAccession(int GO_accession);
-//  public String addGoTerm(GoTerms g);
+
+    public int addGoTerms(GoTerms goTerms);
 
     public ProteinCurrent getProteinWithPTMs(String uniprotID);
     public PTM searchByPTMType(String ptm_type);
@@ -43,6 +44,8 @@ public interface ProteinDAO {
 
     public ProteinCurrent getProteinWithSpectra(String uniprotID);
     public int addSpectrumProtein(SpectrumProtein p);
+
+    public Species searchSpecies(String name);
 
 
 }

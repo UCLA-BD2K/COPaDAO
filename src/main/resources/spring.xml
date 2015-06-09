@@ -55,4 +55,7 @@
     <bean id="proteinDAO" class="org.copakb.server.dao.ProteinDAOImpl">
         <property name="sessionFactory" ref="hibernateSessionFactory" />
     </bean>
+
+    <bean name="obj" class="org.copakb.server.dao.DAOObject">
+    </bean>
 </beans>

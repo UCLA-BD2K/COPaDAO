@@ -64,6 +64,12 @@ public class ProteinDAOImpl implements ProteinDAO {
      */
     public String addProteinCurrent(ProteinCurrent p) throws HibernateException{
         String uniprot = "";
+
+        ProteinCurrent existingProtein = searchByID(p.getProtein_acc()); // add param
+        if (existingProtein != null)
+            return "Existed";
+        //return existingProtein.getProtein_acc();
+
         try {
             Session session = this.sessionFactory.openSession();
             Transaction tx = session.beginTransaction();
@@ -80,38 +86,28 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     /**
-     * Add a species to the database and to the each of the protein objects listed under the Species object
+     * Add a species to the database
      * @param sp defined species object with name, id, and list of relevant proteins
      * @return species id if successful, -1 otherwise
      * @throws HibernateException
      */
     public int addSpecies(Species sp) throws HibernateException {
         int result = -1;
-        // look for relevant species
+
         Species existingSpecies = searchSpecies(sp.getSpecies_name()); // add param
         if (existingSpecies != null)
             return existingSpecies.getSpecies_id();
 
-        if (sp.getProteinCurrents() == null) {
-            return -1;
+        try {
+            Session session = this.sessionFactory.openSession();
+            Transaction tx = session.beginTransaction();
+            result = (int) session.save(sp);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        // if no existing species, then add in according to species
-        Iterator iterator = sp.getProteinCurrents().iterator(); //iterate through the Species' Set of assoc. ProteinCurrents
 
-        // check values
-        while (iterator.hasNext()) {
-            ProteinCurrent temp = (ProteinCurrent) iterator.next(); // current ProteinCurrent object being iterated over
-            ProteinCurrent prot = this.searchByID(temp.getProtein_acc());
-            if (prot == null) {
-                this.addProteinCurrent(temp);
-                //add protein to the associated species list
-                //temp.setProtein_acc(temp.getProtein_acc()); // how to set protein accession? uniprot?
-                Set<ProteinCurrent> tempSet = sp.getProteinCurrents();
-                tempSet.add(temp);
-            } else {
-                //temp.setProtein_acc(protein_id);
-            }
-        }
         return result;
     }
 
@@ -305,6 +301,26 @@ public class ProteinDAOImpl implements ProteinDAO {
         }
         return go;
     }
+
+    public int addGoTerms(GoTerms goTerms) {
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        int result = -1;
+
+        GoTerms existingGoTerms = searchByGOAccession(goTerms.getGO_accession());
+        if (existingGoTerms != null)
+            return existingGoTerms.getGO_accession();
+
+        Set<ProteinCurrent> listofProteinCurrent = goTerms.getProteins();
+
+        result = (int) session.save(goTerms);
+
+        tx.commit();
+        session.close();
+
+        return result;
+    }
 //
 //    public String addGoTerm(GoTerms g) throws HibernateException {
 //        String result = "";
@@ -397,18 +413,7 @@ public class ProteinDAOImpl implements ProteinDAO {
         if(existingGene != null)
             return existingGene.getGene_name();
 
-        Set<ProteinCurrent> listofProteinCurrent = g.getProteins();
-
-        for (ProteinCurrent p : listofProteinCurrent) {
-            ProteinCurrent existingProtein = this.searchByID(p.getProtein_acc());
-            if (existingProtein == null) {
-                String protein_id = this.addProteinCurrent(p);
-                p.setProtein_acc(protein_id);
-            } else {
-                p = existingProtein;
-            }
-            result = String.valueOf(session.save(g));
-        }
+        result = (String) session.save(g);
 
         tx.commit();
         session.close();

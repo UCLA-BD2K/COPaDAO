@@ -235,5 +235,6 @@ public class ProteinCurrent {
         int specID = this.getSpecies().getSpecies_id();
         String specName = this.getSpecies().getSpecies_name();
         return "Acc: " + acc + "\nSequence: " + seq + "\nName: " + name + "\nSpecies ID: " + specID + "\nSpecies Name: " + specName + "\n**";
-    }*/
+    }
+    */
 }

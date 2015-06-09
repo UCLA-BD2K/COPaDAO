@@ -11,15 +11,39 @@ import javax.annotation.PostConstruct;
 @Controller
 public class DAOObject {
 
-    private ClassPathXmlApplicationContext context;
-    public PeptideDAO peptideDAO;
-    public ProteinDAO proteinDAO;
+    private static ClassPathXmlApplicationContext context;
+    public static PeptideDAO peptideDAO;
+    public static ProteinDAO proteinDAO;
 
     @PostConstruct
     public void init() {
         context = new ClassPathXmlApplicationContext("spring.xml");
         peptideDAO = context.getBean(PeptideDAO.class);
         proteinDAO = context.getBean(ProteinDAO.class);
+    }
+
+    public static PeptideDAO getPeptideDAO() {
+        if (context == null) {
+            context = new ClassPathXmlApplicationContext("spring.xml");
+        }
+        if (peptideDAO == null) {
+            peptideDAO = context.getBean(PeptideDAO.class);
+        }
+        return peptideDAO;
+    }
+
+    public static ProteinDAO getProteinDAO() {
+        if (context == null) {
+            context = new ClassPathXmlApplicationContext("spring.xml");
+        }
+        if (proteinDAO == null) {
+            proteinDAO = context.getBean(ProteinDAO.class);
+        }
+        return proteinDAO;
+    }
+
+    public DAOObject() {
+
     }
 
 }

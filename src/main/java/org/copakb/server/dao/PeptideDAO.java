@@ -1,6 +1,7 @@
 package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.Peptide;
+import org.copakb.server.dao.model.Species;
 import org.copakb.server.dao.model.Spectrum;
 
 import java.util.List;
