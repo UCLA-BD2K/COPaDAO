@@ -2,46 +2,47 @@ package org.copakb.server.dao.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Kevin on 5/28/2015.
  */
 
-@Document(collection = "Reports")
+@Document
 public class Report {
     //mongodb ID
     @Id
-    private String Id;
+    private String id;
 
     private String taskID;
     private String mzFile;
     private String libModule;
     private String searchFilter;
-    private String iDProteins;
-    private List<ReportProtein> reportProteins;
+    private String idProteins;
+    private ArrayList<ReportProtein> reportProteins;
 
     public Report(String id, String taskID, String mzFile, String libModule,
                   String searchFilter, String idProteins,
-                  List<ReportProtein> reportProteins) {
-        Id = id;
+                  ArrayList<ReportProtein> reportProteins) {
+        this.id = id;
         this.taskID = taskID;
         this.mzFile = mzFile;
         this.libModule = libModule;
         this.searchFilter = searchFilter;
-        this.iDProteins = idProteins;
+        this.idProteins = idProteins;
         this.reportProteins = reportProteins;
     }
 
     public Report(String id, String taskID, String mzFile, String libModule,
                   String searchFilter, String idProteins) {
-        Id = id;
+        this.id = id;
         this.taskID = taskID;
         this.mzFile = mzFile;
         this.libModule = libModule;
         this.searchFilter = searchFilter;
-        this.iDProteins = idProteins;
+        this.idProteins = idProteins;
     }
 
     public Report() {
@@ -49,11 +50,11 @@ public class Report {
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        id = id;
     }
 
     public String getTaskID() {
@@ -88,29 +89,31 @@ public class Report {
         this.searchFilter = searchFilter;
     }
 
+    @Field("iDProteins")
     public String getIdProteins() {
-        return iDProteins;
+        return idProteins;
     }
 
     public void setIdProteins(String idProteins) {
-        this.iDProteins = idProteins;
+        this.idProteins = idProteins;
     }
 
-    public List<ReportProtein> getReportProteins() {
+    @Field("proteins")
+    public ArrayList<ReportProtein> getReportProteins() {
         return reportProteins;
     }
 
-    public void setReportProteins(List<ReportProtein> reportProteins) {
+    public void setReportProteins(ArrayList<ReportProtein> reportProteins) {
         this.reportProteins = reportProteins;
     }
 
     @Override
     public String toString() {
-        String result = "Id: " + Id + "\n" +
+        String result = "id: " + id + "\n" +
                         "mzFile: " + mzFile + "\n" +
                         "libModule: " + libModule + "\n" +
                         "searchFilter: " + searchFilter + "\n" +
-                        "iDProteins: " + iDProteins + "\n";
+                        "idProteins: " + idProteins + "\n";
 
         return result;
     }

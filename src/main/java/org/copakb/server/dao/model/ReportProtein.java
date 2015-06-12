@@ -2,14 +2,16 @@ package org.copakb.server.dao.model;
 
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Kevin on 5/28/2015.
  */
 
-@Document
+
 public class ReportProtein {
     private String iPI;
     private String cOPaID;
@@ -20,12 +22,12 @@ public class ReportProtein {
     private double normalizCount;
     private int probability;
     private int length;
-    private List<ScanPeptide> scanPeptides;
+    private ArrayList<ScanPeptide> scanPeptides;
 
     public ReportProtein(String iPI, String cOPaID, String proteinName,
                          String geneSymbol, String organism, int spectraCount,
                          double normalizCount, int probability, int length,
-                         List<ScanPeptide> scanPeptides) {
+                         ArrayList<ScanPeptide> scanPeptides) {
         this.iPI = iPI;
         this.cOPaID = cOPaID;
         this.proteinName = proteinName;
@@ -128,11 +130,28 @@ public class ReportProtein {
         this.length = length;
     }
 
-    public List<ScanPeptide> getScanPeptides() {
+
+    @Field("scanPeptides")
+    public ArrayList<ScanPeptide> getScanPeptides() {
         return scanPeptides;
     }
 
-    public void setScanPeptides(List<ScanPeptide> scanPeptides) {
+    public void setScanPeptides(ArrayList<ScanPeptide> scanPeptides) {
         this.scanPeptides = scanPeptides;
+    }
+
+    @Override
+    public String toString() {
+        String result = "iPI: " + iPI + "\n" +
+                        "cOPaID: " + cOPaID + "\n" +
+                        "proteinName: " + proteinName + "\n" +
+                        "geneSymbol: " + geneSymbol + "\n" +
+                        "organism: " + organism + "\n" +
+                        "spectraCount: " + spectraCount + "\n" +
+                        "normalizCount: " + normalizCount + "\n" +
+                        "probability: " + probability + "\n" +
+                        "length: " + length + "\n";
+
+        return result;
     }
 }

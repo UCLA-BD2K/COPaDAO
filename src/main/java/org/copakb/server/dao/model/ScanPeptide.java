@@ -148,4 +148,23 @@ public class ScanPeptide {
     public void setFeature(String feature) {
         this.feature = feature;
     }
+
+    @Override
+    public String toString() {
+        String result = "mzFile: " + mzFile + "\n" +
+                        "scan: " + scan + "\n" +
+                        "peptideSequence: " + peptideSequence + "\n" +
+                        "peptide: " + peptide + "\n" +
+                        "similarityScore: " + similarityScore + "\n" +
+                        "deltaMZ: " + deltaMZ + "\n" +
+                        "spectrum: " + spectrum + "\n" +
+                        "finalScore: " + finalScore + "\n" +
+                        "unique: " + unique + "\n" +
+                        "charge: " + charge + "\n" +
+                        "precurMZ: " + precurMZ + "\n" +
+                        "thPrecurMZ: " + thPrecurMZ + "\n" +
+                        "feature: " + feature + "\n";
+
+        return result;
+    }
 }
