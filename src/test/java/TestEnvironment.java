@@ -1,4 +1,5 @@
 import org.copakb.server.dao.PeptideDAO;
+import org.copakb.server.dao.ReportDAO;
 import org.copakb.server.dao.model.*;
 import org.copakb.server.dao.ProteinDAO;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -63,27 +64,36 @@ public class TestEnvironment {
         //System.out.println("" + proteinDAO.searchByName("Example"));
         //System.out.println("" + proteinDAO.searchByRef("test8"));
 
-        // Test code for GoTerms search
-        ProteinCurrent protein= proteinDAO.getProteinWithGoTerms("P1");
-        Set<GoTerms> listofGo= protein.getGoTerms();
-        for (GoTerms goTerm : listofGo) {
-            System.out.println("" + goTerm.getGO_accession() + "\t" + goTerm.getTerms());
-        }
+//        // Test code for GoTerms search
+//        ProteinCurrent protein= proteinDAO.getProteinWithGoTerms("P1");
+//        Set<GoTerms> listofGo= protein.getGoTerms();
+//        for (GoTerms goTerm : listofGo) {
+//            System.out.println("" + goTerm.getGO_accession() + "\t" + goTerm.getTerms());
+//        }
+//
+//        // Test code for ProteinGene search
+//        ProteinCurrent prote = proteinDAO.getProteinWithGenes("P1");
+//        Set<Gene> listofGene = prote.getGenes();
+//        for (Gene gene : listofGene) {
+//            System.out.println("" + gene.toString());
+//        }
+//
+//        // Test code for SpectrumProtein search
+//        ProteinCurrent prot = proteinDAO.getProteinWithSpectra("P1");
+//        Set<SpectrumProtein> listofSpectra = prot.getSpectra();
+//        System.out.println(listofSpectra.size());
+//        for (SpectrumProtein specProt : listofSpectra) {
+//            System.out.println("" + specProt.getProtein_acc() + "\t" + specProt.getPrevAA() + "\t" + specProt.getNextAA());
+//        }
 
-        // Test code for ProteinGene search
-        ProteinCurrent prote = proteinDAO.getProteinWithGenes("P1");
-        Set<Gene> listofGene = prote.getGenes();
-        for (Gene gene : listofGene) {
-            System.out.println("" + gene.toString());
-        }
 
-        // Test code for SpectrumProtein search
-        ProteinCurrent prot = proteinDAO.getProteinWithSpectra("P1");
-        Set<SpectrumProtein> listofSpectra = prot.getSpectra();
-        System.out.println(listofSpectra.size());
-        for (SpectrumProtein specProt : listofSpectra) {
-            System.out.println("" + specProt.getProtein_acc() + "\t" + specProt.getPrevAA() + "\t" + specProt.getNextAA());
-        }
+        ReportDAO reportDAO = context.getBean("reportDAO", ReportDAO.class);
+
+        System.out.println(reportDAO.generateToken());
+
+        //http://stackoverflow.com/questions/17893293/spring-mongodb-xml-configuration-with-credentials-fails
+        Report report = reportDAO.searchReport("5508bc9bfb8bcff4d7c0b597");
+        System.out.println(report);
 
         //close resources
         context.close();

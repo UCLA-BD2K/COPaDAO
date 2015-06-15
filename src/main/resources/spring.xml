@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:c="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.5.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
              destroy-method="close">
@@ -58,4 +63,20 @@
 
     <bean name="obj" class="org.copakb.server.dao.DAOObject">
     </bean>
+
+    <!--http://stackoverflow.com/questions/17893293/spring-mongodb-xml-configuration-with-credentials-fails-->
+
+    <mongo:mongo host="@host@" port="27017" id="mongo" />
+    <mongo:db-factory dbname="@dbname@" mongo-ref="mongo" id="mongoDbFactory" />
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+    </bean>
+
+    <bean id="reportDAO" class="org.copakb.server.dao.ReportDAOImpl">
+        <constructor-arg name="mongoOps" ref="mongoTemplate"/>
+    </bean>
+
+
+
 </beans>
