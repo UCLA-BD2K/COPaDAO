@@ -25,10 +25,19 @@ public class ReportDAOImpl implements ReportDAO {
 
     private static final String REPORT_COLLECTION = "Reports";
 
+    /**
+     * Sets the MongoOps to execute MongoDB operations
+     * @param mongoOps
+     */
+
     public ReportDAOImpl(MongoOperations mongoOps){
         this.mongoOps = mongoOps;
     }
 
+    /**
+     * generates a random token for Report identification
+     * @return a token 24 characters long, and only contains lower-case alphanumeric characters
+     */
     public String generateToken() {
         //ex: 5508bc9bfb8bcff4d7c0b597
         //length: 24, lower case alphanumeric
@@ -37,11 +46,22 @@ public class ReportDAOImpl implements ReportDAO {
         return result;
     }
 
+    /**
+     * Searches the MongoDB database for a specific Report
+     * @param   token   the token of a specific Report
+     * @return  model of the Report with the specified token
+     */
     @Override
     public Report searchReport(String token) {
         return this.mongoOps.findById(token, Report.class, REPORT_COLLECTION);
     }
 
+    /**
+     * Searches the MongoDB database for a specific Protein in a specific Report
+     * @param   token       the token of a specific Report
+     * @param   uniprotID   the uniprotID of a specific Protein
+     * @return  the model of the Protein with the specific uniprotID that is in the Report with the specific token
+     */
     @Override
     public ReportProtein searchProtein(String token, String uniprotID) {
         //http://docs.spring.io/spring-data/data-mongo/docs/1.4.0.RC1/reference/html/mongo.repositories.html
@@ -63,6 +83,13 @@ public class ReportDAOImpl implements ReportDAO {
 
     }
 
+    /**
+     * Searches the MongoDB database for a specific Peptide in a specific Protein in a specific Report
+     * @param   token       the token of a specific Report
+     * @param   uniprotID   the uniprotID of a specific Protein
+     * @param   sequence    the peptide sequence of a specific Peptide
+     * @return  the model of a Peptide with the specified sequence
+     */
     @Override
     public ScanPeptide searchScanPeptide(String token, String uniprotID, String sequence) {
         ReportProtein reportProtein = searchProtein(token, uniprotID);

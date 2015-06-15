@@ -18,10 +18,21 @@ public class PeptideDAOImpl implements PeptideDAO {
 
     private SessionFactory sessionFactory;
 
+    /**
+     * Initializes the sessionFactory to run database operations
+     * @param sessionFactory
+     */
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
+    /**
+     * Adds a peptide into the MySQL database
+     * @param   p   model of the Peptide that needs to be added
+     * @return  On success: the ID of the peptide that is added
+     *          On failure: returns -1
+     * @throws HibernateException
+     */
     public int addPeptide(Peptide p) throws HibernateException{
         int result = -1;
         Session session = this.sessionFactory.openSession();
@@ -33,6 +44,13 @@ public class PeptideDAOImpl implements PeptideDAO {
         return result;
     }
 
+    /**
+     * Adds a spectrum into the MySQL database
+     * @param   s   model of the Spectrum that needs to be added
+     * @return  On success: returns the ID of the spectrum that is added
+     *          On failure: returns -1
+     * @throws HibernateException
+     */
     public int addSpectrum(Spectrum s) throws HibernateException{
         int result = -1;
 
@@ -58,6 +76,13 @@ public class PeptideDAOImpl implements PeptideDAO {
         return result;
     }
 
+    /**
+     * Searches the MySQL database for a specific Spectrum
+     * @param ptm_seq   ptm_seq of the Spectrum
+     * @param mod_id    mod_id of the Spectrum
+     * @param charge    charge of the Spectrum
+     * @return  The spectrum with the specified ptm_seq, mod_id, and charge
+     */
     public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge){
         Session session = this.sessionFactory.openSession();
 
@@ -90,6 +115,11 @@ public class PeptideDAOImpl implements PeptideDAO {
         }
     }
 
+    /**
+     * Searches the MySQL database for all Peptides
+     * @return list of all Peptides in the database
+     * @throws HibernateException
+     */
     @SuppressWarnings("unchecked")
     @Override
     public List<Peptide> list() throws HibernateException{
@@ -99,6 +129,12 @@ public class PeptideDAOImpl implements PeptideDAO {
         return peptideList;
     }
 
+    /**
+     * Searches the MySQL database for a limited number of Peptides
+     * @param start     the starting index of the desired list
+     * @param length    the length of the desired list
+     * @return          List of Peptides with desired starting index and length
+     */
     public List<Peptide> limitedList(int start, int length){
         Session session = this.sessionFactory.openSession();
         List<Peptide> peptideList = session.createCriteria(Peptide.class).setFirstResult(start).setMaxResults(length).list();
@@ -106,6 +142,12 @@ public class PeptideDAOImpl implements PeptideDAO {
         return peptideList;
     }
 
+    /**
+     * Searches the database for a specific Peptide
+     * @param   peptide_id  the ID of the desired Peptide
+     * @return  the specific Peptide with the provided ID
+     * @throws HibernateException
+     */
     public Peptide searchById(Integer peptide_id) throws HibernateException{
         Session session = this.sessionFactory.openSession();
         Peptide peptide = null;
@@ -124,6 +166,12 @@ public class PeptideDAOImpl implements PeptideDAO {
         return peptide;
     }
 
+    /**
+     * Searches the database for a specific Peptide
+     * @param   peptide_sequence  the peptide sequence of the desired Peptide
+     * @return  the specific Peptide with the provided peptide sequence
+     * @throws HibernateException
+     */
     public Peptide searchBySequence(String peptide_sequence) throws HibernateException{
         Session session = this.sessionFactory.openSession();
 
@@ -148,6 +196,12 @@ public class PeptideDAOImpl implements PeptideDAO {
         }
     }
 
+    /**
+     * Searches the database for a specific Spectrum
+     * @param   id  the ID of the desired Spectrum
+     * @return  the Spectrum with the provided ID
+     * @throws HibernateException
+     */
     public Spectrum searchBySpecId(Integer id) throws HibernateException{
         Session session = this.sessionFactory.openSession();
         Spectrum spectrum = null;
