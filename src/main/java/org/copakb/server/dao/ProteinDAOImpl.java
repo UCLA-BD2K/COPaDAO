@@ -8,10 +8,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by vincekyi on 5/2/15.
@@ -543,4 +540,16 @@ public class ProteinDAOImpl implements ProteinDAO {
         return result;
     }
 
+    /**
+     * Searches a limited list of Gene objects from the database
+     * @param start beginning index for list
+     * @param length number of genes to be returned
+     * @return partial list of specified length of Gene objects beginning at the start index
+     */
+    public List<Gene> limitedGeneList(int start, int length){
+        Session session = this.sessionFactory.openSession();
+        List<Gene> genes = session.createCriteria(Gene.class).setFirstResult(start).setMaxResults(length).list();
+        session.close();
+        return genes;
+    }
 }
