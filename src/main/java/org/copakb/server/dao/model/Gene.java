@@ -12,13 +12,15 @@ import java.util.Set;
 public class Gene {
     private String gene_name;
     private String ensembl_id;
+    private String chromosome;
     private Set<HPA> hpas;
     private Set<Disease> diseases;
     private Set<ProteinCurrent> proteins;
 
-    public Gene(String gene_name, String ensembl_id, Set<HPA> hpas, Set<Disease> diseases, Set<ProteinCurrent> proteins) {
+    public Gene(String gene_name, String ensembl_id, String chromosome, Set<HPA> hpas, Set<Disease> diseases, Set<ProteinCurrent> proteins) {
         this.gene_name = gene_name;
         this.ensembl_id = ensembl_id;
+        this.chromosome = chromosome;
         this.hpas = hpas;
         this.diseases = diseases;
         this.proteins = proteins;
@@ -36,6 +38,15 @@ public class Gene {
     @Column(name = "ensembl_id")
     public String getEnsembl_id() { return ensembl_id; }
     public void setEnsembl_id(String ensembl_id) { this.ensembl_id = ensembl_id; }
+
+    @Column(name = "chromosome")
+    public String getChromosome() {
+        return chromosome;
+    }
+
+    public void setChromosome(String chromosome) {
+        this.chromosome = chromosome;
+    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensembl_id")
     public Set<HPA> getHpas() { return hpas; }

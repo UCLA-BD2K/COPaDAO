@@ -66,6 +66,36 @@ public class ProteinDAOImpl implements ProteinDAO {
         if (existingProtein != null)
             return "Existed";
         //return existingProtein.getProtein_acc();
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            uniprot = (String) session.save(p);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            tx.rollback();
+            session.close();
+            String temp = "";
+            if (e instanceof org.hibernate.exception.LockTimeoutException) {
+                temp = addProteinCurrentLast(p);
+            }
+            if (temp.equals("")) {
+                return "Failed";
+            }
+        }
+
+        return uniprot;
+    }
+
+    public String addProteinCurrentLast(ProteinCurrent p) {
+        String uniprot = "";
+
+        ProteinCurrent existingProtein = searchByID(p.getProtein_acc()); // add param
+        if (existingProtein != null)
+            return "Existed";
+        //return existingProtein.getProtein_acc();
 
         try {
             Session session = this.sessionFactory.openSession();
@@ -77,6 +107,7 @@ public class ProteinDAOImpl implements ProteinDAO {
         catch (Exception e)
         {
             e.printStackTrace();
+            return "Failed";
         }
 
         return uniprot;
@@ -95,9 +126,10 @@ public class ProteinDAOImpl implements ProteinDAO {
         if (existingSpecies != null)
             return existingSpecies.getSpecies_id();
 
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
         try {
-            Session session = this.sessionFactory.openSession();
-            Transaction tx = session.beginTransaction();
             result = (int) session.save(sp);
             tx.commit();
             session.close();
@@ -531,13 +563,48 @@ public class ProteinDAOImpl implements ProteinDAO {
      */
     public int addSpectrumProtein(SpectrumProtein p) throws HibernateException{
         int result = -1;
+
+        //SpectrumProtein existingSpecProtein = searchSpectrumProtein(p.getSpectrum().getSpectrum_id(), p.getProtein_acc()); // add param
+        //if (existingSpecProtein != null)
+        //    return existingSpecProtein.getSpectrumProtein_id();
+
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        result = (int)session.save(p);
-        tx.commit();
-        session.close();
+
+        try {
+            result = (int) session.save(p);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return result;
+    }
+
+    public SpectrumProtein searchSpectrumProtein(int spectrum_id, String protein_acc) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(SpectrumProtein.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion specIdRestriction = Restrictions.eq("spectrum_id", spectrum_id);
+            Criterion proteinAccRestriction = Restrictions.eq("protein_acc", protein_acc);
+
+            criteria.add(Restrictions.and(specIdRestriction, proteinAccRestriction));
+            List<SpectrumProtein> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
     }
 
     /**

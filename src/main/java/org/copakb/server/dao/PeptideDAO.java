@@ -1,8 +1,6 @@
 package org.copakb.server.dao;
 
-import org.copakb.server.dao.model.Peptide;
-import org.copakb.server.dao.model.Species;
-import org.copakb.server.dao.model.Spectrum;
+import org.copakb.server.dao.model.*;
 
 import java.util.List;
 
@@ -26,5 +24,17 @@ public interface PeptideDAO {
     public int addSpectrum(Spectrum s);
 
     public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge);
+
+    public Species searchSpecies(String name);
+
+    public int addSpecies(Species spec);
+
+    public LibraryModule searchLibraryModuleWithId(int id);
+
+    public LibraryModule searchLibraryModuleWithModule(String lib_mod);
+
+    public int addLibraryModule(LibraryModule libmod);
+
+    public PTM_type searchPtmType(int id);
 
 }

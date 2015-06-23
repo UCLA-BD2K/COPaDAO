@@ -13,7 +13,6 @@ public class ProteinCurrent {
     private String protein_acc;
     private String sequence;
     private String protein_name;
-    private String chromosome;
     private double molecular_weight;
     private String transmembrane_domain;
     private String cytoplasmatic_domain;
@@ -30,7 +29,7 @@ public class ProteinCurrent {
     private Set<SpectrumProtein> spectra;
 
     public ProteinCurrent(String protein_acc, String sequence, String protein_name,
-                          String chromosome, double molecular_weight, String transmembrane_domain,
+                          double molecular_weight, String transmembrane_domain,
                           String cytoplasmatic_domain, String noncytoplasmatic_domain,
                           String signal_peptide, String ref_kb_id, String keywords,
                           String feature_table, Species species,
@@ -38,7 +37,6 @@ public class ProteinCurrent {
         this.protein_acc = protein_acc;
         this.sequence = sequence;
         this.protein_name = protein_name;
-        this.chromosome = chromosome;
         this.molecular_weight = molecular_weight;
         this.transmembrane_domain = transmembrane_domain;
         this.cytoplasmatic_domain = cytoplasmatic_domain;
@@ -64,7 +62,6 @@ public class ProteinCurrent {
         this.protein_acc = protein_acc;
         this.sequence = sequence;
         this.protein_name = protein_name;
-        this.chromosome = chromosome;
         this.molecular_weight = molecular_weight;
         this.transmembrane_domain = transmembrane_domain;
         this.cytoplasmatic_domain = cytoplasmatic_domain;
@@ -105,14 +102,6 @@ public class ProteinCurrent {
     }
     public void setProtein_name(String protein_name) {
         this.protein_name = protein_name;
-    }
-
-    @Column(name = "chromosome")
-    public String getChromosome() {
-        return chromosome;
-    }
-    public void setChromosome(String chromosome) {
-        this.chromosome = chromosome;
     }
 
     @Column(name = "molecular_weight")

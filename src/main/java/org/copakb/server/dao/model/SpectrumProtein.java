@@ -20,18 +20,16 @@ public class SpectrumProtein {
     private boolean feature_peptide;
     @Type(type = "numeric_boolean")
     private boolean species_unique;
-    private String enzyme_specificity;
     private char prevAA;
     private char nextAA;
     private int location;
 
-    public SpectrumProtein(String protein_acc, Spectrum spectrum, LibraryModule libraryModule, boolean feature_peptide, boolean species_unique, String enzyme_specificity, char prevAA, char nextAA, int location) {
+    public SpectrumProtein(String protein_acc, Spectrum spectrum, LibraryModule libraryModule, boolean feature_peptide, boolean species_unique, char prevAA, char nextAA, int location) {
         this.protein_acc = protein_acc;
         this.spectrum = spectrum;
         this.libraryModule = libraryModule;
         this.feature_peptide = feature_peptide;
         this.species_unique = species_unique;
-        this.enzyme_specificity = enzyme_specificity;
         this.prevAA = prevAA;
         this.nextAA = nextAA;
         this.location = location;
@@ -51,11 +49,11 @@ public class SpectrumProtein {
         this.spec_protein_id = spec_protein_id;
     }
 
-    @Column(name = "protein_acc" , insertable = false, updatable = false)
+    @Column(name = "protein_acc", nullable = false)
     public String getProtein_acc() {return protein_acc;}
     public void setProtein_acc(String protein_acc) {this.protein_acc = protein_acc;}
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "spectrum_id", nullable = false)
     public Spectrum getSpectrum() {
         return spectrum;
@@ -85,16 +83,9 @@ public class SpectrumProtein {
     public boolean isSpecies_unique() {
         return species_unique;
     }
+
     public void setSpecies_unique(boolean species_unique) {
         this.species_unique = species_unique;
-    }
-
-    @Column(name = "enzyme_specificity")
-    public String getEnzyme_specificity() {
-        return enzyme_specificity;
-    }
-    public void setEnzyme_specificity(String enzyme_specificity) {
-        this.enzyme_specificity = enzyme_specificity;
     }
 
     @Column(name = "prevAA")

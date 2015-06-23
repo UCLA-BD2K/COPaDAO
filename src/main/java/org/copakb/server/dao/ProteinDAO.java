@@ -45,6 +45,8 @@ public interface ProteinDAO {
     public ProteinCurrent getProteinWithSpectra(String uniprotID);
     public int addSpectrumProtein(SpectrumProtein p);
 
+    public SpectrumProtein searchSpectrumProtein(int spectrum_id, String protein_acc);
+
     public Species searchSpecies(String name);
 
     public List<Gene> limitedGeneList(int start, int length);

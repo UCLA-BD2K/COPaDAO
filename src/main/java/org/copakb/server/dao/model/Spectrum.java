@@ -53,7 +53,6 @@ public class Spectrum {
     public int getSpectrum_id() {
         return spectrum_id;
     }
-
     public void setSpectrum_id(int spectrum_id) {
         this.spectrum_id = spectrum_id;
     }
@@ -182,6 +181,7 @@ public class Spectrum {
 
     @Override
     public String toString(){
-        return "seq: "+this.ptm_sequence+"\npeptide sequence: "+this.peptide.getPeptide_sequence()+"/n--";
+        //return "seq: "+this.ptm_sequence+"\npeptide sequence: "+this.peptide.getPeptide_sequence()+"/n--";
+        return "";
     }
 }

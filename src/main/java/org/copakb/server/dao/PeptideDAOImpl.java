@@ -1,8 +1,6 @@
 package org.copakb.server.dao;
 
-import org.copakb.server.dao.model.LibraryModule;
-import org.copakb.server.dao.model.Peptide;
-import org.copakb.server.dao.model.Spectrum;
+import org.copakb.server.dao.model.*;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.LogicalExpression;
@@ -218,6 +216,157 @@ public class PeptideDAOImpl implements PeptideDAO {
             session.close();
         }
         return spectrum;
+    }
+
+    /**
+     * Searches for a species object by checking species names
+     *
+     * @param name name of species
+     * @return species object that matches the given name
+     */
+    public Species searchSpecies(String name) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(Species.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion nameRestriction = Restrictions.eq("species_name", name);
+
+            criteria.add(Restrictions.and(nameRestriction));
+            List<Species> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
+     * Add a species to the database
+     *
+     * @param sp defined species object with name, id, and list of relevant proteins
+     * @return species id if successful, -1 otherwise
+     * @throws HibernateException
+     */
+    public int addSpecies(Species sp) throws HibernateException {
+        int result = -1;
+
+        Species existingSpecies = searchSpecies(sp.getSpecies_name()); // add param
+        if (existingSpecies != null)
+            return existingSpecies.getSpecies_id();
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            result = (int) session.save(sp);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public LibraryModule searchLibraryModuleWithId(int id) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(LibraryModule.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion nameRestriction = Restrictions.eq("mod_id", id);
+
+            criteria.add(Restrictions.and(nameRestriction));
+            List<LibraryModule> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    public LibraryModule searchLibraryModuleWithModule(String lib_mod) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(LibraryModule.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion nameRestriction = Restrictions.eq("lib_mod", lib_mod);
+
+            criteria.add(Restrictions.and(nameRestriction));
+            List<LibraryModule> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    public int addLibraryModule(LibraryModule libmod) {
+        int result = -1;
+
+        LibraryModule existingLibraryModule = searchLibraryModuleWithId(libmod.getMod_id()); // add param
+        if (existingLibraryModule != null)
+            return existingLibraryModule.getMod_id();
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            result = (int) session.save(libmod);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public PTM_type searchPtmType(int id) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(PTM_type.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion nameRestriction = Restrictions.eq("ptm_type", id);
+
+            criteria.add(Restrictions.and(nameRestriction));
+            List<PTM_type> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
     }
 
 }

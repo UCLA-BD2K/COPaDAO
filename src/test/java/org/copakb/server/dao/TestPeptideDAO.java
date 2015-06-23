@@ -14,7 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class TestPeptideDAO {
 
-    private static ClassPathXmlApplicationContext context = null;
+    /*private static ClassPathXmlApplicationContext context = null;
 
     @BeforeClass
     public static void setupTest(){
@@ -48,7 +48,7 @@ public class TestPeptideDAO {
             /*prot1 = proteinDAO.searchByID("P1");
             System.out.println(prot1.getSequence());
             System.out.println(prot1.getENSG_ID());
-            System.out.println(prot1.getSpecies().getProteinCurrents().size()); */
+            System.out.println(prot1.getSpecies().getProteinCurrents().size());
         }catch(HibernateException ex){
             assert(false);
         }
@@ -66,5 +66,5 @@ public class TestPeptideDAO {
         }catch(HibernateException ex){
             assert(true);
         }
-    }
+    }*/
 }

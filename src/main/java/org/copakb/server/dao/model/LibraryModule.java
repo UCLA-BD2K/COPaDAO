@@ -18,14 +18,16 @@ public class LibraryModule {
     private String instrument;
     private String organelle;
     private Date upload_date;
+    private String enzyme_specificity;
     private Set<Spectrum> spectra;
     private Species species;
 
-    public LibraryModule(String lib_mod, String instrument, String organelle, Date upload_date, Species species) {
+    public LibraryModule(String lib_mod, String instrument, String organelle, Date upload_date, String enzyme_specificity, Species species) {
         this.lib_mod = lib_mod;
         this.instrument = instrument;
         this.organelle = organelle;
         this.upload_date = upload_date;
+        this.enzyme_specificity = enzyme_specificity;
         this.species = species;
     }
 
@@ -69,6 +71,15 @@ public class LibraryModule {
 
     public void setOrganelle(String organelle) {
         this.organelle = organelle;
+    }
+
+    @Column(name = "enzyme_specificity")
+    public String getEnzyme_Specificity() {
+        return enzyme_specificity;
+    }
+
+    public void setEnzyme_Specificity(String enzyme_specificity) {
+        this.enzyme_specificity = enzyme_specificity;
     }
 
     @Column(name = "upload_date")
