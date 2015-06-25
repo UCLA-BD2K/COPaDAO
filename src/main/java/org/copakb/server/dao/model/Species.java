@@ -71,4 +71,13 @@ public class Species {
     public void setProteinCurrents(Set<ProteinCurrent> proteinCurrents) {
         this.proteinCurrents = proteinCurrents;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Species ID: " + species_id + "\n");
+        sb.append("Species Name: " + species_name + "\n");
+
+        return sb.toString();
+    }
 }

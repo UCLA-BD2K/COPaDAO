@@ -216,14 +216,27 @@ public class ProteinCurrent {
     }
     public void setSpectra(Set<SpectrumProtein> spectra) { this.spectra = spectra; }
 
-    /*@Override
+    @Override
     public String toString(){
-        String acc = this.getProtein_acc();
-        String seq = this.getSequence();
-        String name = this.getProtein_name();
-        int specID = this.getSpecies().getSpecies_id();
-        String specName = this.getSpecies().getSpecies_name();
-        return "Acc: " + acc + "\nSequence: " + seq + "\nName: " + name + "\nSpecies ID: " + specID + "\nSpecies Name: " + specName + "\n**";
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Accession: " + protein_acc + "\n");
+        sb.append("Name: " + protein_name + "\n");
+        sb.append("Mass: " + molecular_weight + "\n");
+        sb.append("Transmembrane Domain: " + transmembrane_domain + "\n");
+        sb.append("Cytoplasmatic Domain: " + cytoplasmatic_domain + "\n");
+        sb.append("Noncytoplasmatic Domain: " + noncytoplasmatic_domain + "\n");
+        sb.append("Signal peptide: " + signal_peptide + "\n");
+        sb.append("Ref KB ID: " + ref_kb_id + "\n");
+        sb.append("Keywords: " + keywords + "\n");
+        sb.append("Feature table:\n"  + feature_table + "\n");
+        sb.append("Species:\n" + species.toString());
+        sb.append("Wiki link: " + wiki_link + "\n");
+        sb.append("Genes:\n" + genes.toString());
+        // sb.append("GoTerms: " + goTerms.toString() + "\n");
+        // sb.append("PTMs: " + PTMs.toString() + "\n");
+        // sb.append("Spectra: " + spectra.toString() + "\n");
+
+        return sb.toString();
     }
-    */
 }

@@ -81,7 +81,8 @@ public class Gene {
     @Override
     public String toString() {
         String result = "gene_name: " + gene_name + "\n" +
-                        "ensembl_id: " + ensembl_id + "\n";
+                        "ensembl_id: " + ensembl_id + "\n" +
+                        "chromosome: " + chromosome + "\n";
 
         return result;
     }
