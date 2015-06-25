@@ -42,8 +42,7 @@ public class DAOObject {
         return proteinDAO;
     }
 
-    public DAOObject() {
-
+    protected DAOObject() {
+        // Protect against instantiation
     }
-
 }
