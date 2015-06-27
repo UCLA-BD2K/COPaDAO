@@ -52,10 +52,6 @@ public class TestEnvironment {
         geneSet.add(tempGene);
         result.setGenes(geneSet);
 
-        // todo: figure out go term commit issue -> might be because there is not connection in db between uniprot and go_accession
-        // ^ PROTEIN CURRENT still uses GoProtein (but it is not initialized!)
-        /* debugging makes it seem that goterms is causing the infinite loop in commit */
-
         GoTerms tempGoTerm = new GoTerms(51220, "A:Phosphorous,C:", null);
         proteinDAO.addGoTerms(tempGoTerm);
         Set<GoTerms> goTermSet = new HashSet<>();

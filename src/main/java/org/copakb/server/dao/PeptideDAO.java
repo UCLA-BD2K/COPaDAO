@@ -37,4 +37,6 @@ public interface PeptideDAO {
 
     public PTM_type searchPtmType(int id);
 
+    public int addPtmType(PTM_type type);
+
 }
