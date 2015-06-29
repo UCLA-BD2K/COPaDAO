@@ -1,5 +1,6 @@
 package org.copakb.server.dao;
 
+import org.copakb.server.dao.model.AnalysisTask;
 import org.copakb.server.dao.model.Report;
 import org.copakb.server.dao.model.ReportProtein;
 import org.copakb.server.dao.model.ScanPeptide;
@@ -14,5 +15,9 @@ public interface ReportDAO {
     public ReportProtein searchProtein(String token, String uniprotID);
 
     public ScanPeptide searchScanPeptide(String token, String uniprotID, String sequence);
+
+    //public int addTask(AnalysisTask task);
+
+    //public AnalysisTask searchTask(String token);
 }
 

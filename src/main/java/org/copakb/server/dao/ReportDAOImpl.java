@@ -1,10 +1,13 @@
 package org.copakb.server.dao;
 
-import org.copakb.server.dao.model.Report;
-import org.copakb.server.dao.model.ReportProtein;
-import org.copakb.server.dao.model.ScanPeptide;
+import org.copakb.server.dao.model.*;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -13,6 +16,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
 import java.lang.String;
+import java.util.List;
 
 /**
  * Created by Kevin on 5/28/2015.
@@ -20,7 +24,7 @@ import java.lang.String;
 
 public class ReportDAOImpl implements ReportDAO {
     //http://www.journaldev.com/4144/spring-data-mongodb-example-tutorial
-
+    private SessionFactory sessionFactory;
     private MongoOperations mongoOps;
 
     private static final String REPORT_COLLECTION = "Reports";
@@ -102,6 +106,68 @@ public class ReportDAOImpl implements ReportDAO {
 
         return null;
     }
+
+    /**
+     * Add a species to the database
+     * @param task defined species object with name, id, and list of relevant proteins
+     * @return task id if successful, -1 otherwise
+     * @throws HibernateException
+     */
+   /* public int addTask(AnalysisTask task) throws HibernateException {
+        int result = -1;
+
+        AnalysisTask existingTask = searchTask(task.getToken()); // add param
+        if (existingTask != null)
+            return existingTask.getTask_id();
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            result = (int) session.save(task);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    */
+
+    /**
+     * Searches for a task object by checking task id
+     *
+     * @param //tok name of task
+     * @return species object that matches the given name
+     */
+    /*public AnalysisTask searchTask(String tok)
+    {
+            Session session = this.sessionFactory.openSession();
+            //AnalysisTask task = null;
+            org.hibernate.Criteria criteria = session.createCriteria(AnalysisTask.class);
+            Transaction tx = session.beginTransaction();
+            try {
+                //task = (AnalysisTask) session.get(AnalysisTask.class, token);
+                //tx.commit();
+
+            Criterion nameRestriction = Restrictions.eq("token", tok);
+            criteria.add(nameRestriction);//Restrictions.and(nameRestriction));
+            List<AnalysisTask> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+            } catch (Exception e) {
+                tx.rollback();
+                e.printStackTrace();
+                return null;
+            } finally {
+                session.close();
+            }
+            //return task;
+    }
+*/
 
     public long count() {
         return 1;

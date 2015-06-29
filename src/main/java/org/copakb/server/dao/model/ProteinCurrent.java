@@ -217,6 +217,7 @@ public class ProteinCurrent {
     public void setSpectra(Set<SpectrumProtein> spectra) { this.spectra = spectra; }
 
     @Override
+    //todo" need to fix
     public String toString(){
         StringBuilder sb = new StringBuilder();
 

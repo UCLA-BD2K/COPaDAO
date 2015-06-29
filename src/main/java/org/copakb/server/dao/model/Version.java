@@ -16,12 +16,14 @@ public class Version {
     private Date date;
     private String description;
     private Set<ProteinHistory> proteinHistories = new HashSet<ProteinHistory>(0);
+    private Set<AnalysisTask> tasks;
 
-    public Version(int version, Date date, String description, Set<ProteinHistory> proteinHistories) {
+    public Version(int version, Date date, String description, Set<ProteinHistory> proteinHistories, Set<AnalysisTask> tasks) {
         this.version = version;
         this.date = date;
         this.description = description;
         this.proteinHistories = proteinHistories;
+        this.tasks = tasks;
     }
 
     public Version() {
@@ -61,4 +63,9 @@ public class Version {
     public void setProteinHistories(Set<ProteinHistory> proteinHistories) {
         this.proteinHistories = proteinHistories;
     }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "version")
+    public Set<AnalysisTask> getAnalysisTask() {return tasks;}
+    public void setAnalysisTask(Set<AnalysisTask> tasks) { this.tasks = tasks;}
+
 }

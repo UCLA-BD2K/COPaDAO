@@ -2,6 +2,7 @@ package org.copakb.server.dao;
 
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import org.copakb.server.dao.model.*;
+import org.copakb.server.dao.model.Version;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
@@ -182,7 +183,8 @@ public class ProteinDAOImpl implements ProteinDAO {
         try {
             protein = (ProteinCurrent)session.get(ProteinCurrent.class, protein_acc);
             tx.commit();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             tx.rollback();
             e.printStackTrace();
             return null;
@@ -540,15 +542,19 @@ public class ProteinDAOImpl implements ProteinDAO {
         ProteinCurrent protein = null;
         Transaction tx = session.beginTransaction();
 
-        try {
+        try
+        {
             protein = (ProteinCurrent)session.get(ProteinCurrent.class, uniprotID);
             Hibernate.initialize(protein.getSpectra());
             tx.commit();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             tx.rollback();
             e.printStackTrace();
             return null;
-        } finally {
+        }
+        finally {
             session.close();
         }
 
@@ -618,5 +624,74 @@ public class ProteinDAOImpl implements ProteinDAO {
         List<Gene> genes = session.createCriteria(Gene.class).setFirstResult(start).setMaxResults(length).list();
         session.close();
         return genes;
+    }
+
+    //TODO
+    //move searchTask and addAnalysisTask to ProteinDAOImpl
+    /**
+     * Searches the AnalysisTask database by token name, returns object if found, else returns null
+     * @param tok
+     * @return
+     */
+    public AnalysisTask searchTask(String tok)
+    {
+        Session session = this.sessionFactory.openSession();
+        org.hibernate.Criteria criteria = session.createCriteria(AnalysisTask.class);
+        Transaction tx = session.beginTransaction();
+        try
+        {
+            Criterion nameRestriction = Restrictions.eq("token", tok);
+            criteria.add(nameRestriction);
+            List<AnalysisTask> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+        }
+        catch (Exception e)
+        {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }
+        finally
+        {
+            session.close();
+        }
+    }
+
+    /**
+     *
+     * @param directory
+     * @param email
+     * @param mod_id
+     * @param version
+     * @return
+     * @throws HibernateException
+     */
+
+    public int addAnalysisTask(String directory, String email, LibraryModule mod_id, Version version) throws HibernateException //String directory, String email, int mod_id, int version)
+    {
+        //CHANGE PARAMETERS TO STRING DIRECTORY, STRING EMAIL, INT MOD_ID, INT VERSION
+
+        AnalysisTask task = new AnalysisTask(directory, email, mod_id, version);
+        int result = 0;
+
+        AnalysisTask existingTask = searchTask(task.getToken());
+        if(existingTask != null)
+            return 0;
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try{
+            result = (int)session.save(task);
+            tx.commit();
+            session.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
