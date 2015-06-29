@@ -7,19 +7,29 @@ import javax.annotation.PostConstruct;
 
 /**
  * Created by Ping PC1 on 6/4/2015.
+ * Modified on 6/29/2015 by Daniel Yao to a Singleton class
  */
 @Controller
 public class DAOObject {
 
     private static ClassPathXmlApplicationContext context;
+    private volatile static DAOObject uniqueInstance;
     public static PeptideDAO peptideDAO;
     public static ProteinDAO proteinDAO;
 
-    @PostConstruct
-    public void init() {
-        context = new ClassPathXmlApplicationContext("spring.xml");
-        peptideDAO = context.getBean(PeptideDAO.class);
-        proteinDAO = context.getBean(ProteinDAO.class);
+    /**
+     * Used to get the unique instance.
+     * Returns the unique instance or construct a new one if doesn't exist.
+     */
+    public static DAOObject getInstance() {
+        if(uniqueInstance == null) {
+            synchronized (DAOObject.class) {
+                if(uniqueInstance == null) {
+                    uniqueInstance = new DAOObject();
+                }
+            }
+        }
+        return uniqueInstance;
     }
 
     public static PeptideDAO getPeptideDAO() {
@@ -42,7 +52,10 @@ public class DAOObject {
         return proteinDAO;
     }
 
-    protected DAOObject() {
+    private DAOObject() {
         // Protect against instantiation
+        context = new ClassPathXmlApplicationContext("spring.xml");
+        peptideDAO = context.getBean(PeptideDAO.class);
+        proteinDAO = context.getBean(ProteinDAO.class);
     }
 }
