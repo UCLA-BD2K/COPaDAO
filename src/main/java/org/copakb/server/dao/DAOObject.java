@@ -1,5 +1,6 @@
 package org.copakb.server.dao;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 
@@ -9,6 +10,7 @@ import javax.annotation.PostConstruct;
  * Created by Ping PC1 on 6/4/2015.
  * Modified on 6/29/2015 by Daniel Yao to a Singleton class
  */
+
 @Controller
 public class DAOObject {
 
@@ -26,6 +28,9 @@ public class DAOObject {
             synchronized (DAOObject.class) {
                 if(uniqueInstance == null) {
                     uniqueInstance = new DAOObject();
+                    context = new ClassPathXmlApplicationContext("spring.xml");
+                    peptideDAO = context.getBean(PeptideDAO.class);
+                    proteinDAO = context.getBean(ProteinDAO.class);
                 }
             }
         }
@@ -33,29 +38,14 @@ public class DAOObject {
     }
 
     public static PeptideDAO getPeptideDAO() {
-        if (context == null) {
-            context = new ClassPathXmlApplicationContext("spring.xml");
-        }
-        if (peptideDAO == null) {
-            peptideDAO = context.getBean(PeptideDAO.class);
-        }
         return peptideDAO;
     }
 
     public static ProteinDAO getProteinDAO() {
-        if (context == null) {
-            context = new ClassPathXmlApplicationContext("spring.xml");
-        }
-        if (proteinDAO == null) {
-            proteinDAO = context.getBean(ProteinDAO.class);
-        }
         return proteinDAO;
     }
 
     private DAOObject() {
-        // Protect against instantiation
-        context = new ClassPathXmlApplicationContext("spring.xml");
-        peptideDAO = context.getBean(PeptideDAO.class);
-        proteinDAO = context.getBean(ProteinDAO.class);
+
     }
 }
