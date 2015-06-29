@@ -59,3 +59,4 @@ dependency-reduced-pom.xml
 
 ### Local Test files
 src/test/java/TestEnvironment.java
+RESTfulAPI.iml

@@ -21,6 +21,7 @@ public class LibraryModule {
     private String enzyme_specificity;
     private Set<Spectrum> spectra;
     private Species species;
+    private Set<AnalysisTask> tasks;
 
     public LibraryModule(String lib_mod, String instrument, String organelle, Date upload_date, String enzyme_specificity, Species species) {
         this.lib_mod = lib_mod;
@@ -100,6 +101,10 @@ public class LibraryModule {
     public void setSpectra(Set<Spectrum> spectra) {
         this.spectra = spectra;
     }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mod")
+    public Set<AnalysisTask> getAnalysisTask() {return tasks;}
+    public void setAnalysisTask(Set<AnalysisTask> tasks) { this.tasks = tasks;}
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "species_id", nullable = false)

@@ -51,5 +51,7 @@ public interface ProteinDAO {
 
     public List<Gene> limitedGeneList(int start, int length);
 
+    public AnalysisTask searchTask(String tok);
 
+    public int addAnalysisTask(String directory, String email, LibraryModule mod_id, Version version);
 }
