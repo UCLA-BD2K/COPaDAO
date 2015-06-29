@@ -186,7 +186,7 @@ public class ProteinCurrent {
         this.wiki_link = wiki_link;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "Protein_Gene", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "gene_name",
@@ -217,7 +217,6 @@ public class ProteinCurrent {
     public void setSpectra(Set<SpectrumProtein> spectra) { this.spectra = spectra; }
 
     @Override
-    //todo" need to fix
     public String toString(){
         StringBuilder sb = new StringBuilder();
 
