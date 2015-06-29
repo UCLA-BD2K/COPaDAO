@@ -22,12 +22,15 @@ public interface ProteinDAO {
     public int addSpecies(Species spec);
 
     public ProteinCurrent searchByID(String uniprotID);
+    public List<ProteinCurrent> searchByLikeID(String uniprotID);
 
     public ProteinCurrent searchByName(String proteinName);
 
     public ProteinCurrent searchByRef(String refKbId);
 
     public ProteinCurrent searchByEnsg(String ensgID);
+
+    public List<ProteinCurrent> searchByPartialSequence(String sequence);
 
     public ProteinCurrent getProteinWithGenes(String uniprotID);
     public Gene searchByGeneName(String name);

@@ -195,6 +195,28 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     /**
+     * Returns a list of all proteins that start with the given UniProt ID prefix.
+     *
+     * @param protein_acc   UniProt ID prefix
+     * @return              A list of proteins objects that start with the given UniProt ID prefix.
+     */
+    @Override
+    public List<ProteinCurrent> searchByLikeID(String protein_acc) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class)
+                .add(Restrictions.like("protein_acc", protein_acc + "%"))
+                .list();
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return proteins;
+    }
+
+    /**
      * Searches for an object in the database with the given protein name
      * @param protein_name name of the protein
      * @return ProteinCurrent object that contains the given protein name
@@ -283,6 +305,27 @@ public class ProteinDAOImpl implements ProteinDAO {
 //        }
     }
 
+    /**
+     * Returns a list of proteins containing the partial sequence.
+     *
+     * @param sequence  Partial sequence to search.
+     * @return          List of proteins containing hte partial sequence.
+     */
+    @Override
+    public List<ProteinCurrent> searchByPartialSequence(String sequence) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class)
+                .add(Restrictions.like("sequence", "%" + sequence + "%"))
+                .list();
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return proteins;
+    }
 
     /**
      * Searches for proteins in the database with the given uniprot ID and
