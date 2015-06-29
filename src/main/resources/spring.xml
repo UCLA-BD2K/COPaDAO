@@ -22,6 +22,7 @@
         <property name="dataSource" ref="dataSource" />
         <property name="annotatedClasses">
             <list>
+                <value>org.copakb.server.dao.model.AnalysisTask</value>
                 <value>org.copakb.server.dao.model.Peptide</value>
                 <value>org.copakb.server.dao.model.Spectrum</value>
                 <value>org.copakb.server.dao.model.LibraryModule</value>
