@@ -369,4 +369,25 @@ public class PeptideDAOImpl implements PeptideDAO {
         }
     }
 
+    public int addPtmType(PTM_type type) {
+        int result = -1;
+
+        PTM_type existingPtm_type = searchPtmType(type.getPtm_type()); // add param
+        if (existingPtm_type != null)
+            return existingPtm_type.getPtm_type();
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            result = (int) session.save(type);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 }
