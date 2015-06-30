@@ -24,7 +24,7 @@ public class WebStatistics
     private int unique_visitors;
     private int countries;
 
-    public WebStatistics(int pageviews, int unique_visitors, int countries)
+    public WebStatistics(int pageviews, double ppv, int unique_visitors, int countries)
     {
         this.pageviews = pageviews;
         this.unique_visitors = unique_visitors;
@@ -37,7 +37,7 @@ public class WebStatistics
         String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         this.month = monthNames[month];
         this.year = Calendar.getInstance().get(Calendar.YEAR);
-        ppv = this.pageviews/this.unique_visitors;
+        this.ppv = ppv;
         this.countries = countries;
     }
 
@@ -76,5 +76,5 @@ public class WebStatistics
     @Column(name = "date")
     public Date getDate(){return date;}
     public void setDate(Date date){this.date = date;}
-    
+
 }
