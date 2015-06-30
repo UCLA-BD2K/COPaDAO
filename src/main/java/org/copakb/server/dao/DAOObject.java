@@ -37,15 +37,15 @@ public class DAOObject {
         return uniqueInstance;
     }
 
-    public static PeptideDAO getPeptideDAO() {
+    public PeptideDAO getPeptideDAO() {
         return peptideDAO;
     }
 
-    public static ProteinDAO getProteinDAO() {
+    public ProteinDAO getProteinDAO() {
         return proteinDAO;
     }
 
-    private DAOObject() {
+    protected DAOObject() {
 
     }
 }
