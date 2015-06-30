@@ -65,4 +65,8 @@ public interface ProteinDAO {
     public String addAntibody(Antibody antibody);
 
     public Antibody searchAntibodyByID(String antibodyID);
+
+    public String addDbRef(DBRef dbRef);
+
+    public DBRef searchDbRefByID(String uniprotID);
 }

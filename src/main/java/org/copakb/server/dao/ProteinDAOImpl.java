@@ -790,4 +790,28 @@ public class ProteinDAOImpl implements ProteinDAO {
 
         return antibody;
     }
+
+    @Override
+    public String addDbRef(DBRef dbRef) {
+        if (searchDbRefByID(dbRef.getProteinCurrent().getProtein_acc()) != null) {
+            return "Existed";
+        }
+
+        Session session = this.sessionFactory.openSession();
+        String result = (String) session.save(dbRef);
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return result;
+    }
+
+    @Override
+    public DBRef searchDbRefByID(String uniprotID) {
+        Session session = sessionFactory.openSession();
+        DBRef dbRef = (DBRef) session.get(DBRef.class, uniprotID);
+        session.beginTransaction().commit();
+        session.close();
+        return dbRef;
+    }
 }

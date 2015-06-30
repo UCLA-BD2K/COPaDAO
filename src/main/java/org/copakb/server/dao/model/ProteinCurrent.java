@@ -19,6 +19,7 @@ public class ProteinCurrent {
     private String noncytoplasmatic_domain;
     private String signal_peptide;
     private String ref_kb_id;
+    private DBRef dbRef;
     private String keywords;
     private String feature_table;
     private Species species;
@@ -27,57 +28,6 @@ public class ProteinCurrent {
     private Set<GoTerms> goTerms;
     private Set<PTM> PTMs;
     private Set<SpectrumProtein> spectra;
-
-    public ProteinCurrent(String protein_acc, String sequence, String protein_name,
-                          double molecular_weight, String transmembrane_domain,
-                          String cytoplasmatic_domain, String noncytoplasmatic_domain,
-                          String signal_peptide, String ref_kb_id, String keywords,
-                          String feature_table, Species species,
-                          String wiki_link, Set<Gene> genes, Set<GoTerms> goTerms, Set<PTM> PTMs, Set<SpectrumProtein> spectra) {
-        this.protein_acc = protein_acc;
-        this.sequence = sequence;
-        this.protein_name = protein_name;
-        this.molecular_weight = molecular_weight;
-        this.transmembrane_domain = transmembrane_domain;
-        this.cytoplasmatic_domain = cytoplasmatic_domain;
-        this.noncytoplasmatic_domain = noncytoplasmatic_domain;
-        this.signal_peptide = signal_peptide;
-        this.ref_kb_id = ref_kb_id;
-        this.keywords = keywords;
-        this.feature_table = feature_table;
-        this.species = species;
-        this.wiki_link = wiki_link;
-        this.genes = genes;
-        this.goTerms = goTerms;
-        this.PTMs = PTMs;
-        this.spectra = spectra;
-    }
-
-    public ProteinCurrent(String protein_acc, String sequence, String protein_name,
-                          String chromosome, double molecular_weight, String transmembrane_domain,
-                          String cytoplasmatic_domain, String noncytoplasmatic_domain,
-                          String signal_peptide, String ref_kb_id, String keywords,
-                          String feature_table, Species species,
-                          String wiki_link) {
-        this.protein_acc = protein_acc;
-        this.sequence = sequence;
-        this.protein_name = protein_name;
-        this.molecular_weight = molecular_weight;
-        this.transmembrane_domain = transmembrane_domain;
-        this.cytoplasmatic_domain = cytoplasmatic_domain;
-        this.noncytoplasmatic_domain = noncytoplasmatic_domain;
-        this.signal_peptide = signal_peptide;
-        this.ref_kb_id = ref_kb_id;
-        this.keywords = keywords;
-        this.feature_table = feature_table;
-        this.species = species;
-        this.wiki_link = wiki_link;
-
-    }
-
-    public ProteinCurrent() {
-        //default
-    }
 
     @Id
     @Column(name = "protein_acc")
@@ -152,6 +102,14 @@ public class ProteinCurrent {
         this.ref_kb_id = ref_kb_id;
     }
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
+    public DBRef getDbRef() {
+        return dbRef;
+    }
+    public void setDbRef(DBRef dbRef) {
+        this.dbRef = dbRef;
+    }
+
     @Column(name = "keywords")
     public String getKeywords() {
         return keywords;
@@ -167,7 +125,6 @@ public class ProteinCurrent {
     public void setFeature_table(String feature_table) {
         this.feature_table = feature_table;
     }
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "species_id", nullable = false)
@@ -228,6 +185,7 @@ public class ProteinCurrent {
         sb.append("Noncytoplasmatic Domain: " + noncytoplasmatic_domain + "\n");
         sb.append("Signal peptide: " + signal_peptide + "\n");
         sb.append("Ref KB ID: " + ref_kb_id + "\n");
+        sb.append("DBRefs:\n" + dbRef.toString() + "\n");
         sb.append("Keywords: " + keywords + "\n");
         sb.append("Feature table:\n"  + feature_table + "\n");
         sb.append("Species:\n" + species.toString());

@@ -39,6 +39,7 @@
                 <value>org.copakb.server.dao.model.Version</value>
                 <value>org.copakb.server.dao.model.PTM</value>
                 <value>org.copakb.server.dao.model.SpectrumProtein</value>
+                <value>org.copakb.server.dao.model.DBRef</value>
             </list>
         </property>
         <property name="hibernateProperties">
