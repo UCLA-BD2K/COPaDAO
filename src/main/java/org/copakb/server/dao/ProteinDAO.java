@@ -57,4 +57,12 @@ public interface ProteinDAO {
     public AnalysisTask searchTask(String tok);
 
     public int addAnalysisTask(String directory, String email, LibraryModule mod_id, Version version);
+
+    public String addHPAProtein(HPAProtein protein);
+
+    public HPAProtein searchHPAByID(String ensemblID);
+
+    public String addAntibody(Antibody antibody);
+
+    public Antibody searchAntibodyByID(String antibodyID);
 }
