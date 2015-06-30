@@ -1,13 +1,10 @@
 package org.copakb.server.dao;
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import org.copakb.server.dao.model.*;
 import org.copakb.server.dao.model.Version;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.*;
 
@@ -736,5 +733,61 @@ public class ProteinDAOImpl implements ProteinDAO {
         }
 
         return result;
+    }
+
+    @Override
+    public String addHPAProtein(HPAProtein protein) {
+        if (searchHPAByID(protein.getEnsemblID()) != null) {
+            return "Existed";
+        }
+
+        Session session = this.sessionFactory.openSession();
+        String result = (String) session.save(protein);
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return result;
+    }
+
+    @Override
+    public HPAProtein searchHPAByID(String ensemblID) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        HPAProtein protein = (HPAProtein) session.get(HPAProtein.class, ensemblID);
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return protein;
+    }
+
+    @Override
+    public String addAntibody(Antibody antibody) {
+        if (searchAntibodyByID(antibody.getAntibodyID()) != null) {
+            return "Existed";
+        }
+
+        Session session = this.sessionFactory.openSession();
+        String result = (String) session.save(antibody);
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return result;
+    }
+
+    @Override
+    public Antibody searchAntibodyByID(String antibodyID) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        Antibody antibody = (Antibody) session.get(Antibody.class, antibodyID);
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return antibody;
     }
 }

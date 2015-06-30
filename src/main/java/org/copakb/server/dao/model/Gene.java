@@ -1,7 +1,6 @@
 package org.copakb.server.dao.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -13,15 +12,15 @@ public class Gene {
     private String gene_name;
     private String ensembl_id;
     private String chromosome;
-    private Set<HPA> hpas;
+    private Set<HPAProtein> hpaProteins;
     private Set<Disease> diseases;
     private Set<ProteinCurrent> proteins;
 
-    public Gene(String gene_name, String ensembl_id, String chromosome, Set<HPA> hpas, Set<Disease> diseases, Set<ProteinCurrent> proteins) {
+    public Gene(String gene_name, String ensembl_id, String chromosome, Set<HPAProtein> hpaProteins, Set<Disease> diseases, Set<ProteinCurrent> proteins) {
         this.gene_name = gene_name;
         this.ensembl_id = ensembl_id;
         this.chromosome = chromosome;
-        this.hpas = hpas;
+        this.hpaProteins = hpaProteins;
         this.diseases = diseases;
         this.proteins = proteins;
     }
@@ -48,9 +47,9 @@ public class Gene {
         this.chromosome = chromosome;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensembl_id")
-    public Set<HPA> getHpas() { return hpas; }
-    public void setHpas(Set<HPA> hpas1) { this.hpas = hpas1; }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensemblID")
+    public Set<HPAProtein> getHpaProteins() { return hpaProteins; }
+    public void setHpaProteins(Set<HPAProtein> hpas1) { this.hpaProteins = hpas1; }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Disease_Gene", joinColumns = {
