@@ -59,7 +59,7 @@ public class DAOObject {
         return reportDAO;
     }
 
-    public StatisticsDAO getStatisticsDAODAO() {
+    public StatisticsDAO getStatisticsDAO() {
         return statisticsDAO;
     }
 
