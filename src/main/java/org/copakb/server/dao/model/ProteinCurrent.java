@@ -18,12 +18,11 @@ public class ProteinCurrent {
     private String cytoplasmatic_domain;
     private String noncytoplasmatic_domain;
     private String signal_peptide;
-    private String ref_kb_id;
     private DBRef dbRef;
     private String keywords;
     private String feature_table;
     private Species species;
-    private String wiki_link;
+    private String chromosome;
     private Set<Gene> genes;
     private Set<GoTerms> goTerms;
     private Set<PTM> PTMs;
@@ -94,14 +93,6 @@ public class ProteinCurrent {
         this.signal_peptide = signal_peptide;
     }
 
-    @Column(name = "ref_kb_id")
-    public String getRef_kb_id() {
-        return ref_kb_id;
-    }
-    public void setRef_kb_id(String ref_kb_id) {
-        this.ref_kb_id = ref_kb_id;
-    }
-
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
     public DBRef getDbRef() {
         return dbRef;
@@ -135,12 +126,12 @@ public class ProteinCurrent {
         this.species = species;
     }
 
-    @Column(name = "wiki_link")
-    public String getWiki_link() {
-        return wiki_link;
+    @Column(name = "chromosome")
+    public String getChromosome() {
+        return chromosome;
     }
-    public void setWiki_link(String wiki_link) {
-        this.wiki_link = wiki_link;
+    public void setChromosome(String chromosome) {
+        this.chromosome = chromosome;
     }
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -184,12 +175,11 @@ public class ProteinCurrent {
         sb.append("Cytoplasmatic Domain: " + cytoplasmatic_domain + "\n");
         sb.append("Noncytoplasmatic Domain: " + noncytoplasmatic_domain + "\n");
         sb.append("Signal peptide: " + signal_peptide + "\n");
-        sb.append("Ref KB ID: " + ref_kb_id + "\n");
         sb.append("DBRefs:\n" + dbRef.toString() + "\n");
         sb.append("Keywords: " + keywords + "\n");
         sb.append("Feature table:\n"  + feature_table + "\n");
         sb.append("Species:\n" + species.toString());
-        sb.append("Wiki link: " + wiki_link + "\n");
+        sb.append("Chromosome: " + chromosome + "\n");
         sb.append("Genes:\n" + genes.toString());
         // sb.append("GoTerms: " + goTerms.toString() + "\n");
         // sb.append("PTMs: " + PTMs.toString() + "\n");

@@ -35,7 +35,6 @@ public class TestEnvironment {
         result.setCytoplasmatic_domain("1");
         result.setNoncytoplasmatic_domain("1");
         result.setSignal_peptide("1");
-        result.setRef_kb_id("Ref1");
         result.setKeywords("3D-structure|Acetylation");
         result.setFeature_table("CHAIN\t1\t246");
 
@@ -44,9 +43,7 @@ public class TestEnvironment {
         proteinDAO.addSpecies(newSpecies);
         result.setSpecies(newSpecies);
 
-        result.setWiki_link("www.wiki.com");
-
-        Gene tempGene = new Gene("YWHAB", "ENSG000000166913", "15", null, null, null);
+        Gene tempGene = new Gene("YWHAB", "ENSG000000166913", null, null, null);
         proteinDAO.addGene(tempGene);
         Set<Gene> geneSet = new HashSet<>();
         geneSet.add(tempGene);
