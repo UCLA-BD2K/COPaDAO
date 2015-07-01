@@ -13,8 +13,13 @@ public class ProteinDAOImplTest {
     }
 
     @Test
+    public void testSearchByPartialId() throws Exception {
+        System.out.println(DAOObject.getInstance().getProteinDAO().searchByPartialID("5E"));
+    }
+
+    @Test
     public void testSearchByPartialSequence() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().searchByPartialSequence("AAA"));
+        System.out.println(DAOObject.getInstance().getProteinDAO().searchByPartialSequence("SVS"));
     }
 
     @Test

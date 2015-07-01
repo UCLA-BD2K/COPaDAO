@@ -308,6 +308,22 @@ public class ProteinDAOImpl implements ProteinDAO {
 //        }
     }
 
+    @Override
+    public List<ProteinCurrent> searchByPartialID(String idFragment) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class)
+                .add(Restrictions.like("protein_acc", "%" + idFragment + "%"))
+                .list();
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return proteins;
+    }
+
     /**
      * Returns a list of proteins containing the partial sequence.
      *

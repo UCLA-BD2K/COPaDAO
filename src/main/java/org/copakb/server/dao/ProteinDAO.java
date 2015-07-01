@@ -30,6 +30,7 @@ public interface ProteinDAO {
 
     public ProteinCurrent searchByEnsg(String ensgID);
 
+    public List<ProteinCurrent> searchByPartialID(String idFragment);
     public List<ProteinCurrent> searchByPartialSequence(String sequence);
 
     public ProteinCurrent getProteinWithGenes(String uniprotID);
