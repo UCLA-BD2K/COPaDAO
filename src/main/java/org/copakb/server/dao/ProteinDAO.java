@@ -13,64 +13,71 @@ import java.util.Set;
  */
 public interface ProteinDAO {
 
+    public String addProteinCurrent(ProteinCurrent prot);
     public List<ProteinCurrent> list();
-
     public List<ProteinCurrent> limitedList(int start, int length);
 
-    public String addProteinCurrent(ProteinCurrent prot);
 
-    public int addSpecies(Species spec);
+    /* Searches for Protein objects */
 
     public ProteinCurrent searchByID(String uniprotID);
     public List<ProteinCurrent> searchByLikeID(String uniprotID);
-
     public ProteinCurrent searchByName(String proteinName);
-
     public ProteinCurrent searchByRef(String refKbId);
-
     public ProteinCurrent searchByEnsg(String ensgID);
-
     public List<ProteinCurrent> searchByPartialID(String idFragment);
     public List<ProteinCurrent> searchByPartialSequence(String sequence);
+
+
+    /* Gene completion, add & search */
 
     public ProteinCurrent getProteinWithGenes(String uniprotID);
     public Gene searchByGeneName(String name);
     public String addGene(Gene g);
 
+
+    /* GO term completion, add & search */
+
     public ProteinCurrent getProteinWithGoTerms(String uniprotID);
     public GoTerms searchByGOAccession(int GO_accession);
-
     public int addGoTerms(GoTerms goTerms);
+
+
+    /* PTM completion */
 
     public ProteinCurrent getProteinWithPTMs(String uniprotID);
 
-    public PTM searchByPTMType(int ptm_type);
 
-    public int addPTM(PTM p);
+    /* Spectrum completion, add & search */
 
     public ProteinCurrent getProteinWithSpectra(String uniprotID);
     public int addSpectrumProtein(SpectrumProtein p);
-
     public SpectrumProtein searchSpectrumProtein(int spectrum_id, String protein_acc);
 
+
+    /* Species add & search */
+
+    public int addSpecies(Species sp);
     public Species searchSpecies(String name);
 
-    public AnalysisTask searchTask(String tok);
 
-    public int addAnalysisTask(String directory, String email, LibraryModule mod_id, Version version);
+    /* HPA add & search */
 
     public String addHPAProtein(HPAProtein protein);
-
     public HPAProtein searchHPAByID(String ensemblID);
 
-    public String addAntibody(Antibody antibody);
 
+    /* Antibody add & search */
+
+    public String addAntibody(Antibody antibody);
     public Antibody searchAntibodyByID(String antibodyID);
+
+
+    /* Database reference add & search */
 
     public String addDbRef(DBRef dbRef);
 
     public DBRef searchDbRefByID(String uniprotID);
-
     public ProteinCurrent searchByPDB(String pdbID);
 
 }

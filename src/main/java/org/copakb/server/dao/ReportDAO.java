@@ -10,14 +10,23 @@ public interface ReportDAO {
 
     public String generateToken();
 
-    public Report searchReport(String token);
 
+    /* Report searches */
+
+    public Report searchReport(String token);
     public ReportProtein searchProtein(String token, String uniprotID);
+
+
+    /* Scan peptide search */
 
     public ScanPeptide searchScanPeptide(String token, String uniprotID, String sequence);
 
-    //public int addTask(AnalysisTask task);
 
-    //public AnalysisTask searchTask(String token);
+    /* Task add & search */
+
+    public int addTask(AnalysisTask task);
+
+    public AnalysisTask searchTask(String token);
+
 }
 

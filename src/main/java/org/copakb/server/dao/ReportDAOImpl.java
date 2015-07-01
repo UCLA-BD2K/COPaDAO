@@ -22,6 +22,7 @@ import java.util.List;
  * Created by Kevin on 5/28/2015.
  */
 
+
 public class ReportDAOImpl implements ReportDAO {
     //http://www.journaldev.com/4144/spring-data-mongodb-example-tutorial
     private SessionFactory sessionFactory;
@@ -36,6 +37,14 @@ public class ReportDAOImpl implements ReportDAO {
 
     public ReportDAOImpl(MongoOperations mongoOps){
         this.mongoOps = mongoOps;
+    }
+
+    /**
+     * Initializes the sessionFactory to run database operations
+     * @param sessionFactory
+     */
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     /**
@@ -113,12 +122,17 @@ public class ReportDAOImpl implements ReportDAO {
      * @return task id if successful, -1 otherwise
      * @throws HibernateException
      */
-   /* public int addTask(AnalysisTask task) throws HibernateException {
+    public int addTask(AnalysisTask task) throws HibernateException {
         int result = -1;
-
-        AnalysisTask existingTask = searchTask(task.getToken()); // add param
-        if (existingTask != null)
-            return existingTask.getTask_id();
+        try {
+            if (task.getToken() != null) {
+                AnalysisTask existingTask = searchTask(task.getToken()); // add param
+                if (existingTask != null)
+                    return existingTask.getTask_id();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Session session = this.sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
@@ -133,15 +147,15 @@ public class ReportDAOImpl implements ReportDAO {
 
         return result;
     }
-    */
+
 
     /**
      * Searches for a task object by checking task id
      *
-     * @param //tok name of task
+     * @param tok name of task
      * @return species object that matches the given name
      */
-    /*public AnalysisTask searchTask(String tok)
+    public AnalysisTask searchTask(String tok)
     {
             Session session = this.sessionFactory.openSession();
             //AnalysisTask task = null;
@@ -167,7 +181,7 @@ public class ReportDAOImpl implements ReportDAO {
             }
             //return task;
     }
-*/
+
 
     public long count() {
         return 1;

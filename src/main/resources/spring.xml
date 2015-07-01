@@ -81,6 +81,7 @@
 
     <bean id="reportDAO" class="org.copakb.server.dao.ReportDAOImpl">
         <constructor-arg name="mongoOps" ref="mongoTemplate"/>
+        <property name="sessionFactory" ref="hibernateSessionFactory"/>
     </bean>
 
 </beans>

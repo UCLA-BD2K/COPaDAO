@@ -10,35 +10,42 @@ import java.util.List;
 public interface PeptideDAO {
 
     public int addPeptide(Peptide p);
-
     public List<Peptide> list();
-
     public List<Peptide> limitedList(int start, int length);
 
+
+    /* Search for Peptide objects */
+
     public Peptide searchById(Integer peptide_id);
-
     public Peptide searchBySequence(String peptide_sequence);
-
     public Spectrum searchBySpecId(Integer id);
-
     public List<Peptide> searchByPartialSequence(String sequence);
 
-    public int addSpectrum(Spectrum s);
+
+    /* Spectrum add & search */
 
     public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge);
 
-    public Species searchSpecies(String name);
+    public int addSpectrum(Spectrum s);
 
+
+    /* Species add & search */
+
+    public Species searchSpecies(String name);
     public int addSpecies(Species spec);
+
+
+    /* Library Modules add & search */
 
     public LibraryModule searchLibraryModuleWithId(int id);
 
     public LibraryModule searchLibraryModuleWithModule(String lib_mod);
-
     public int addLibraryModule(LibraryModule libmod);
 
-    public PTM_type searchPtmType(int id);
 
+    /* PTM type add & search */
+
+    public PTM_type searchPtmType(int id);
     public int addPtmType(PTM_type type);
 
 }
