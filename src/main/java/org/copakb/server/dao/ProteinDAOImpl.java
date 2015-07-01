@@ -814,4 +814,45 @@ public class ProteinDAOImpl implements ProteinDAO {
         session.close();
         return dbRef;
     }
+
+    /**
+     * Returns the first DBRef which references the given PDB ID.
+     *
+     * @param pdbID The PDB ID to search for.
+     * @return      A protein that references the given PDB IDl
+     */
+    public DBRef searchDbRefByPDB(String pdbID) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        List<DBRef> dbRefs = session
+                .createCriteria(DBRef.class)
+                .add(Restrictions.like("pdb", "%" + pdbID + "%"))
+                .list();
+
+        session.beginTransaction().commit();
+        session.close();
+
+        if (dbRefs == null || dbRefs.isEmpty()) {
+            return null;
+        }
+
+        return dbRefs.get(0);
+    }
+
+    /**
+     * Returns the first protein which references the given PDB ID.
+     *
+     * @param pdbID The PDB ID to search for.
+     * @return      A protein that references the given PDB IDl
+     */
+    @Override
+    public ProteinCurrent searchByPDB(String pdbID) {
+        DBRef dbRef = searchDbRefByPDB(pdbID);
+        if (dbRef == null) {
+            return null;
+        }
+
+        return searchByID(dbRef.getProtein_acc());
+    }
 }

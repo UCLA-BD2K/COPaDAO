@@ -69,4 +69,6 @@ public interface ProteinDAO {
     public String addDbRef(DBRef dbRef);
 
     public DBRef searchDbRefByID(String uniprotID);
+
+    public ProteinCurrent searchByPDB(String pdbID);
 }
