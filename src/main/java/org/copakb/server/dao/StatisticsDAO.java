@@ -11,5 +11,5 @@ public interface StatisticsDAO {
 
     public WebStatistics getCurrentStats();
 
-    public void addNewStats(int pageviews, double ppv, int uniqueVisitors, int countries);
+    public int addNewStats(int pageviews, double ppv, int uniqueVisitors, int countries);
 }

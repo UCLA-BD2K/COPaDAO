@@ -36,6 +36,7 @@ public class DAOObject {
                     proteinDAO = context.getBean(ProteinDAO.class);
                     diseaseDAO = context.getBean(DiseaseDAO.class);
                     reportDAO = context.getBean(ReportDAO.class);
+                    statisticsDAO = context.getBean(StatisticsDAO.class);
                 }
             }
         }

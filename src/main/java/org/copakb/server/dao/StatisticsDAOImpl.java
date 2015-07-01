@@ -1,21 +1,11 @@
 package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.*;
-import org.copakb.server.dao.model.Version;
 import org.hibernate.*;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import java.util.*;
-import java.sql.PreparedStatement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 
 
@@ -23,9 +13,18 @@ import java.util.logging.Logger;
  * Created by Sneha on 6/30/2015.
  */
 
-public class StatisticsDAOImpl {
+public class StatisticsDAOImpl implements StatisticsDAO {
 
     private SessionFactory sessionFactory;
+
+    /**
+     * Default sets the session factory
+     * @param sessionFactory
+     */
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
 
     public WebStatistics getCurrentStats()
     {
