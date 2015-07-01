@@ -8,10 +8,12 @@ import javax.persistence.*;
  * Created by Kevin on 5/1/2015.
  */
 @Entity
-@Table(name = "Go_Terms")
+@Table(name = "GO_Terms")
 public class GoTerms {
     private int GO_accession;
     private String Terms;
+    private String Evidence;
+    private String Reference;
     private Set<ProteinCurrent> proteins;
 
     public GoTerms(int GO_accession, String terms, Set<ProteinCurrent> proteins) {
@@ -40,6 +42,21 @@ public class GoTerms {
         Terms = terms;
     }
 
+    @Column(name = "Evidence")
+    public String getEvidence() {
+        return Evidence;
+    }
+    public void setEvidence(String evidence) {
+        Evidence = evidence;
+    }
+
+    @Column(name = "Reference")
+    public String getReference() {
+        return Reference;
+    }
+    public void setReference(String reference) {
+        Reference = reference;
+    }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "GO_Protein", joinColumns = {
@@ -49,13 +66,17 @@ public class GoTerms {
     public Set<ProteinCurrent> getProteins() {
         return proteins;
     }
-
     public void setProteins(Set<ProteinCurrent> proteins) {
         this.proteins = proteins;
     }
 
     @Override
     public String toString() {
-        return "GO Accession: " + GO_accession + "\tTerms: " + Terms;
+        return "GoTerms{" +
+                "GO_accession=" + GO_accession +
+                ", Terms='" + Terms + '\'' +
+                ", Evidence='" + Evidence + '\'' +
+                ", Reference='" + Reference + '\'' +
+                '}';
     }
 }
