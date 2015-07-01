@@ -1,7 +1,6 @@
 package org.copakb.server.dao.model;
 
 import javassist.tools.web.Webserver;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -46,6 +45,7 @@ public class WebStatistics
 
     @Id
     @Column(name = "ws_id")
+    @GeneratedValue(strategy= GenerationType.AUTO)
     public int getWs_id() {return ws_id;}
     public void setWs_id(int ws_id) { this.ws_id = ws_id; }
 
