@@ -20,6 +20,7 @@ public class DAOObject {
     public static ProteinDAO proteinDAO;
     public static DiseaseDAO diseaseDAO;
     public static ReportDAO reportDAO;
+    public static StatisticsDAO statisticsDAO;
 
     /**
      * Used to get the unique instance.
@@ -55,6 +56,10 @@ public class DAOObject {
 
     public ReportDAO getReportDAO() {
         return reportDAO;
+    }
+
+    public StatisticsDAO getStatisticsDAODAO() {
+        return statisticsDAO;
     }
 
 
