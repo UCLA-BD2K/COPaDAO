@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "PTM")
 public class PTM {
     private ProteinCurrent proteinCurrent;
-    private String ptm_type;
+    private int ptm_type;
     private int ptm_site;
     private char ptm_site_code;
     private String PMIDS;
@@ -19,7 +19,7 @@ public class PTM {
     private String source;
     private String db_source;
 
-    public PTM(String ptm_type, int ptm_site, char ptm_site_code, String PMIDS, String kinases, String source, String db_source, ProteinCurrent proteinCurrent) {
+    public PTM(int ptm_type, int ptm_site, char ptm_site_code, String PMIDS, String kinases, String source, String db_source, ProteinCurrent proteinCurrent) {
         this.ptm_type = ptm_type;
         this.ptm_site = ptm_site;
         this.ptm_site_code = ptm_site_code;
@@ -46,10 +46,11 @@ public class PTM {
     @Id
     @Column(name = "ptm_type")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public String getPtm_type() {
+    public int getPtm_type() {
         return ptm_type;
     }
-    public void setPtm_type(String ptm_type) {
+
+    public void setPtm_type(int ptm_type) {
         this.ptm_type = ptm_type;
     }
 

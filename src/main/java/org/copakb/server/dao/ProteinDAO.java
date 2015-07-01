@@ -42,8 +42,10 @@ public interface ProteinDAO {
     public int addGoTerms(GoTerms goTerms);
 
     public ProteinCurrent getProteinWithPTMs(String uniprotID);
-    public PTM searchByPTMType(String ptm_type);
-    public String addPTM(PTM p);
+
+    public PTM searchByPTMType(int ptm_type);
+
+    public int addPTM(PTM p);
 
     public ProteinCurrent getProteinWithSpectra(String uniprotID);
     public int addSpectrumProtein(SpectrumProtein p);
@@ -71,4 +73,15 @@ public interface ProteinDAO {
     public DBRef searchDbRefByID(String uniprotID);
 
     public ProteinCurrent searchByPDB(String pdbID);
+
+    public int addDisease(Disease d);
+
+    public Disease searchDisease(int doid);
+
+    public int addDiseaseGene(DiseaseGene d);
+
+    public DiseaseGene searchDiseaseGene(Disease disease, Gene gene);
+
+
+
 }
