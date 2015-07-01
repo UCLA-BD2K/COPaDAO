@@ -219,6 +219,28 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     /**
+     * Returns a list of peptides containing the partial sequence.
+     *
+     * @param sequence Partial sequence to search.
+     * @return  List of peptides containing the partial sequence.
+     */
+    @Override
+    public List<Peptide> searchByPartialSequence(String sequence) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        List<Peptide> peptides = session
+                .createCriteria(Peptide.class)
+                .add(Restrictions.like("peptide_sequence", "%" + sequence + "%"))
+                .list();
+
+        session.beginTransaction().commit();
+        session.close();
+
+        return peptides;
+    }
+
+    /**
      * Searches for a species object by checking species names
      *
      * @param name name of species

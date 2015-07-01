@@ -21,6 +21,8 @@ public interface PeptideDAO {
 
     public Spectrum searchBySpecId(Integer id);
 
+    public List<Peptide> searchByPartialSequence(String sequence);
+
     public int addSpectrum(Spectrum s);
 
     public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge);
