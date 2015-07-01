@@ -18,6 +18,8 @@ public class DAOObject {
     private volatile static DAOObject uniqueInstance;
     public static PeptideDAO peptideDAO;
     public static ProteinDAO proteinDAO;
+    public static DiseaseDAO diseaseDAO;
+    public static ReportDAO reportDAO;
 
     /**
      * Used to get the unique instance.
@@ -31,6 +33,8 @@ public class DAOObject {
                     context = new ClassPathXmlApplicationContext("spring.xml");
                     peptideDAO = context.getBean(PeptideDAO.class);
                     proteinDAO = context.getBean(ProteinDAO.class);
+                    diseaseDAO = context.getBean(DiseaseDAO.class);
+                    reportDAO = context.getBean(ReportDAO.class);
                 }
             }
         }
@@ -44,6 +48,15 @@ public class DAOObject {
     public ProteinDAO getProteinDAO() {
         return proteinDAO;
     }
+
+    public DiseaseDAO getDiseaseDAO() {
+        return diseaseDAO;
+    }
+
+    public ReportDAO getReportDAO() {
+        return reportDAO;
+    }
+
 
     protected DAOObject() {
 

@@ -54,8 +54,6 @@ public interface ProteinDAO {
 
     public Species searchSpecies(String name);
 
-    public List<Gene> limitedGeneList(int start, int length);
-
     public AnalysisTask searchTask(String tok);
 
     public int addAnalysisTask(String directory, String email, LibraryModule mod_id, Version version);
@@ -73,15 +71,5 @@ public interface ProteinDAO {
     public DBRef searchDbRefByID(String uniprotID);
 
     public ProteinCurrent searchByPDB(String pdbID);
-
-    public int addDisease(Disease d);
-
-    public Disease searchDisease(int doid);
-
-    public int addDiseaseGene(DiseaseGene d);
-
-    public DiseaseGene searchDiseaseGene(Disease disease, Gene gene);
-
-
 
 }

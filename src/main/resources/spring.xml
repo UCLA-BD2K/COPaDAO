@@ -62,6 +62,10 @@
         <property name="sessionFactory" ref="hibernateSessionFactory" />
     </bean>
 
+    <bean id="diseaseDAO" class="org.copakb.server.dao.DiseaseDAOImpl">
+        <property name="sessionFactory" ref="hibernateSessionFactory"/>
+    </bean>
+
     <bean name="obj" class="org.copakb.server.dao.DAOObject">
     </bean>
 
@@ -77,7 +81,5 @@
     <bean id="reportDAO" class="org.copakb.server.dao.ReportDAOImpl">
         <constructor-arg name="mongoOps" ref="mongoTemplate"/>
     </bean>
-
-
 
 </beans>
