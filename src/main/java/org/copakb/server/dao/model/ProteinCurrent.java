@@ -181,7 +181,7 @@ public class ProteinCurrent {
         sb.append("Species:\n" + species.toString());
         sb.append("Chromosome: " + chromosome + "\n");
         sb.append("Genes:\n" + genes.toString());
-        // sb.append("GoTerms: " + goTerms.toString() + "\n");
+        sb.append("GoTerms: " + goTerms.toString() + "\n");
         // sb.append("PTMs: " + PTMs.toString() + "\n");
         // sb.append("Spectra: " + spectra.toString() + "\n");
 

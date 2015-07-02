@@ -181,7 +181,7 @@ public class Spectrum {
 
     @Override
     public String toString(){
-        //return "seq: "+this.ptm_sequence+"\npeptide sequence: "+this.peptide.getPeptide_sequence()+"/n--";
-        return "";
+        return "seq: "+this.ptm_sequence+"\npeptide sequence: "+this.peptide.getPeptide_sequence()+"/n--";
+        //return "";
     }
 }

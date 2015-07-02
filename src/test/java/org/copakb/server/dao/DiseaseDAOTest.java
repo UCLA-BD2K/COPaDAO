@@ -16,4 +16,9 @@ public class DiseaseDAOTest {
     public void testSearchDiseaseByGene() throws Exception {
         System.out.println(DAOObject.getInstance().getDiseaseDAO().searchDiseaseByGene("PTEN"));
     }
+
+    @Test
+    public void testSearchGeneWithDisease() throws Exception {
+        System.out.println(DAOObject.getInstance().getDiseaseDAO().searchGeneWithDisease("PTEN"));
+    }
 }

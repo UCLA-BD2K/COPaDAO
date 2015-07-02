@@ -3,10 +3,8 @@ package org.copakb.server.dao;
 import org.copakb.server.dao.model.Disease;
 import org.copakb.server.dao.model.DiseaseGene;
 import org.copakb.server.dao.model.Gene;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.copakb.server.dao.model.ProteinCurrent;
+import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -56,9 +54,38 @@ public class DiseaseDAOImpl implements DiseaseDAO {
     @Override
     public Set<Disease> searchDiseaseByGene(String geneName) {
         Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
         Gene gene = (Gene) session.get(Gene.class, geneName);
         Hibernate.initialize(gene.getDiseases());
+        //gene.getDiseases();
+        //gene.setDiseases(gene.getDiseases());
+        //session.evict(gene);
+        //Set<Disease> tempSet = gene.getDiseases();
+        tx.commit();
+        session.close();
         return gene.getDiseases();
+    }
+
+    public Gene searchGeneWithDisease(String geneName) {
+
+        Session session = this.sessionFactory.openSession();
+        Gene gene = null;
+
+        Transaction tx = session.beginTransaction();
+
+        try {
+            gene = (Gene) session.get(Gene.class, geneName);
+            Hibernate.initialize(gene.getDiseases());
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+
+        return gene;
     }
 
     /**

@@ -28,6 +28,8 @@ public interface DiseaseDAO {
 
     public DiseaseGene searchDiseaseGene(Disease disease, Gene gene);
 
+    public Gene searchGeneWithDisease(String geneName);
+
     public List<Gene> limitedGeneList(int start, int length);
 
 }

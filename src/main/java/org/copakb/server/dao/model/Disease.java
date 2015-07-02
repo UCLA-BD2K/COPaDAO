@@ -85,7 +85,8 @@ public class Disease {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", heart_disease='" + heart_disease + '\'' +
-                ", genes=" + genes +
+                //", genes=" + getGenes() +
                 '}';
+        //return "Disease: " + DOID;
     }
 }

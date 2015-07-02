@@ -18,7 +18,7 @@ public class TestEnvironment {
         PeptideDAO peptideDAO = context.getBean(PeptideDAO.class);
         ReportDAO reportDAO = context.getBean(ReportDAO.class);
 
-        Date date = new Date();
+        /*Date date = new Date();
         LibraryModule mod = new LibraryModule("module_name", "LTQ", "proteasome", date, "Trypsin", proteinDAO.searchSpecies("Human"));
 
         peptideDAO.addLibraryModule(mod);
@@ -27,7 +27,9 @@ public class TestEnvironment {
         AnalysisTask task = new AnalysisTask("directory", "email", mod, version);
         //task.setToken("QSAD");
 
-        reportDAO.addTask(task);
+        reportDAO.addTask(task);*/
+
+
 
 
         context.close();

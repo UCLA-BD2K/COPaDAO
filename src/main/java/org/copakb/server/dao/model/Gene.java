@@ -70,8 +70,14 @@ public class Gene {
 
     @Override
     public String toString() {
-        return "gene_name: " + gene_name + "\n" +
-                "ensembl_id: " + ensembl_id + "\n";
+        String ans = "gene_name: " + gene_name + "\n" +
+                "ensembl_id: " + ensembl_id + "\n" + "disease: ";
+
+        //ans += diseases.size() + "";
+        for(Disease disease : diseases) {
+            ans += disease.toString() + "\n";
+        }
+        return ans;
     }
 
     @Override
