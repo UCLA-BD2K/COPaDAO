@@ -559,6 +559,10 @@ public class ProteinDAOImpl implements ProteinDAO {
         {
             protein = (ProteinCurrent)session.get(ProteinCurrent.class, uniprotID);
             Hibernate.initialize(protein.getSpectra());
+            for(SpectrumProtein s: protein.getSpectra()){
+                Hibernate.initialize(s.getSpectrum().getPeptide());
+            }
+
             tx.commit();
         }
         catch (Exception e)
