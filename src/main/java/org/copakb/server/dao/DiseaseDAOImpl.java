@@ -8,6 +8,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Ping PC1 on 7/1/2015.
@@ -48,6 +49,14 @@ public class DiseaseDAOImpl implements DiseaseDAO {
             session.close();
         }
         return disease;
+    }
+
+    @Override
+    public Set<Disease> searchDiseaseByGene(String geneName) {
+        Session session = sessionFactory.openSession();
+        Gene gene = (Gene) session.get(Gene.class, geneName);
+        Hibernate.initialize(gene.getDiseases());
+        return gene.getDiseases();
     }
 
     /**
