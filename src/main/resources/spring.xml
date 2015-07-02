@@ -40,6 +40,7 @@
                 <value>org.copakb.server.dao.model.PTM</value>
                 <value>org.copakb.server.dao.model.SpectrumProtein</value>
                 <value>org.copakb.server.dao.model.DBRef</value>
+                <value>org.copakb.server.dao.model.ModuleStatistics</value>
                 <value>org.copakb.server.dao.model.WebStatistics</value>
             </list>
         </property>
