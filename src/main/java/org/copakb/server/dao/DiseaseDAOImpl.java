@@ -3,10 +3,7 @@ package org.copakb.server.dao;
 import org.copakb.server.dao.model.Disease;
 import org.copakb.server.dao.model.DiseaseGene;
 import org.copakb.server.dao.model.Gene;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -41,6 +38,7 @@ public class DiseaseDAOImpl implements DiseaseDAO {
         Transaction tx = session.beginTransaction();
         try {
             disease = (Disease) session.get(Disease.class, doid);
+            Hibernate.initialize(disease.getGenes());
             tx.commit();
         } catch (Exception e) {
             tx.rollback();

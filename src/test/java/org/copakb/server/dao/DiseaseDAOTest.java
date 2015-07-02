@@ -1,0 +1,17 @@
+package org.copakb.server.dao;
+
+import org.copakb.server.dao.model.Gene;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+/**
+ * Created by Alan on 7/2/2015.
+ */
+public class DiseaseDAOTest {
+
+    @Test
+    public void testSearchDisease() throws Exception {
+        System.out.println(DAOObject.getInstance().getDiseaseDAO().searchDisease(153480));
+    }
+}

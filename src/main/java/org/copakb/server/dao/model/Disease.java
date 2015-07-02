@@ -77,4 +77,15 @@ public class Disease {
     public void setGenes(Set<Gene> genes) {
         this.genes = genes;
     }
+
+    @Override
+    public String toString() {
+        return "Disease{" +
+                "DOID=" + DOID +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", heart_disease='" + heart_disease + '\'' +
+                ", genes=" + genes +
+                '}';
+    }
 }
