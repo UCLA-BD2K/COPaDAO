@@ -31,9 +31,17 @@ public class ProteinDAOImplTest {
     public void testGetProteinWithGOTerms() throws Exception {
         System.out.println(DAOObject.getInstance().getProteinDAO().getProteinWithGoTerms("P41932"));
     }
-
+    
+    @Test
+    public void testSearchProteinsByPeptide() throws Exception {
+        System.out.println(DAOObject.getInstance().getProteinDAO().searchProteinsByPeptide(
+                DAOObject.getInstance().getPeptideDAO().searchById(6401)));
+    }
+    
     @Test
     public void testGetProteinWithSpectra() throws Exception {
         System.out.println(DAOObject.getInstance().getProteinDAO().getProteinWithSpectra("P41932"));
     }*/
+
+
 }

@@ -81,4 +81,6 @@ public interface ProteinDAO {
     public DBRef searchDbRefByID(String uniprotID);
     public ProteinCurrent searchByPDB(String pdbID);
 
+    public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide);
+
 }
