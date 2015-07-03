@@ -7,7 +7,7 @@ import org.junit.Test;
  */
 public class DiseaseDAOTest {
 
-    @Test
+    /*@Test
     public void testSearchDisease() throws Exception {
         System.out.println(DAOObject.getInstance().getDiseaseDAO().searchDisease(153480));
     }
@@ -20,5 +20,5 @@ public class DiseaseDAOTest {
     @Test
     public void testSearchGeneWithDisease() throws Exception {
         System.out.println(DAOObject.getInstance().getDiseaseDAO().searchGeneWithDisease("PTEN"));
-    }
+    }*/
 }

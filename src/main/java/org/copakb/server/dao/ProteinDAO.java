@@ -27,6 +27,7 @@ public interface ProteinDAO {
     public ProteinCurrent searchByEnsg(String ensgID);
     public List<ProteinCurrent> searchByPartialID(String idFragment);
     public List<ProteinCurrent> searchByPartialSequence(String sequence);
+    public List<ProteinCurrent> getProteinsByPeptide(String sequence); // get all the proteins through spectrum protein
 
 
     /* Gene completion, add & search */

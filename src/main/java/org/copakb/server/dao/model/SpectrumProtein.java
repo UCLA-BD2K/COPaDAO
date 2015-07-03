@@ -23,8 +23,9 @@ public class SpectrumProtein {
     private char prevAA;
     private char nextAA;
     private int location;
+    private Peptide peptide;
 
-    public SpectrumProtein(String protein_acc, Spectrum spectrum, LibraryModule libraryModule, boolean feature_peptide, boolean species_unique, char prevAA, char nextAA, int location) {
+    public SpectrumProtein(String protein_acc, Spectrum spectrum, LibraryModule libraryModule, boolean feature_peptide, boolean species_unique, char prevAA, char nextAA, int location, Peptide peptide) {
         this.protein_acc = protein_acc;
         this.spectrum = spectrum;
         this.libraryModule = libraryModule;
@@ -33,6 +34,7 @@ public class SpectrumProtein {
         this.prevAA = prevAA;
         this.nextAA = nextAA;
         this.location = location;
+        this.peptide = peptide;
     }
 
     public SpectrumProtein() {
@@ -110,5 +112,14 @@ public class SpectrumProtein {
     }
     public void setLocation(int location) {
         this.location = location;
+    }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "peptide_id", nullable = false)
+    public Peptide getPeptide() {
+        return peptide;
+    }
+    public void setPeptide(Peptide peptide) {
+        this.peptide = peptide;
     }
 }

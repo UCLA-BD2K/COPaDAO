@@ -7,7 +7,7 @@ import org.junit.Test;
  */
 public class ProteinDAOImplTest {
 
-    @Test
+/*    @Test
     public void testSearchByLikeID() throws Exception {
         System.out.println(DAOObject.getInstance().getProteinDAO().searchByLikeID("A4F"));
     }
@@ -35,5 +35,5 @@ public class ProteinDAOImplTest {
     @Test
     public void testGetProteinWithSpectra() throws Exception {
         System.out.println(DAOObject.getInstance().getProteinDAO().getProteinWithSpectra("P41932"));
-    }
+    }*/
 }

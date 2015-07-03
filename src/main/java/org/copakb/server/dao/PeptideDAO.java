@@ -12,6 +12,7 @@ public interface PeptideDAO {
     public int addPeptide(Peptide p);
     public List<Peptide> list();
     public List<Peptide> limitedList(int start, int length);
+    public int getLocation(Peptide peptide, ProteinCurrent protein); // todo: get peptide relative location in protein
 
 
     /* Search for Peptide objects */
@@ -27,6 +28,7 @@ public interface PeptideDAO {
     public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge);
 
     public int addSpectrum(Spectrum s);
+    public String getSpectrum(int spec_id); // todo: return string of spectrum file (stored on harddrive)
 
 
     /* Species add & search */
