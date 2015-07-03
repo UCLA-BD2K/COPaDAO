@@ -446,4 +446,12 @@ public class PeptideDAOImpl implements PeptideDAO {
         return result;
     }
 
+    public String getSpectrum(int spec_id) {
+        return "";
+    }
+
+    public int getLocation(Peptide peptide, ProteinCurrent protein) {
+        return -1;
+    }
+
 }

@@ -27,7 +27,8 @@ public interface ProteinDAO {
     public ProteinCurrent searchByEnsg(String ensgID);
     public List<ProteinCurrent> searchByPartialID(String idFragment);
     public List<ProteinCurrent> searchByPartialSequence(String sequence);
-    public List<ProteinCurrent> getProteinsByPeptide(String sequence); // get all the proteins through spectrum protein
+
+    public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide); // get all the proteins through spectrum protein
 
 
     /* Gene completion, add & search */
@@ -81,6 +82,5 @@ public interface ProteinDAO {
     public DBRef searchDbRefByID(String uniprotID);
     public ProteinCurrent searchByPDB(String pdbID);
 
-    public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide);
 
 }

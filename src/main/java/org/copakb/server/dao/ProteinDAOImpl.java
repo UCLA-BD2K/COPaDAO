@@ -352,6 +352,40 @@ public class ProteinDAOImpl implements ProteinDAO {
         return proteins;
     }
 
+    public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide) {
+        List<ProteinCurrent> results = null;
+
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria1 = session.createCriteria(SpectrumProtein.class);
+        Criteria criteria2 = session.createCriteria(ProteinCurrent.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+
+            Criterion c1 = Restrictions.eq("peptide_id", peptide.getPeptide_id());
+            criteria1.add(c1);
+            List<SpectrumProtein> spectrumProteins = criteria1.list();
+
+            Criterion c2;
+            for (SpectrumProtein spectrumProtein : spectrumProteins) {
+                c2 = Restrictions.eq("protein_acc", spectrumProtein.getProtein_acc());
+                results.add((ProteinCurrent) criteria2.list().get(0));
+            }
+
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results;
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
     /**
      * Searches for proteins in the database with the given uniprot ID and
      * matches it with all the relevant GO terms
@@ -757,14 +791,4 @@ public class ProteinDAOImpl implements ProteinDAO {
         return searchByID(dbRef.getProtein_acc());
     }
 
-    @Override
-    public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide) {
-        Session session = sessionFactory.openSession();
-
-        List<ProteinCurrent> proteins = null; // TODO
-
-        session.beginTransaction().commit();
-        session.close();
-        return proteins;
-    }
 }
