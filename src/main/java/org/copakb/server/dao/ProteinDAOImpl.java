@@ -757,5 +757,14 @@ public class ProteinDAOImpl implements ProteinDAO {
         return searchByID(dbRef.getProtein_acc());
     }
 
+    @Override
+    public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide) {
+        Session session = sessionFactory.openSession();
 
+        List<ProteinCurrent> proteins = null; // TODO
+
+        session.beginTransaction().commit();
+        session.close();
+        return proteins;
+    }
 }

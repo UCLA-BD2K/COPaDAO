@@ -26,4 +26,10 @@ public class ProteinDAOImplTest {
     public void testSearchByPDB() throws Exception {
         System.out.println(DAOObject.getInstance().getProteinDAO().searchByPDB("2B05"));
     }
+
+    @Test
+    public void testSearchProteinsByPeptide() throws Exception {
+        System.out.println(DAOObject.getInstance().getProteinDAO().searchProteinsByPeptide(
+                DAOObject.getInstance().getPeptideDAO().searchById(6401)));
+    }
 }
