@@ -390,7 +390,7 @@ public class ProteinDAOImpl implements ProteinDAO {
             e.printStackTrace();
             return null;
         } finally {
-            //session.close();
+            session.close();
         }
         return results;
     }

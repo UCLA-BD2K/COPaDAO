@@ -12,7 +12,8 @@ public interface PeptideDAO {
     public int addPeptide(Peptide p);
     public List<Peptide> list();
     public List<Peptide> limitedList(int start, int length);
-    public int getLocation(Peptide peptide, ProteinCurrent protein); // todo: get peptide relative location in protein
+
+    public int getLocation(Peptide peptide, ProteinCurrent protein);
 
 
     /* Search for Peptide objects */

@@ -447,6 +447,7 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     public String getSpectrum(int spec_id) {
+        String fileName = "/target/" + spec_id + ".txt";
         return "";
     }
 

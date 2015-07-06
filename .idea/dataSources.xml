@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="3487692907">
-    <data-source source="LOCAL" name="MySQL - @104.236.142.82" uuid="a007dec5-f947-4e70-8944-32c902a51b02">
+  <component name="DataSourceManagerImpl" format="xml" hash="3215144136">
+    <data-source source="LOCAL" name="MySQL - COPADB@52.26.76.160" uuid="cdc8e974-1dfa-4b80-8cfe-38ac58556d45">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://52.26.76.160:3306/COPADB</jdbc-url>
+      <driver-properties>
+        <property name="zeroDateTimeBehavior" value="convertToNull" />
+        <property name="tinyInt1isBit" value="false" />
+        <property name="characterEncoding" value="utf8" />
+        <property name="characterSetResults" value="utf8" />
+        <property name="yearIsDateType" value="false" />
+      </driver-properties>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="MySQL - @104.236.142.82" uuid="24d5640b-a1c4-4e3a-acb1-f02b0a56751f">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
