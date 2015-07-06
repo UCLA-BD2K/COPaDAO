@@ -451,7 +451,29 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     public int getLocation(Peptide peptide, ProteinCurrent protein) {
-        return -1;
+
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(SpectrumProtein.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion peptideRestriction = Restrictions.eq("peptide", peptide);
+            Criterion proteinRestriction = Restrictions.eq("protein_acc", protein.getProtein_acc());
+            criteria.add(Restrictions.and(peptideRestriction));
+            criteria.add(Restrictions.and(proteinRestriction));
+            List<SpectrumProtein> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return -1;
+            return results.get(0).getLocation();
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return -1;
+        } finally {
+            session.close();
+        }
     }
 
 }
