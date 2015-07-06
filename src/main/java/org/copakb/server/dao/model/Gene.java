@@ -87,7 +87,15 @@ public class Gene {
 
         Gene gene = (Gene) o;
 
-        return !(ensembl_id != null ? !ensembl_id.equals(gene.ensembl_id) : gene.ensembl_id != null);
+        if (!gene_name.equals(gene.gene_name)) return false;
+        return ensembl_id.equals(gene.ensembl_id);
 
+    }
+
+    @Override
+    public int hashCode() {
+        int result = gene_name.hashCode();
+        result = 31 * result + ensembl_id.hashCode();
+        return result;
     }
 }
