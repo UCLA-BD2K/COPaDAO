@@ -93,7 +93,7 @@ public class ProteinCurrent {
         this.signal_peptide = signal_peptide;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "proteinCurrent", cascade = CascadeType.ALL)
     public DBRef getDbRef() {
         return dbRef;
     }

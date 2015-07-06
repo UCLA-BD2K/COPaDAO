@@ -709,7 +709,7 @@ public class ProteinDAOImpl implements ProteinDAO {
 
     @Override
     public String addDbRef(DBRef dbRef) {
-        if (searchDbRefByID(dbRef.getProteinCurrent().getProtein_acc()) != null) {
+        if (searchDbRefByID(dbRef.getProtein_acc()) != null) {
             return "Existed";
         }
 
