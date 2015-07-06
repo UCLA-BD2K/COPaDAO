@@ -22,7 +22,7 @@ public interface DiseaseDAO {
      * @param geneName Name of gene to search.
      * @return List of diseases with the given gene.
      */
-    public Set<Disease> searchDiseaseByGene(String geneName);
+    public List<Disease> searchDiseaseByGene(String geneName);
 
     public int addDiseaseGene(DiseaseGene d);
 

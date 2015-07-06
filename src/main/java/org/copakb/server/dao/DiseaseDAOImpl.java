@@ -52,13 +52,19 @@ public class DiseaseDAOImpl implements DiseaseDAO {
         return disease;
     }
 
-    @Override
-    public Set<Disease> searchDiseaseByGene(String geneName) {
+    public List<Disease> searchDiseaseByGene(String geneName) {
         Session session = sessionFactory.openSession();
-        Gene gene = (Gene) session.get(Gene.class, geneName);
-        Hibernate.initialize(gene.getDiseases());
+
+        List<Disease> diseases = session
+                .createCriteria(Disease.class, "d")
+                .createAlias("d.genes", "genes")
+                .add(Restrictions.eq("genes.gene_name", geneName))
+                .list();
+
+        session.beginTransaction().commit();
         session.close();
-        return gene.getDiseases();
+
+        return diseases;
     }
 
     /**
