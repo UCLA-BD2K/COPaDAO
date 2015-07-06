@@ -175,13 +175,13 @@ public class ProteinCurrent {
         sb.append("Cytoplasmatic Domain: " + cytoplasmatic_domain + "\n");
         sb.append("Noncytoplasmatic Domain: " + noncytoplasmatic_domain + "\n");
         sb.append("Signal peptide: " + signal_peptide + "\n");
-        sb.append("DBRefs:\n" + dbRef.toString() + "\n");
+        //sb.append("DBRefs:\n" + dbRef.toString() + "\n");
         sb.append("Keywords: " + keywords + "\n");
         sb.append("Feature table:\n"  + feature_table + "\n");
         sb.append("Species:\n" + species.toString());
         sb.append("Chromosome: " + chromosome + "\n");
-        sb.append("Genes:\n" + genes.toString());
-        sb.append("GoTerms: " + goTerms.toString() + "\n");
+        //sb.append("Genes:\n" + genes.toString());
+        //sb.append("GoTerms: " + goTerms.toString() + "\n");
         // sb.append("PTMs: " + PTMs.toString() + "\n");
         // sb.append("Spectra: " + spectra.toString() + "\n");
 

@@ -43,5 +43,4 @@ public class ProteinDAOImplTest {
                 DAOObject.getInstance().getPeptideDAO().searchById(6401)));
     }
 
-
 }

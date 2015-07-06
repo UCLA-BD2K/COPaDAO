@@ -353,37 +353,46 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide) {
-        List<ProteinCurrent> results = null;
+        List<ProteinCurrent> results = new ArrayList<ProteinCurrent>();
 
         Session session = this.sessionFactory.openSession();
 
         Criteria criteria1 = session.createCriteria(SpectrumProtein.class);
-        Criteria criteria2 = session.createCriteria(ProteinCurrent.class);
 
         Transaction tx = session.beginTransaction();
         try {
 
-            Criterion c1 = Restrictions.eq("peptide_id", peptide.getPeptide_id());
+            //System.out.println(peptide.toString());
+
+            Criterion c1 = Restrictions.eq("peptide", peptide);
             criteria1.add(c1);
             List<SpectrumProtein> spectrumProteins = criteria1.list();
 
-            Criterion c2;
             for (SpectrumProtein spectrumProtein : spectrumProteins) {
-                c2 = Restrictions.eq("protein_acc", spectrumProtein.getProtein_acc());
-                results.add((ProteinCurrent) criteria2.list().get(0));
+                Criteria criteria2 = session.createCriteria(ProteinCurrent.class);
+                //System.out.println("For " + spectrumProtein.getProtein_acc());
+                Criterion c2 = Restrictions.eq("protein_acc", spectrumProtein.getProtein_acc());
+                criteria2.add(c2);
+
+                List<ProteinCurrent> tempList = criteria2.list();
+                //System.out.println(tempList.size());
+
+                if (tempList.size() >= 1) {
+                    results.add(tempList.get(0));
+                }
+
             }
 
             tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results;
+
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
             return null;
         } finally {
-            session.close();
+            //session.close();
         }
+        return results;
     }
 
     /**
