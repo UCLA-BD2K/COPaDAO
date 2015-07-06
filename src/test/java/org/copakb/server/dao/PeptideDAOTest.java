@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Alan on 7/1/2015.
  */
-public class PeptideDAOImplTest {
+public class PeptideDAOTest {
 
    /* @Test
     public void testSearchByPartialSequence() throws Exception {

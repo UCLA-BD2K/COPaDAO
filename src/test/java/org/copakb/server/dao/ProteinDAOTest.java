@@ -5,7 +5,7 @@ import org.junit.Test;
 /**
  * Created by Alan on 6/29/2015.
  */
-public class ProteinDAOImplTest {
+public class ProteinDAOTest {
 
 /*    @Test
     public void testSearchByLikeID() throws Exception {
