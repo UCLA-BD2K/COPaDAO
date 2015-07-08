@@ -38,11 +38,16 @@ public interface ProteinDAO {
 
     public boolean compareProteinCurrent(ProteinCurrent a, ProteinCurrent b);
 
+    public boolean deleteSpectrumProtein(int id);
+
 
     /* Protein History add, search */
 
     public String addProteinHistory(ProteinHistory p);
     public ProteinHistory searchProteinHistory(String uniprot_id);
+    public String addSpectrumProteinHistory(SpectrumProteinHistory p);
+    public SpectrumProteinHistory searchSpectrumProteinHistory(String protein_acc, int spec_id);
+    public List<SpectrumProtein> searchSpectrumProteins(ProteinCurrent proteinCurrent);
 
 
     /* Gene completion, add & search */

@@ -51,7 +51,7 @@ public class SpectrumProtein {
         this.spec_protein_id = spec_protein_id;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "protein_acc", nullable = false)
     public ProteinCurrent getProtein() {
         return protein;

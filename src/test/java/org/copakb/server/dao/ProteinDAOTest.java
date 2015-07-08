@@ -2,6 +2,7 @@ package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.ProteinCurrent;
 import org.copakb.server.dao.model.ProteinHistory;
+import org.copakb.server.dao.model.SpectrumProteinHistory;
 import org.copakb.server.dao.model.Version;
 import org.junit.Test;
 
@@ -95,6 +96,42 @@ public class ProteinDAOTest {
         DAOObject.getInstance().getProteinDAO().addProteinCurrent(p);*/
 
         //DAOObject.getInstance().getProteinDAO().deleteProteinCurrent("P99999");
+        return;
+    }
+
+    @Test
+    public void testAddVersion() throws Exception {
+        Version version = new Version();
+        version.setDate(new Date());
+        version.setVersion(1);
+        version.setDescription("First");
+
+        DAOObject.getInstance().getProteinDAO().addVersion(version);
+    }
+
+    @Test
+    public void testAddSpectrumProteinHistory() throws Exception {
+        Version version = new Version();
+        version.setVersion(DAOObject.getInstance().getProteinDAO().searchLatestVersion().getVersion() - 1); // set it to previous versions
+        version.setDescription("Update"); // todo: change the description values
+        version.setDate(new Date());
+
+        SpectrumProteinHistory spectrumProteinHistory = new SpectrumProteinHistory();
+        spectrumProteinHistory.setSpectrumProtein_id(1);
+        spectrumProteinHistory.setVersion(version);
+        spectrumProteinHistory.setProtein_acc("FP123");
+        spectrumProteinHistory.setFeature_peptide(true);
+        spectrumProteinHistory.setLibraryModule(1);
+        spectrumProteinHistory.setLocation(123);
+        spectrumProteinHistory.setPrevAA('A');
+        spectrumProteinHistory.setNextAA('B');
+
+        DAOObject.getInstance().getProteinDAO().addSpectrumProteinHistory(spectrumProteinHistory);
+    }
+
+    @Test
+    public void testSearchSpectrumProteins() throws Exception {
+        //System.out.println(DAOObject.getInstance().getProteinDAO().searchSpectrumProteins().size());
         return;
     }
 

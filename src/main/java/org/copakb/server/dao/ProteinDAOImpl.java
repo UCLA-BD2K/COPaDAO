@@ -146,15 +146,39 @@ public class ProteinDAOImpl implements ProteinDAO {
         Transaction tx = session.beginTransaction();
         ProteinCurrent proteinCurrent = (ProteinCurrent) session.load(ProteinCurrent.class, protein_acc);
 
-        if (proteinCurrent != null) {
-            // todo: if has spectrum protein entries, then need to move to spectrum history before deleting
-            session.delete(proteinCurrent);
-            tx.commit();
-            session.close();
-            return true;
+        try {
+            if (proteinCurrent != null) {
+                session.delete(proteinCurrent);
+                tx.commit();
+                session.close();
+                return true;
+            }
         }
-        tx.rollback();
-        session.close();
+        catch (Exception e) {
+            tx.rollback();
+            session.close();
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteSpectrumProtein(int id) {
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        SpectrumProtein spectrumProtein = (SpectrumProtein) session.load(SpectrumProtein.class, id);
+
+        try {
+            if (spectrumProtein != null) {
+                session.delete(spectrumProtein);
+                tx.commit();
+                session.close();
+                return true;
+            }
+        }
+        catch (Exception e) {
+            tx.rollback();
+            session.close();
+        }
         return false;
     }
 
@@ -187,11 +211,53 @@ public class ProteinDAOImpl implements ProteinDAO {
         try {
             Criterion c = Restrictions.eq("protein_acc", protein_acc);
             criteria.add(c);
-            List<ProteinHistory> results = criteria.list();
+            ProteinHistory result = (ProteinHistory) criteria.addOrder(Order.desc("version")).setMaxResults(1).uniqueResult();
             tx.commit();
-            if(results.isEmpty())
+            if(result == null)
                 return null;
-            return results.get(results.size()-1); //return latest one
+            return result; //return latest one
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }finally{
+            session.close();
+        }
+    }
+
+    public String addSpectrumProteinHistory(SpectrumProteinHistory p) {
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            session.save(p);
+            tx.commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            tx.rollback();
+            session.close();
+            return "Failed";
+        }
+        session.close();
+        return "Success";
+    }
+
+    public SpectrumProteinHistory searchSpectrumProteinHistory(String protein_acc, int spec_id) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(ProteinHistory.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion c = Restrictions.eq("protein_acc", protein_acc);
+            criteria.add(c);
+            SpectrumProteinHistory result = (SpectrumProteinHistory) criteria.addOrder(Order.desc("version")).setMaxResults(1).uniqueResult();
+            tx.commit();
+            if(result == null)
+                return null;
+            return result; //return latest one
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
@@ -208,6 +274,14 @@ public class ProteinDAOImpl implements ProteinDAO {
      * @return true if equal, false otherwise
      */
     public boolean compareProteinCurrent(ProteinCurrent a, ProteinCurrent b) {
+        if(a.getChromosome().isEmpty() || b.getChromosome().isEmpty()) {
+            if(!a.getSequence().equals(b.getSequence()) ||
+                    !a.getProtein_name().equals(b.getProtein_name()) ||
+                    a.getMolecular_weight() != b.getMolecular_weight() ||
+                    a.getSpecies().getSpecies_id() != b.getSpecies().getSpecies_id()) {
+                return false;
+            }
+        }
         if(!a.getSequence().equals(b.getSequence()) ||
                !a.getProtein_name().equals(b.getProtein_name()) ||
                 a.getMolecular_weight() != b.getMolecular_weight() ||
@@ -807,6 +881,30 @@ public class ProteinDAOImpl implements ProteinDAO {
             if (results.isEmpty())
                 return null;
             return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    public List<SpectrumProtein> searchSpectrumProteins(ProteinCurrent proteinCurrent) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(SpectrumProtein.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion proteinAccRestriction = Restrictions.eq("protein", proteinCurrent);
+            criteria.add(proteinAccRestriction);
+
+            List<SpectrumProtein> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results;
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
