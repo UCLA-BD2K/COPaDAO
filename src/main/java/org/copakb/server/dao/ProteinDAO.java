@@ -27,14 +27,22 @@ public interface ProteinDAO {
     public ProteinCurrent searchByEnsg(String ensgID);
     public List<ProteinCurrent> searchByPartialID(String idFragment);
     public List<ProteinCurrent> searchByPartialSequence(String sequence);
-
     public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide); // get all the proteins through spectrum protein
+
+
+    /* Protein updates, deletions, and compare */
+
+    public void updateProteinCurrent(String protein_acc, ProteinCurrent p);
+
+    public boolean deleteProteinCurrent(String protein_acc);
+
+    public boolean compareProteinCurrent(ProteinCurrent a, ProteinCurrent b);
+
+
+    /* Protein History add, search */
 
     public String addProteinHistory(ProteinHistory p);
     public ProteinHistory searchProteinHistory(String uniprot_id);
-    public boolean compareProteinCurrent(ProteinCurrent a, ProteinCurrent b);
-    public void updateProteinCurrent(String protein_acc, ProteinCurrent p);
-    public boolean deleteProteinCurrent(String protein_acc);
 
 
     /* Gene completion, add & search */
@@ -84,7 +92,6 @@ public interface ProteinDAO {
     /* Database reference add & search */
 
     public String addDbRef(DBRef dbRef);
-
     public DBRef searchDbRefByID(String uniprotID);
     public ProteinCurrent searchByPDB(String pdbID);
 

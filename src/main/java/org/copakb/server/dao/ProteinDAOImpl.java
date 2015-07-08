@@ -165,14 +165,15 @@ public class ProteinDAOImpl implements ProteinDAO {
         try {
             session.save(p);
             tx.commit();
-            session.close();
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            tx.rollback();
+            session.close();
             return "Failed";
         }
-
+        session.close();
         return "Success";
     }
 
