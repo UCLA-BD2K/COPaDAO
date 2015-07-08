@@ -30,6 +30,12 @@ public interface ProteinDAO {
 
     public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide); // get all the proteins through spectrum protein
 
+    public String addProteinHistory(ProteinHistory p);
+    public ProteinHistory searchProteinHistory(String uniprot_id);
+    public boolean compareProteinCurrent(ProteinCurrent a, ProteinCurrent b);
+    public void updateProteinCurrent(String protein_acc, ProteinCurrent p);
+    public boolean deleteProteinCurrent(String protein_acc);
+
 
     /* Gene completion, add & search */
 
@@ -82,5 +88,10 @@ public interface ProteinDAO {
     public DBRef searchDbRefByID(String uniprotID);
     public ProteinCurrent searchByPDB(String pdbID);
 
+    /* Version add & search */
+
+    public Version searchVersion(int version);
+    public int addVersion(Version version);
+    public Version searchLatestVersion();
 
 }

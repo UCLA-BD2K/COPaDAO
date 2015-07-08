@@ -13,4 +13,9 @@ public class PeptideDAOTest {
     public void testSearchByPartialSequence() throws Exception {
         System.out.println(DAOObject.getInstance().getPeptideDAO().searchByPartialSequence("AAA"));
     }*/
+
+    /*@Test
+    public void testGetSpectrum() throws Exception {
+        System.out.println(DAOObject.getInstance().getPeptideDAO().getSpectrum(1));
+    }*/
 }

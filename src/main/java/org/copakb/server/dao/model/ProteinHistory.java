@@ -1,6 +1,7 @@
 package org.copakb.server.dao.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -34,7 +35,6 @@ public class ProteinHistory {
 
     @Id
     @Column(name = "protein_acc")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String getProtein_acc() {
         return protein_acc;
     }

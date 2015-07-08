@@ -1,6 +1,11 @@
 package org.copakb.server.dao;
 
+import org.copakb.server.dao.model.ProteinCurrent;
+import org.copakb.server.dao.model.ProteinHistory;
+import org.copakb.server.dao.model.Version;
 import org.junit.Test;
+
+import java.util.Date;
 
 /**
  * Created by Alan on 6/29/2015.
@@ -37,10 +42,59 @@ public class ProteinDAOTest {
         System.out.println(DAOObject.getInstance().getProteinDAO().getProteinWithSpectra("P41932"));
     }*/
 
-    @Test
+    /*@Test
     public void testSearchProteinsByPeptide() throws Exception {
         System.out.println(DAOObject.getInstance().getProteinDAO().searchProteinsByPeptide(
                 DAOObject.getInstance().getPeptideDAO().searchById(6401)));
+    }*/
+
+    /*@Test
+    public void testCompareProteinCurrent() throws Exception {
+        ProteinCurrent a = DAOObject.getInstance().getProteinDAO().searchByID("P54216");
+        ProteinCurrent b = DAOObject.getInstance().getProteinDAO().searchByID("P54216");
+        if(a != null && b != null) {
+            b.setProtein_name(a.getProtein_name().substring(0, a.getProtein_name().length() - 3));
+            System.out.println(DAOObject.getInstance().getProteinDAO().compareProteinCurrent(a, b));
+        }
+    }
+
+    @Test
+    public void testSearchProteinHistory() throws Exception {
+        System.out.println(DAOObject.getInstance().getProteinDAO().searchProteinHistory("P1"));
+    }*/
+
+    @Test
+    public void testAddProteinToHistory() throws Exception {
+        Version version = new Version();
+        version.setVersion(DAOObject.getInstance().getProteinDAO().searchLatestVersion().getVersion() - 1); // set it to previous versions
+        version.setDescription("Update"); // todo: change the description values
+        version.setDate(new Date());
+
+        ProteinHistory proteinHistory = new ProteinHistory();
+        proteinHistory.setProtein_acc("G5EC63");
+        proteinHistory.setProtein_name("protein name");
+        proteinHistory.setChromosome("XX");
+        proteinHistory.setMolecular_weight(1234.1234);
+        proteinHistory.setSequence("OLDSEQUENCE");
+        proteinHistory.setVersion(version);
+
+        DAOObject.getInstance().getProteinDAO().addProteinHistory(proteinHistory);
+    }
+
+    @Test
+    public void testDeleteProteinCurrent() throws Exception {
+        /*ProteinCurrent p = new ProteinCurrent();
+        p.setProtein_acc("FP123");
+        p.setSequence("NEWSEQUENCEHERE");
+        p.setProtein_name("NEWNAMEHERE");
+        p.setMolecular_weight(1234.1234);
+        p.setSpecies(DAOObject.getInstance().getProteinDAO().searchSpecies("Human"));
+        p.setChromosome("X");
+
+        DAOObject.getInstance().getProteinDAO().addProteinCurrent(p);*/
+
+        //DAOObject.getInstance().getProteinDAO().deleteProteinCurrent("P99999");
+        return;
     }
 
 }

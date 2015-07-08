@@ -4,6 +4,7 @@ import org.copakb.server.dao.model.*;
 import org.copakb.server.dao.model.Version;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.*;
@@ -58,14 +59,14 @@ public class ProteinDAOImpl implements ProteinDAO {
      * @throws HibernateException
      */
     public String addProteinCurrent(ProteinCurrent p) throws HibernateException{
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
         String uniprot = "";
 
         ProteinCurrent existingProtein = searchByID(p.getProtein_acc()); // add param
-        if (existingProtein != null)
-            return "Existed";
-        //return existingProtein.getProtein_acc();
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
+        if(existingProtein != null)
+            return existingProtein.getProtein_acc();
 
         try {
             uniprot = (String) session.save(p);
@@ -115,6 +116,168 @@ public class ProteinDAOImpl implements ProteinDAO {
         }
 
         return uniprot;
+    }
+
+    public void updateProteinCurrent(String protein_acc, ProteinCurrent p) {
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            ProteinCurrent proteinCurrent = (ProteinCurrent)session.get(ProteinCurrent.class, protein_acc);
+
+            // update protein current values
+            proteinCurrent.setProtein_name(p.getProtein_name());
+            proteinCurrent.setSequence(p.getSequence());
+            proteinCurrent.setMolecular_weight(p.getMolecular_weight());
+            proteinCurrent.setChromosome(p.getChromosome());
+
+            session.update(proteinCurrent);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+    }
+
+    public boolean deleteProteinCurrent(String protein_acc) {
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        ProteinCurrent proteinCurrent = (ProteinCurrent) session.load(ProteinCurrent.class, protein_acc);
+
+        if (proteinCurrent != null) {
+            session.delete(proteinCurrent);
+            tx.commit();
+            session.close();
+            return true;
+        }
+        tx.rollback();
+        session.close();
+        return false;
+    }
+
+    public String addProteinHistory(ProteinHistory p) {
+        //ProteinHistory existingProteinHistory = searchProteinHistory(p.getProtein_acc()); // add param
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            session.save(p);
+            tx.commit();
+            session.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "Failed";
+        }
+
+        return "Success";
+    }
+
+    public ProteinHistory searchProteinHistory(String protein_acc) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(ProteinHistory.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion c = Restrictions.eq("protein_acc", protein_acc);
+            criteria.add(c);
+            List<ProteinHistory> results = criteria.list();
+            tx.commit();
+            if(results.isEmpty())
+                return null;
+            return results.get(results.size()-1); //return latest one
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }finally{
+            session.close();
+        }
+    }
+
+    /**
+     *
+     * @param a
+     * @param b
+     * @return true if equal, false otherwise
+     */
+    public boolean compareProteinCurrent(ProteinCurrent a, ProteinCurrent b) {
+        if(!a.getSequence().equals(b.getSequence()) ||
+               !a.getProtein_name().equals(b.getProtein_name()) ||
+                a.getMolecular_weight() != b.getMolecular_weight() ||
+                a.getSpecies().getSpecies_id() != b.getSpecies().getSpecies_id() ||
+                !a.getChromosome().equals(b.getChromosome())) {
+            return false;
+        }
+        return true;
+    }
+
+    public Version searchVersion(int version) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(Version.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion nameRestriction = Restrictions.eq("version", version);
+
+            criteria.add(Restrictions.and(nameRestriction));
+            List<Version> results = criteria.list();
+            tx.commit();
+            if(results.isEmpty())
+                return null;
+            return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }finally{
+            session.close();
+        }
+    }
+
+    public Version searchLatestVersion() {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(Version.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Version latestVersion = (Version) criteria.addOrder(Order.desc("version")).setMaxResults(1).uniqueResult();
+            tx.commit();
+            return latestVersion;
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        }finally{
+            session.close();
+        }
+    }
+
+    public int addVersion(Version version) {
+        int result = -1;
+
+        Version existingVersion = searchVersion(version.getVersion()); // add param
+        if (existingVersion != null)
+            return existingVersion.getVersion();
+
+        Session session = this.sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        try {
+            result = (int) session.save(version);
+            tx.commit();
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     /**

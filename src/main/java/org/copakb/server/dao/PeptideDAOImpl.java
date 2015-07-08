@@ -7,6 +7,10 @@ import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.hql.internal.ast.tree.RestrictableStatement;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -447,8 +451,27 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     public String getSpectrum(int spec_id) {
-        String fileName = "/target/" + spec_id + ".txt";
-        return "";
+        // todo: decide location for spectra files
+        String fileName = "target/" + spec_id + ".txt";
+
+        String content = "";
+        String line = null;
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+
+            while((line = bufferedReader.readLine()) != null) {
+                content += line;
+            }
+
+            bufferedReader.close();
+        }
+        catch(Exception ex) {
+            System.out.println("Unable to open spectrum file '" + spec_id + "'");
+            ex.printStackTrace();
+        }
+
+        return content;
     }
 
     public int getLocation(Peptide peptide, ProteinCurrent protein) {
