@@ -147,6 +147,7 @@ public class ProteinDAOImpl implements ProteinDAO {
         ProteinCurrent proteinCurrent = (ProteinCurrent) session.load(ProteinCurrent.class, protein_acc);
 
         if (proteinCurrent != null) {
+            // todo: if has spectrum protein entries, then need to move to spectrum history before deleting
             session.delete(proteinCurrent);
             tx.commit();
             session.close();

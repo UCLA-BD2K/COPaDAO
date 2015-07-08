@@ -158,7 +158,7 @@ public class ProteinCurrent {
     public Set<GoTerms> getGoTerms() { return goTerms; }
     public void setGoTerms(Set<GoTerms> goTerms) { this.goTerms = goTerms; }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "protein_acc")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "protein")
     public Set<SpectrumProtein> getSpectra() {
         return spectra;
     }

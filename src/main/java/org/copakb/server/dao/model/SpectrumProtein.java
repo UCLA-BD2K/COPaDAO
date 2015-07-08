@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "Spectrum_Protein")
 public class SpectrumProtein {
     private int spec_protein_id;
-    private String protein_acc;
+    private ProteinCurrent protein;
     private Spectrum spectrum;
     private LibraryModule libraryModule;
     @Type(type = "numeric_boolean")
@@ -25,8 +25,8 @@ public class SpectrumProtein {
     private int location;
     private Peptide peptide;
 
-    public SpectrumProtein(String protein_acc, Spectrum spectrum, LibraryModule libraryModule, boolean feature_peptide, boolean species_unique, char prevAA, char nextAA, int location, Peptide peptide) {
-        this.protein_acc = protein_acc;
+    public SpectrumProtein(ProteinCurrent protein, Spectrum spectrum, LibraryModule libraryModule, boolean feature_peptide, boolean species_unique, char prevAA, char nextAA, int location, Peptide peptide) {
+        this.protein = protein;
         this.spectrum = spectrum;
         this.libraryModule = libraryModule;
         this.feature_peptide = feature_peptide;
@@ -51,9 +51,15 @@ public class SpectrumProtein {
         this.spec_protein_id = spec_protein_id;
     }
 
-    @Column(name = "protein_acc", nullable = false)
-    public String getProtein_acc() {return protein_acc;}
-    public void setProtein_acc(String protein_acc) {this.protein_acc = protein_acc;}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "protein_acc", nullable = false)
+    public ProteinCurrent getProtein() {
+        return protein;
+    }
+
+    public void setProtein(ProteinCurrent protein) {
+        this.protein = protein;
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "spectrum_id", nullable = false)
