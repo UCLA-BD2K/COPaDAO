@@ -203,24 +203,17 @@ public class ProteinDAOImpl implements ProteinDAO {
     public SpectrumProteinHistory searchSpectrumProteinHistory(String protein_acc, int spec_id) {
         Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(ProteinHistory.class);
+        SpectrumProteinHistory result = (SpectrumProteinHistory) session
+                .createCriteria(SpectrumProteinHistory.class)
+                .add(Restrictions.and(
+                        Restrictions.eq("protein_acc", protein_acc),
+                        Restrictions.eq("spectrum_id", spec_id)))
+                .addOrder(Order.desc("version"))
+                .setMaxResults(1)
+                .uniqueResult();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion c = Restrictions.eq("protein_acc", protein_acc);
-            criteria.add(c);
-            SpectrumProteinHistory result = (SpectrumProteinHistory) criteria.addOrder(Order.desc("version")).setMaxResults(1).uniqueResult();
-            tx.commit();
-            if (result == null)
-                return null;
-            return result; //return latest one
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
+        session.close();
+        return result;
     }
 
     @Override
@@ -311,6 +304,11 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
 
         session.close();
+
+        if (proteins == null || proteins.isEmpty()) {
+            return null;
+        }
+
         return proteins;
     }
 
@@ -324,6 +322,11 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
 
         session.close();
+
+        if (proteins == null || proteins.isEmpty()) {
+            return null;
+        }
+
         return proteins;
     }
 
@@ -355,6 +358,11 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
 
         session.close();
+
+        if (proteins == null || proteins.isEmpty()) {
+            return null;
+        }
+
         return proteins;
     }
 
@@ -367,6 +375,11 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
 
         session.close();
+
+        if (proteins == null || proteins.isEmpty()) {
+            return null;
+        }
+
         return proteins;
     }
 
@@ -381,6 +394,11 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
 
         session.close();
+
+        if (proteins == null || proteins.isEmpty()) {
+            return null;
+        }
+
         return proteins;
     }
 
@@ -618,27 +636,16 @@ public class ProteinDAOImpl implements ProteinDAO {
     @Override
     public ProteinCurrent getProteinWithSpectra(String uniprotID) {
         Session session = sessionFactory.openSession();
-        ProteinCurrent protein = null;
-        Transaction tx = session.beginTransaction();
 
-        try {
-            protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
-            if (protein != null) {
-                Hibernate.initialize(protein.getSpectra());
-                for (SpectrumProtein s : protein.getSpectra()) {
-                    Hibernate.initialize(s.getSpectrum().getPeptide());
-                }
+        ProteinCurrent protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
+        if (protein != null) {
+            Hibernate.initialize(protein.getSpectra());
+            for (SpectrumProtein s : protein.getSpectra()) {
+                Hibernate.initialize(s.getSpectrum().getPeptide());
             }
-
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
         }
 
+        session.close();
         return protein;
     }
 
@@ -670,21 +677,6 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     @Override
-    public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide) {
-        Session session = sessionFactory.openSession();
-
-        List<ProteinCurrent> proteins = session
-                .createCriteria(ProteinCurrent.class, "protein")
-                .createAlias("protein.spectra", "spectra")
-                .add(Restrictions.eq("spectra.peptide", peptide))
-                .list();
-
-        session.beginTransaction().commit();
-        session.close();
-        return proteins;
-    }
-
-    @Override
     public List<SpectrumProtein> searchSpectrumProteins(ProteinCurrent proteinCurrent) {
         Session session = sessionFactory.openSession();
 
@@ -695,11 +687,30 @@ public class ProteinDAOImpl implements ProteinDAO {
 
         session.close();
 
-        if (spectrumProteins.isEmpty()) {
+        if (spectrumProteins == null || spectrumProteins.isEmpty()) {
             return null;
         }
 
         return spectrumProteins;
+    }
+
+    @Override
+    public List<ProteinCurrent> searchProteinsByPeptide(Peptide peptide) {
+        Session session = sessionFactory.openSession();
+
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class, "protein")
+                .createAlias("protein.spectra", "spectra")
+                .add(Restrictions.eq("spectra.peptide", peptide))
+                .list();
+
+        session.close();
+
+        if (proteins == null || proteins.isEmpty()) {
+            return null;
+        }
+
+        return proteins;
     }
 
     @Override
@@ -781,7 +792,9 @@ public class ProteinDAOImpl implements ProteinDAO {
 
         try {
             protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
-            Hibernate.initialize(protein.getPTMs());
+            if (protein != null) {
+                Hibernate.initialize(protein.getPTMs());
+            }
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
