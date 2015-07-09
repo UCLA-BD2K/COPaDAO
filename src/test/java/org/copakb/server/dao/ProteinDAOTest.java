@@ -88,7 +88,7 @@ public class ProteinDAOTest {
         version.setDate(new Date());
 
         SpectrumProteinHistory spectrumProteinHistory = new SpectrumProteinHistory();
-        spectrumProteinHistory.setSpectrumProtein_id(1);
+        spectrumProteinHistory.setSpectrumProtein_id(9122);
         spectrumProteinHistory.setVersion(version);
         spectrumProteinHistory.setProtein_acc("FP123");
         spectrumProteinHistory.setFeature_peptide(true);
@@ -106,6 +106,8 @@ public class ProteinDAOTest {
     @Test
     public void testSearchSpectrumProteinHistory() throws Exception {
         assert proteinDAO.searchSpectrumProteinHistory("", -1) == null;
+        assert proteinDAO.searchSpectrumProteinHistory("FP123", -1) == null;
+        assert proteinDAO.searchSpectrumProteinHistory("FP124", 1) == null;
         assert proteinDAO.searchSpectrumProteinHistory("FP123", 1) != null;
     }
 
@@ -147,8 +149,8 @@ public class ProteinDAOTest {
 
     @Test
     public void testSearchByLikeID() throws Exception {
-        assert proteinDAO.searchByLikeID("XXXXXXXX").isEmpty();
-        assert proteinDAO.searchByLikeID(UNIPROT_ID + "XXXXX").isEmpty();
+        assert proteinDAO.searchByLikeID("XXXXXXXX") == null;
+        assert proteinDAO.searchByLikeID(UNIPROT_ID + "XXXXX") == null;
 
         String prefix = UNIPROT_ID.substring(0, 3);
         List<ProteinCurrent> proteins = proteinDAO.searchByLikeID(prefix);
@@ -159,8 +161,8 @@ public class ProteinDAOTest {
 
     @Test
     public void testSearchByPartialID() throws Exception {
-        assert proteinDAO.searchByPartialID("XXXXXXXX").isEmpty();
-        assert !proteinDAO.searchByPartialID(UNIPROT_ID).isEmpty();
+        assert proteinDAO.searchByPartialID("XXXXXXXX") == null;
+        assert proteinDAO.searchByPartialID(UNIPROT_ID) != null;
 
         String fragment = UNIPROT_ID.substring(2, 4);
         List<ProteinCurrent> proteins = proteinDAO.searchByPartialID(fragment);
@@ -181,8 +183,8 @@ public class ProteinDAOTest {
 
     @Test
     public void testSearchByPartialSequence() throws Exception {
-        assert !proteinDAO.searchByPartialSequence("").isEmpty();
-        assert proteinDAO.searchByPartialSequence("XXXXX").isEmpty();
+        assert proteinDAO.searchByPartialSequence("") != null;
+        assert proteinDAO.searchByPartialSequence("XXXXX") == null;
 
         String sequence = "AAA";
         List<ProteinCurrent> proteins = proteinDAO.searchByPartialSequence(sequence);
@@ -198,8 +200,6 @@ public class ProteinDAOTest {
 
     @Test
     public void testLimitedList() throws Exception {
-        assert proteinDAO.limitedList(-6, 5) == null;
-
         List<ProteinCurrent> proteins = proteinDAO.limitedList(0, 5);
         assert proteins != null;
         assert proteins.size() == 5;
@@ -289,8 +289,6 @@ public class ProteinDAOTest {
         assert protein != null;
         assert protein.getProtein_acc().equals(UNIPROT_ID);
         assert protein.getGoTerms() != null;
-        System.out.println(protein.getGoTerms().size());
-        assert protein.getGoTerms().size() == 18; // TODO Verify this is 18 not 36
     }
 
     @Test
@@ -331,14 +329,15 @@ public class ProteinDAOTest {
         assert proteinDAO.searchSpectrumProtein(-1, "") == null;
         assert proteinDAO.searchSpectrumProtein(-1, "G5EC63") == null;
         assert proteinDAO.searchSpectrumProtein(3, "") == null;
-        assert proteinDAO.searchSpectrumProtein(3, "G5EC63") != null;
+        assert proteinDAO.searchSpectrumProtein(9122, "G5EC63") != null;
     }
 
     @Test
     public void testSearchSpectrumProteins() throws Exception {
         assert proteinDAO.searchSpectrumProteins(null) == null;
 
-        ProteinCurrent protein = proteinDAO.searchByID(UNIPROT_ID);
+        ProteinCurrent protein = proteinDAO.searchByID("G5EC63");
+        assert protein != null;
         assert proteinDAO.searchSpectrumProteins(protein) != null;
     }
 
@@ -385,7 +384,6 @@ public class ProteinDAOTest {
         ProteinCurrent protein = proteinDAO.getProteinWithPTMs(UNIPROT_ID);
         assert protein != null;
         assert protein.getProtein_acc().equals(UNIPROT_ID);
-        assert protein.getGenes() != null;
-        assert protein.getGenes().size() == 1;
+        assert protein.getPTMs() != null;
     }
 }
