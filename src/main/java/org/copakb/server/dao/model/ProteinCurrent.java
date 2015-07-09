@@ -117,7 +117,7 @@ public class ProteinCurrent {
         this.feature_table = feature_table;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "species_id", nullable = false)
     public Species getSpecies() {
         return species;
@@ -134,7 +134,7 @@ public class ProteinCurrent {
         this.chromosome = chromosome;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "Protein_Gene", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "gene_name",
