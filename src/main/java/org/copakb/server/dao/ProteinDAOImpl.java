@@ -130,20 +130,11 @@ public class ProteinDAOImpl implements ProteinDAO {
 
     @Override
     public boolean compareProteinCurrent(ProteinCurrent a, ProteinCurrent b) {
-        if (a.getChromosome().isEmpty() || b.getChromosome().isEmpty()) {
-            if (!a.getSequence().equals(b.getSequence()) ||
-                    !a.getProtein_name().equals(b.getProtein_name()) ||
-                    a.getMolecular_weight() != b.getMolecular_weight() ||
-                    a.getSpecies().getSpecies_id() != b.getSpecies().getSpecies_id()) {
-                return false;
-            }
-        }
-
+        // todo: add more checks without null pointer exception; check if null?
         return !(!a.getSequence().equals(b.getSequence()) ||
                 !a.getProtein_name().equals(b.getProtein_name()) ||
                 a.getMolecular_weight() != b.getMolecular_weight() ||
-                a.getSpecies().getSpecies_id() != b.getSpecies().getSpecies_id() ||
-                !a.getChromosome().equals(b.getChromosome()));
+                a.getSpecies().getSpecies_id() != b.getSpecies().getSpecies_id());
     }
 
     @Override
@@ -651,26 +642,31 @@ public class ProteinDAOImpl implements ProteinDAO {
         return protein;
     }
 
-    @Override
-    public SpectrumProtein searchSpectrumProtein(int spectrum_id, String protein_acc) {
-        Session session = sessionFactory.openSession();
+    public SpectrumProtein searchSpectrumProtein(Spectrum spectrum, ProteinCurrent protein) {
+        Session session = this.sessionFactory.openSession();
 
-        List<SpectrumProtein> results = session
-                .createCriteria(SpectrumProtein.class, "sp")
-                .createAlias("sp.spectrum", "s")
-                .createAlias("sp.protein", "p")
-                .add(Restrictions.and(
-                        Restrictions.eq("s.spectrum_id", spectrum_id),
-                        Restrictions.eq("p.protein_acc", protein_acc)))
-                .list();
+        Criteria criteria = session.createCriteria(SpectrumProtein.class);
 
-        session.close();
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion specIdRestriction = Restrictions.eq("spectrum", spectrum);
+            Criterion proteinAccRestriction = Restrictions.eq("protein", protein);
 
-        if (results == null || results.isEmpty()) {
+            criteria.add(Restrictions.and(specIdRestriction, proteinAccRestriction));
+            List<SpectrumProtein> results = criteria.list();
+
+            session.flush();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
             return null;
+        } finally {
+            session.close();
         }
-
-        return results.get(0);
     }
 
     @Override
@@ -696,6 +692,27 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .createCriteria(SpectrumProtein.class)
                 .add(Restrictions.eq("protein", proteinCurrent))
                 .list();
+
+        session.close();
+
+        if (spectrumProteins.isEmpty()) {
+            return null;
+        }
+
+        return spectrumProteins;
+    }
+
+    @Override
+    public List<SpectrumProtein> searchSpectrumProteins(Spectrum spectrum) {
+        Session session = sessionFactory.openSession();
+        //session.save(spectrum);
+
+        List<SpectrumProtein> spectrumProteins = session
+                .createCriteria(SpectrumProtein.class)
+                .add(Restrictions.eq("spectrum", spectrum))
+                .list();
+
+        session.flush();
 
         session.close();
 

@@ -125,7 +125,13 @@ public class SpectrumProtein {
     public Peptide getPeptide() {
         return peptide;
     }
-    public void setPeptide(Peptide peptide) {
-        this.peptide = peptide;
+    public void setPeptide(Peptide peptide) { this.peptide = peptide; }
+
+    @Override
+    public String toString() {
+        String result = "protein_acc: " + getProtein().getProtein_acc() + "\n" +
+                "spectrum_id " + getSpectrum().getSpectrum_id();
+
+        return result;
     }
 }

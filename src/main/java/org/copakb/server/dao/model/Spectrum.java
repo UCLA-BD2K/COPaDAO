@@ -184,4 +184,17 @@ public class Spectrum {
         return "seq: "+this.ptm_sequence+"\npeptide sequence: "+this.peptide.getPeptide_sequence()+"/n--";
         //return "";
     }
+
+    public int compare(Spectrum spectrum) {
+        if(this.getCharge_state() == spectrum.getCharge_state() &&
+                this.getDelta_cn() == spectrum.getDelta_cn() &&
+                this.getModule().getMod_id() == spectrum.getModule().getMod_id() &&
+                this.getPeptide().getPeptide_id() == spectrum.getPeptide().getPeptide_id() &&
+                this.getPrecursor_mz() == spectrum.getPrecursor_mz() &&
+                this.getPtm().getPtm_type() == spectrum.getPtm().getPtm_type() &&
+                this.getRawfile_id() == spectrum.getRawfile_id())
+            return 0;
+        else
+            return -1;
+    }
 }
