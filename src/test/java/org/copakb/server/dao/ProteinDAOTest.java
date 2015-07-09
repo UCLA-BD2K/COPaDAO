@@ -1,91 +1,33 @@
 package org.copakb.server.dao;
 
-import org.copakb.server.dao.model.ProteinCurrent;
-import org.copakb.server.dao.model.ProteinHistory;
-import org.copakb.server.dao.model.SpectrumProteinHistory;
-import org.copakb.server.dao.model.Version;
+import org.copakb.server.dao.model.*;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
+ * ProteinDAO test class.
  * Created by Alan on 6/29/2015.
  */
 public class ProteinDAOTest {
+    private final ProteinDAO proteinDAO = DAOObject.getInstance().getProteinDAO();
+    private final static String UNIPROT_ID = "P31946";
 
-/*    @Test
-    public void testSearchByLikeID() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().searchByLikeID("A4F"));
+    @Test
+    public void testAddProteinCurrent() throws Exception {
+        // TODO
     }
 
     @Test
-    public void testSearchByPartialId() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().searchByPartialID("5E"));
-    }
-
-    @Test
-    public void testSearchByPartialSequence() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().searchByPartialSequence("SVS"));
-    }
-
-    @Test
-    public void testSearchByPDB() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().searchByPDB("2B05"));
-    }
-
-    @Test
-    public void testGetProteinWithGOTerms() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().getProteinWithGoTerms("P41932"));
-    }
-
-    @Test
-    public void testGetProteinWithSpectra() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().getProteinWithSpectra("P41932"));
-    }*/
-
-    /*@Test
-    public void testSearchProteinsByPeptide() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().searchProteinsByPeptide(
-                DAOObject.getInstance().getPeptideDAO().searchById(6401)));
-    }*/
-
-    /*@Test
-    public void testCompareProteinCurrent() throws Exception {
-        ProteinCurrent a = DAOObject.getInstance().getProteinDAO().searchByID("P54216");
-        ProteinCurrent b = DAOObject.getInstance().getProteinDAO().searchByID("P54216");
-        if(a != null && b != null) {
-            b.setProtein_name(a.getProtein_name().substring(0, a.getProtein_name().length() - 3));
-            System.out.println(DAOObject.getInstance().getProteinDAO().compareProteinCurrent(a, b));
-        }
-    }
-
-    @Test
-    public void testSearchProteinHistory() throws Exception {
-        System.out.println(DAOObject.getInstance().getProteinDAO().searchProteinHistory("P1"));
-    }*/
-
-    @Test
-    public void testAddProteinToHistory() throws Exception {
-        /*Version version = new Version();
-        version.setVersion(DAOObject.getInstance().getProteinDAO().searchLatestVersion().getVersion() - 1); // set it to previous versions
-        version.setDescription("Update"); // todo: change the description values
-        version.setDate(new Date());
-
-        ProteinHistory proteinHistory = new ProteinHistory();
-        proteinHistory.setProtein_acc("G5EC63");
-        proteinHistory.setProtein_name("protein name");
-        proteinHistory.setChromosome("XX");
-        proteinHistory.setMolecular_weight(1234.1234);
-        proteinHistory.setSequence("OLDSEQUENCE");
-        proteinHistory.setVersion(version);
-
-        DAOObject.getInstance().getProteinDAO().addProteinHistory(proteinHistory);*/
-        return;
+    public void testUpdateProteinCurrent() throws Exception {
+        // TODO
     }
 
     @Test
     public void testDeleteProteinCurrent() throws Exception {
-        /*ProteinCurrent p = new ProteinCurrent();
+        ProteinCurrent p = new ProteinCurrent();
         p.setProtein_acc("FP123");
         p.setSequence("NEWSEQUENCEHERE");
         p.setProtein_name("NEWNAMEHERE");
@@ -93,26 +35,55 @@ public class ProteinDAOTest {
         p.setSpecies(DAOObject.getInstance().getProteinDAO().searchSpecies("Human"));
         p.setChromosome("X");
 
-        DAOObject.getInstance().getProteinDAO().addProteinCurrent(p);*/
-
-        //DAOObject.getInstance().getProteinDAO().deleteProteinCurrent("P99999");
-        return;
+        proteinDAO.addProteinCurrent(p);
+        assert proteinDAO.searchByID(p.getProtein_acc()) != null;
+        proteinDAO.deleteProteinCurrent(p.getProtein_acc());
+        assert proteinDAO.searchByID(p.getProtein_acc()) == null;
     }
 
     @Test
-    public void testAddVersion() throws Exception {
-        Version version = new Version();
-        version.setDate(new Date());
-        version.setVersion(1);
-        version.setDescription("First");
+    public void testCompareProteinCurrent() throws Exception {
+        ProteinCurrent a = proteinDAO.searchByID("P54216");
+        ProteinCurrent b = proteinDAO.searchByID("P54216");
+        assert a != null;
+        assert b != null;
+        b.setProtein_name(a.getProtein_name().substring(0, a.getProtein_name().length() - 3));
+        assert !proteinDAO.compareProteinCurrent(a, b);
+    }
 
-        DAOObject.getInstance().getProteinDAO().addVersion(version);
+    @Test
+    public void testAddProteinHistory() throws Exception {
+        ProteinHistory proteinHistory = new ProteinHistory();
+        proteinHistory.setProtein_acc("G5EC63");
+        proteinHistory.setProtein_name("protein name");
+        proteinHistory.setChromosome("XX");
+        proteinHistory.setMolecular_weight(1234.1234);
+        proteinHistory.setSequence("OLDSEQUENCE");
+
+        Version version = new Version();
+        int v = proteinDAO.searchLatestVersion().getVersion() - 1; // set it to previous versions
+        version.setVersion(v);
+        version.setDescription("Update"); // todo: change the description values
+        version.setDate(new Date());
+        proteinHistory.setVersion(version);
+
+        proteinDAO.addProteinHistory(proteinHistory);
+        ProteinHistory ph = proteinDAO.searchProteinHistory("G5EC63");
+        assert ph != null;
+        assert ph.getProtein_acc().equals("G5EC63");
+        assert ph.getVersion().getVersion() == v;
+    }
+
+    @Test
+    public void testSearchProteinHistory() throws Exception {
+        assert proteinDAO.searchProteinHistory("P1") == null;
+        assert proteinDAO.searchProteinHistory("G5EC63") != null;
     }
 
     @Test
     public void testAddSpectrumProteinHistory() throws Exception {
         Version version = new Version();
-        version.setVersion(DAOObject.getInstance().getProteinDAO().searchLatestVersion().getVersion() - 1); // set it to previous versions
+        version.setVersion(proteinDAO.searchLatestVersion().getVersion() - 1); // set it to previous versions
         version.setDescription("Update"); // todo: change the description values
         version.setDate(new Date());
 
@@ -126,13 +97,295 @@ public class ProteinDAOTest {
         spectrumProteinHistory.setPrevAA('A');
         spectrumProteinHistory.setNextAA('B');
 
-        DAOObject.getInstance().getProteinDAO().addSpectrumProteinHistory(spectrumProteinHistory);
+        proteinDAO.addSpectrumProteinHistory(spectrumProteinHistory);
+
+        assert proteinDAO.searchSpectrumProteinHistory(
+                spectrumProteinHistory.getProtein_acc(), spectrumProteinHistory.getSpectrum_id()) != null;
+    }
+
+    @Test
+    public void testSearchSpectrumProteinHistory() throws Exception {
+        assert proteinDAO.searchSpectrumProteinHistory("", -1) == null;
+        assert proteinDAO.searchSpectrumProteinHistory("FP123", 1) != null;
+    }
+
+    @Test
+    public void testDeleteSpectrumProtein() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testAddVersion() throws Exception {
+        Version version = new Version();
+        version.setDate(new Date());
+        version.setVersion(1);
+        version.setDescription("First");
+
+        proteinDAO.addVersion(version);
+        assert proteinDAO.searchVersion(1) != null;
+    }
+
+    @Test
+    public void testSearchVersion() throws Exception {
+        assert proteinDAO.searchVersion(1) != null;
+    }
+
+    @Test
+    public void testSearchLatestVersion() throws Exception {
+        assert proteinDAO.searchLatestVersion() != null;
+    }
+
+    @Test
+    public void testSearchByID() throws Exception {
+        assert proteinDAO.searchByID("") == null;
+
+        ProteinCurrent protein = proteinDAO.searchByID(UNIPROT_ID);
+        assert protein != null;
+        assert protein.getProtein_acc().equals(UNIPROT_ID);
+        assert protein.getDbRef().getProtein_acc().equals(UNIPROT_ID);
+    }
+
+    @Test
+    public void testSearchByLikeID() throws Exception {
+        assert proteinDAO.searchByLikeID("XXXXXXXX").isEmpty();
+        assert proteinDAO.searchByLikeID(UNIPROT_ID + "XXXXX").isEmpty();
+
+        String prefix = UNIPROT_ID.substring(0, 3);
+        List<ProteinCurrent> proteins = proteinDAO.searchByLikeID(prefix);
+        for (ProteinCurrent p : proteins) {
+            assert p.getProtein_acc().startsWith(prefix);
+        }
+    }
+
+    @Test
+    public void testSearchByPartialID() throws Exception {
+        assert proteinDAO.searchByPartialID("XXXXXXXX").isEmpty();
+        assert !proteinDAO.searchByPartialID(UNIPROT_ID).isEmpty();
+
+        String fragment = UNIPROT_ID.substring(2, 4);
+        List<ProteinCurrent> proteins = proteinDAO.searchByPartialID(fragment);
+        for (ProteinCurrent p : proteins) {
+            assert p.getProtein_acc().contains(fragment);
+        }
+    }
+
+    @Test
+    public void testSearchByName() throws Exception {
+        assert proteinDAO.searchByName("") == null;
+        assert proteinDAO.searchByName("XXXXX") == null;
+
+        String name = "14-3-3 protein beta/alpha";
+        ProteinCurrent protein = proteinDAO.searchByName(name);
+        assert protein.getProtein_name().equals(name);
+    }
+
+    @Test
+    public void testSearchByPartialSequence() throws Exception {
+        assert !proteinDAO.searchByPartialSequence("").isEmpty();
+        assert proteinDAO.searchByPartialSequence("XXXXX").isEmpty();
+
+        String sequence = "AAA";
+        List<ProteinCurrent> proteins = proteinDAO.searchByPartialSequence(sequence);
+        for (ProteinCurrent p : proteins) {
+            assert p.getSequence().contains(sequence);
+        }
+    }
+
+    @Test
+    public void testList() throws Exception {
+        assert !proteinDAO.list().isEmpty();
+    }
+
+    @Test
+    public void testLimitedList() throws Exception {
+        assert proteinDAO.limitedList(-6, 5) == null;
+
+        List<ProteinCurrent> proteins = proteinDAO.limitedList(0, 5);
+        assert proteins != null;
+        assert proteins.size() == 5;
+    }
+
+    @Test
+    public void testAddDbRef() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testSearchDbRefByID() throws Exception {
+        assert proteinDAO.searchDbRefByID("") == null;
+        assert proteinDAO.searchDbRefByID("XXXXXX") == null;
+
+        DBRef dbRef = proteinDAO.searchDbRefByID(UNIPROT_ID);
+        assert dbRef != null;
+        assert dbRef.getProtein_acc().equals(UNIPROT_ID);
+    }
+
+    @Test
+    public void testSearchByPDB() throws Exception {
+        assert proteinDAO.searchByPDB("") != null;
+        assert proteinDAO.searchByPDB("XXXXXXXXXXX") == null;
+
+        ProteinCurrent protein = proteinDAO.searchByPDB("2BQ0");
+        assert protein != null;
+        assert protein.getProtein_acc().equals(UNIPROT_ID);
+    }
+
+    @Test
+    public void testAddGene() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testSearchByGeneName() throws Exception {
+        assert proteinDAO.searchByGeneName("XXXXXXXXXXX") == null;
+
+        String geneName = "YWHAB";
+        Gene gene = proteinDAO.searchByGeneName(geneName);
+        assert gene != null;
+        assert gene.getGene_name().equals(geneName);
+    }
+
+    @Test
+    public void testSearchByEnsg() throws Exception {
+        assert proteinDAO.searchByEnsg("XXXXXXX") == null;
+
+        String ensemblID = "ENSG00000166913";
+        ProteinCurrent protein = proteinDAO.searchByEnsg(ensemblID);
+        assert protein != null;
+        assert protein.getProtein_acc().equals(UNIPROT_ID);
+    }
+
+    @Test
+    public void testGetProteinWithGenes() throws Exception {
+        assert proteinDAO.getProteinWithGenes("") == null;
+
+        ProteinCurrent protein = proteinDAO.getProteinWithGenes(UNIPROT_ID);
+        assert protein != null;
+        assert protein.getProtein_acc().equals(UNIPROT_ID);
+        assert protein.getGenes() != null;
+        assert protein.getGenes().size() == 1;
+    }
+
+    @Test
+    public void testAddGoTerms() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testSearchByGOAccession() throws Exception {
+        assert proteinDAO.searchByGOAccession(-1) == null;
+
+        int go_acc = 51220;
+        GoTerms goTerm = proteinDAO.searchByGOAccession(go_acc);
+        assert goTerm != null;
+        assert goTerm.getGO_accession() == go_acc;
+    }
+
+    @Test
+    public void testGetProteinWithGoTerms() throws Exception {
+        assert proteinDAO.getProteinWithGoTerms("") == null;
+
+        ProteinCurrent protein = proteinDAO.getProteinWithGoTerms(UNIPROT_ID);
+        assert protein != null;
+        assert protein.getProtein_acc().equals(UNIPROT_ID);
+        assert protein.getGoTerms() != null;
+        System.out.println(protein.getGoTerms().size());
+        assert protein.getGoTerms().size() == 18; // TODO Verify this is 18 not 36
+    }
+
+    @Test
+    public void testAddSpecies() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testSearchSpecies() throws Exception {
+        assert proteinDAO.searchSpecies("Minion") == null;
+
+        Species species = proteinDAO.searchSpecies("Human");
+        assert species != null;
+        assert species.getSpecies_id() == 1;
+    }
+
+    @Test
+    public void testAddSpectrumProtein() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testGetProteinWithSpectra() throws Exception {
+        assert proteinDAO.getProteinWithSpectra("") == null;
+
+        ProteinCurrent protein = proteinDAO.getProteinWithSpectra(UNIPROT_ID);
+        assert protein != null;
+        assert protein.getProtein_acc().equals(UNIPROT_ID);
+        Set<SpectrumProtein> spectra = protein.getSpectra();
+        assert spectra != null;
+        for (SpectrumProtein s : spectra) {
+            assert s.getProtein().getProtein_acc().equals(UNIPROT_ID);
+        }
+    }
+
+    @Test
+    public void testSearchSpectrumProtein() throws Exception {
+        assert proteinDAO.searchSpectrumProtein(-1, "") == null;
+        assert proteinDAO.searchSpectrumProtein(-1, "G5EC63") == null;
+        assert proteinDAO.searchSpectrumProtein(3, "") == null;
+        assert proteinDAO.searchSpectrumProtein(3, "G5EC63") != null;
     }
 
     @Test
     public void testSearchSpectrumProteins() throws Exception {
-        //System.out.println(DAOObject.getInstance().getProteinDAO().searchSpectrumProteins().size());
-        return;
+        assert proteinDAO.searchSpectrumProteins(null) == null;
+
+        ProteinCurrent protein = proteinDAO.searchByID(UNIPROT_ID);
+        assert proteinDAO.searchSpectrumProteins(protein) != null;
     }
 
+    @Test
+    public void testSearchProteinsByPeptide() throws Exception {
+        assert proteinDAO.searchProteinsByPeptide(null) == null;
+        // TODO
+    }
+
+    @Test
+    public void testAddHPAProtein() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testSearchHPAByID() throws Exception {
+        assert proteinDAO.searchHPAByID("") == null;
+
+        String ensemblID = "ENSG00000000003";
+        HPAProtein hpaProtein = proteinDAO.searchHPAByID(ensemblID);
+        assert hpaProtein != null;
+        assert hpaProtein.getEnsemblID().equals(ensemblID);
+    }
+
+    @Test
+    public void testAddAntibody() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testSearchAntibodyByID() throws Exception {
+        assert proteinDAO.searchAntibodyByID("") == null;
+
+        String antibodyID = "HPA004109";
+        Antibody antibody = proteinDAO.searchAntibodyByID(antibodyID);
+        assert antibody != null;
+        assert antibody.getAntibodyID().equals(antibodyID);
+    }
+
+    @Test
+    public void testGetProteinWithPTMs() throws Exception {
+        assert proteinDAO.getProteinWithPTMs("") == null;
+
+        ProteinCurrent protein = proteinDAO.getProteinWithPTMs(UNIPROT_ID);
+        assert protein != null;
+        assert protein.getProtein_acc().equals(UNIPROT_ID);
+        assert protein.getGenes() != null;
+        assert protein.getGenes().size() == 1;
+    }
 }
