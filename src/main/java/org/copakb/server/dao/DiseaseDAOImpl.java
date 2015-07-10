@@ -3,18 +3,18 @@ package org.copakb.server.dao;
 import org.copakb.server.dao.model.Disease;
 import org.copakb.server.dao.model.DiseaseGene;
 import org.copakb.server.dao.model.Gene;
-import org.copakb.server.dao.model.ProteinCurrent;
-import org.hibernate.*;
-import org.hibernate.*;
-import org.hibernate.criterion.Criterion;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
-import java.util.Set;
 
 /**
+ * DiseaseDAO implementation
  * Created by Ping PC1 on 7/1/2015.
  */
+@SuppressWarnings("unchecked")
 public class DiseaseDAOImpl implements DiseaseDAO {
 
     private SessionFactory sessionFactory;
@@ -22,36 +22,45 @@ public class DiseaseDAOImpl implements DiseaseDAO {
     /**
      * Default sets the session factory
      *
-     * @param sessionFactory
+     * @param sessionFactory SessionFactory to use
      */
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    /**
-     * Search for a disease object from the table
-     *
-     * @param doid OMIM disease id
-     * @return completed disease object retrieved from the database
-     */
-    public Disease searchDisease(int doid) {
-        Session session = this.sessionFactory.openSession();
-        Disease disease = null;
+    @Override
+    public int addDisease(Disease d) {
+        int result = -1;
 
+        Disease disease = searchDisease(d.getDOID());
+        if (disease != null) {
+            return disease.getDOID();
+        }
+
+        Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
         try {
-            disease = (Disease) session.get(Disease.class, doid);
+            result = (int) (session.save(d));
             tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
             session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        return result;
+    }
+
+    @Override
+    public Disease searchDisease(int doid) {
+        Session session = sessionFactory.openSession();
+
+        Disease disease = (Disease) session.get(Disease.class, doid);
+        session.close();
+
         return disease;
     }
 
+    @Override
     public List<Disease> searchDiseaseByGene(String geneName) {
         Session session = sessionFactory.openSession();
 
@@ -67,47 +76,16 @@ public class DiseaseDAOImpl implements DiseaseDAO {
         return diseases;
     }
 
-    /**
-     * Add disease information to the database
-     *
-     * @param d defined disease  object to be added
-     * @return disease OMIM id if successful, -1 otherwise
-     * @throws HibernateException
-     */
-    public int addDisease(Disease d) throws HibernateException {
-        int result = -1;
-
-        Disease disease = searchDisease(d.getDOID());
-        if (disease != null)
-            return disease.getDOID();
-
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        try {
-            result = (int) (session.save(d));
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-    /**
-     * Add disease gene information to the database
-     *
-     * @param d defined diseasegene object to be added
-     * @return disease OMIM id if successful, -1 otherwise
-     */
+    @Override
     public int addDiseaseGene(DiseaseGene d) {
         int result = 0;
 
         DiseaseGene diseaseGene = searchDiseaseGene(d.getDisease(), d.getGene());
-        if (diseaseGene != null)
+        if (diseaseGene != null) {
             return diseaseGene.getDisease().getDOID();
+        }
 
-        Session session = this.sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
         try {
             session.save(d);
@@ -122,50 +100,25 @@ public class DiseaseDAOImpl implements DiseaseDAO {
         return result;
     }
 
-    /**
-     * Searches for the DiseaseGene information from the database using the disease and gene symbol as the objects.
-     * Mapped using the Disease and Gene objects through hibernate
-     *
-     * @param disease Disease to be matched
-     * @param gene    Gene to be matched
-     * @return defined DiseaseGene object with information from the database
-     */
+    @Override
     public DiseaseGene searchDiseaseGene(Disease disease, Gene gene) {
-        DiseaseGene diseaseGene = null;
+        Session session = sessionFactory.openSession();
 
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        org.hibernate.Criteria criteria = session.createCriteria(DiseaseGene.class);
-        try {
-            Criterion diseaseRestriction = Restrictions.eq("disease", disease);
-            Criterion geneRestriction = Restrictions.eq("gene", gene);
+        DiseaseGene diseaseGene = (DiseaseGene) session
+                .createCriteria(DiseaseGene.class)
+                .add(Restrictions.and(
+                        Restrictions.eq("disease", disease),
+                        Restrictions.eq("gene", gene)))
+                .setMaxResults(1)
+                .uniqueResult();
+        session.close();
 
-            criteria.add(Restrictions.and(diseaseRestriction, geneRestriction));
-
-            List<DiseaseGene> results = criteria.list();
-            tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
-
+        return diseaseGene;
     }
 
-    /**
-     * Searches a limited list of Gene objects from the database
-     *
-     * @param start  beginning index for list
-     * @param length number of genes to be returned
-     * @return partial list of specified length of Gene objects beginning at the start index
-     */
+    @Override
     public List<Gene> limitedGeneList(int start, int length) {
-        Session session = this.sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
         List<Gene> genes = session.createCriteria(Gene.class).setFirstResult(start).setMaxResults(length).list();
         session.close();
         return genes;
