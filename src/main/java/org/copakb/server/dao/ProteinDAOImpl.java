@@ -93,7 +93,7 @@ public class ProteinDAOImpl implements ProteinDAO {
             proteinCurrent.setProtein_name(p.getProtein_name());
             proteinCurrent.setSequence(p.getSequence());
             proteinCurrent.setMolecular_weight(p.getMolecular_weight());
-            proteinCurrent.setChromosome(p.getChromosome());
+            //proteinCurrent.setChromosome(p.getChromosome());
 
             session.update(proteinCurrent);
             tx.commit();

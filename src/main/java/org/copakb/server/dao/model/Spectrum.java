@@ -22,6 +22,8 @@ public class Spectrum {
     private double fdr;
     private double precursor_mz;
     private double th_precursor_mz;
+    private boolean species_unique;
+    private boolean feature_peptide;
     private PTM_type ptm;
     private String rawfile_id;
     private Peptide peptide;
@@ -169,6 +171,25 @@ public class Spectrum {
     public void setRawfile_id(String rawfile_id) {
         this.rawfile_id = rawfile_id;
     }
+
+    @Column(name = "feature_peptide")
+    public boolean isFeature_peptide() {
+        return feature_peptide;
+    }
+
+    public void setFeature_peptide(boolean feature_peptide) {
+        this.feature_peptide = feature_peptide;
+    }
+
+    @Column(name = "species_unique")
+    public boolean isSpecies_unique() {
+        return species_unique;
+    }
+
+    public void setSpecies_unique(boolean species_unique) {
+        this.species_unique = species_unique;
+    }
+
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "spectrum")
     public Set<SpectrumProtein> getSpectrumProtein() {

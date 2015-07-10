@@ -26,15 +26,21 @@ public interface PeptideDAO {
 
     /* Spectrum add & search */
 
-    public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge);
+    public List<Spectrum> searchSpectrum(String ptm_seq, int mod_id, int charge);
 
     public int addSpectrum(Spectrum s);
     public String getSpectrum(int spec_id); // todo: return string of spectrum file (stored on harddrive)
+
+    public void updateSpectrumSpecies(int spec_id, Spectrum spectrum);
+
+    public void updateSpectrumFeature(int spec_id, Spectrum spectrum);
 
 
     /* Species add & search */
 
     public Species searchSpecies(String name);
+
+    public Species searchSpecies(int id);
     public int addSpecies(Species spec);
 
 

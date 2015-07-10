@@ -56,7 +56,7 @@ public class PeptideDAOImpl implements PeptideDAO {
     public int addSpectrum(Spectrum s) throws HibernateException{
         int result = -1;
 
-        Spectrum existingSpectrum = searchSpectrum(s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state());
+        Spectrum existingSpectrum = searchSpectrum(s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state()).get(0);
         if(existingSpectrum!=null)
             return existingSpectrum.getSpectrum_id();
 
@@ -85,7 +85,7 @@ public class PeptideDAOImpl implements PeptideDAO {
      * @param charge    charge of the Spectrum
      * @return  The spectrum with the specified ptm_seq, mod_id, and charge
      */
-    public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge){
+    public List<Spectrum> searchSpectrum(String ptm_seq, int mod_id, int charge) {
         Session session = this.sessionFactory.openSession();
 
         Criteria criteria = session.createCriteria(Spectrum.class);
@@ -95,19 +95,23 @@ public class PeptideDAOImpl implements PeptideDAO {
             LibraryModule mod = new LibraryModule();
             mod.setMod_id(mod_id);
             Criterion pmtRestriction = Restrictions.eq("ptm_sequence", ptm_seq);
-            Criterion modRestriction = Restrictions.eq("module", mod);
+            criteria.add(Restrictions.and(pmtRestriction));
 
-            Criterion chargeRestriction = Restrictions.eq("charge_state", charge);
+            if (mod_id != -1) {
+                Criterion modRestriction = Restrictions.eq("module", mod);
+                criteria.add(Restrictions.and(modRestriction));
+            }
 
-            Criterion pmtAndMod = Restrictions.and(pmtRestriction, modRestriction);
+            if (charge != -1) {
+                Criterion chargeRestriction = Restrictions.eq("charge_state", charge);
+                criteria.add(Restrictions.and(chargeRestriction));
+            }
 
-
-            criteria.add(Restrictions.and(pmtAndMod, chargeRestriction));
             List<Spectrum> results = criteria.list();
             tx.commit();
             if(results.isEmpty())
                 return null;
-            return results.get(0);
+            return results;
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
@@ -116,6 +120,52 @@ public class PeptideDAOImpl implements PeptideDAO {
             session.close();
         }
     }
+
+    public void updateSpectrumSpecies(int spec_id, Spectrum spectrum) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
+
+            // Update spectrum values
+            newSpectrum.setSpecies_unique(spectrum.isSpecies_unique());
+            newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
+
+            session.update(newSpectrum);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void updateSpectrumFeature(int spec_id, Spectrum spectrum) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
+
+            // Update spectrum values
+            newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
+
+            session.update(newSpectrum);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
 
     /**
      * Searches the MySQL database for all Peptides
@@ -258,6 +308,30 @@ public class PeptideDAOImpl implements PeptideDAO {
         Transaction tx = session.beginTransaction();
         try {
             Criterion nameRestriction = Restrictions.eq("species_name", name);
+
+            criteria.add(Restrictions.and(nameRestriction));
+            List<Species> results = criteria.list();
+            tx.commit();
+            if (results.isEmpty())
+                return null;
+            return results.get(0);
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    public Species searchSpecies(int id) {
+        Session session = this.sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(Species.class);
+
+        Transaction tx = session.beginTransaction();
+        try {
+            Criterion nameRestriction = Restrictions.eq("species_id", id);
 
             criteria.add(Restrictions.and(nameRestriction));
             List<Species> results = criteria.list();
