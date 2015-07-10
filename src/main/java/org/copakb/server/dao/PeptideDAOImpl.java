@@ -1,283 +1,176 @@
 package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.*;
-import org.hibernate.*;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.LogicalExpression;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.hql.internal.ast.tree.RestrictableStatement;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.List;
 
 /**
+ * PeptideDAO implementation.
  * Created by vincekyi on 4/16/15.
  */
+@SuppressWarnings("unchecked")
 public class PeptideDAOImpl implements PeptideDAO {
 
     private SessionFactory sessionFactory;
 
     /**
      * Initializes the sessionFactory to run database operations
-     * @param sessionFactory
+     *
+     * @param sessionFactory Session factory to use.
      */
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    /**
-     * Adds a peptide into the MySQL database
-     * @param   p   model of the Peptide that needs to be added
-     * @return  On success: the ID of the peptide that is added
-     *          On failure: returns -1
-     * @throws HibernateException
-     */
-    public int addPeptide(Peptide p) throws HibernateException{
-        int result = -1;
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        result = (int)session.save(p);
-        tx.commit();
+    @Override
+    public int addPeptide(Peptide p) {
+        Session session = sessionFactory.openSession();
+        int result = (int) session.save(p);
         session.close();
 
         return result;
     }
 
-    /**
-     * Adds a spectrum into the MySQL database
-     * @param   s   model of the Spectrum that needs to be added
-     * @return  On success: returns the ID of the spectrum that is added
-     *          On failure: returns -1
-     * @throws HibernateException
-     */
-    public int addSpectrum(Spectrum s) throws HibernateException{
-        int result = -1;
-
-        Spectrum existingSpectrum = searchSpectrum(s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state()).get(0);
-        if(existingSpectrum!=null)
+    @Override
+    public int addSpectrum(Spectrum s) {
+        Spectrum existingSpectrum = searchSpectrum(
+                s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state()).get(0);
+        if (existingSpectrum != null) {
             return existingSpectrum.getSpectrum_id();
+        }
 
-        Peptide peptide = this.searchBySequence(s.getPeptide().getPeptide_sequence());
-        if(peptide==null) {
-            int peptide_id = this.addPeptide(s.getPeptide());
+        Peptide peptide = searchBySequence(s.getPeptide().getPeptide_sequence());
+        if (peptide == null) {
+            int peptide_id = addPeptide(s.getPeptide());
             s.getPeptide().setPeptide_id(peptide_id);
-        }else{
+        } else {
             s.setPeptide(peptide);
         }
 
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        result = (int)session.save(s);
-
-        tx.commit();
+        Session session = sessionFactory.openSession();
+        int result = (int) session.save(s);
         session.close();
 
         return result;
     }
 
-    /**
-     * Searches the MySQL database for a specific Spectrum
-     * @param ptm_seq   ptm_seq of the Spectrum
-     * @param mod_id    mod_id of the Spectrum
-     * @param charge    charge of the Spectrum
-     * @return  The spectrum with the specified ptm_seq, mod_id, and charge
-     */
+    @Override
     public List<Spectrum> searchSpectrum(String ptm_seq, int mod_id, int charge) {
-        Session session = this.sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(Spectrum.class);
+        LibraryModule mod = new LibraryModule();
+        mod.setMod_id(mod_id);
+        List<Spectrum> results = session.createCriteria(Spectrum.class)
+                .add(Restrictions.and(
+                        Restrictions.eq("ptm_sequence", ptm_seq),
+                        Restrictions.and(Restrictions.eq("module", mod),
+                                Restrictions.eq("charge_state", charge))))
+                .list();
+        session.close();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            LibraryModule mod = new LibraryModule();
-            mod.setMod_id(mod_id);
-            Criterion pmtRestriction = Restrictions.eq("ptm_sequence", ptm_seq);
-            criteria.add(Restrictions.and(pmtRestriction));
-
-            if (mod_id != -1) {
-                Criterion modRestriction = Restrictions.eq("module", mod);
-                criteria.add(Restrictions.and(modRestriction));
-            }
-
-            if (charge != -1) {
-                Criterion chargeRestriction = Restrictions.eq("charge_state", charge);
-                criteria.add(Restrictions.and(chargeRestriction));
-            }
-
-            List<Spectrum> results = criteria.list();
-            tx.commit();
-            if(results.isEmpty())
-                return null;
-            return results;
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
+        if (results == null || results.isEmpty()) {
             return null;
-        }finally{
-            session.close();
         }
+
+        return results;
     }
 
+    @Override
     public void updateSpectrumSpecies(int spec_id, Spectrum spectrum) {
         Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
 
-            // Update spectrum values
-            newSpectrum.setSpecies_unique(spectrum.isSpecies_unique());
-            newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
-
-            session.update(newSpectrum);
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
+        Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
+        // Update spectrum values
+        newSpectrum.setSpecies_unique(spectrum.isSpecies_unique());
+        newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
+        session.update(newSpectrum);
+        session.close();
     }
 
+    @Override
     public void updateSpectrumFeature(int spec_id, Spectrum spectrum) {
         Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
 
-            // Update spectrum values
-            newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
-
-            session.update(newSpectrum);
-            tx.commit();
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
+        Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
+        // Update spectrum values
+        newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
+        session.update(newSpectrum);
+        session.close();
     }
 
-
-    /**
-     * Searches the MySQL database for all Peptides
-     * @return list of all Peptides in the database
-     * @throws HibernateException
-     */
-    @SuppressWarnings("unchecked")
     @Override
-    public List<Peptide> list() throws HibernateException{
-        Session session = this.sessionFactory.openSession();
+    public List<Peptide> list() {
+        Session session = sessionFactory.openSession();
+
         List<Peptide> peptideList = session.createCriteria(Peptide.class).list();
         session.close();
-        return peptideList;
-    }
 
-    /**
-     * Searches the MySQL database for a limited number of Peptides
-     * @param start     the starting index of the desired list
-     * @param length    the length of the desired list
-     * @return          List of Peptides with desired starting index and length
-     */
-    public List<Peptide> limitedList(int start, int length){
-        Session session = this.sessionFactory.openSession();
-        List<Peptide> peptideList = session.createCriteria(Peptide.class).setFirstResult(start).setMaxResults(length).list();
-        session.close();
-        return peptideList;
-    }
-
-    /**
-     * Searches the database for a specific Peptide
-     * @param   peptide_id  the ID of the desired Peptide
-     * @return  the specific Peptide with the provided ID
-     * @throws HibernateException
-     */
-    public Peptide searchById(Integer peptide_id) throws HibernateException{
-        Session session = this.sessionFactory.openSession();
-        Peptide peptide = null;
-
-        Transaction tx = session.beginTransaction();
-        try {
-            peptide = (Peptide)session.get(Peptide.class, peptide_id);
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
+        if (peptideList == null || peptideList.isEmpty()) {
             return null;
-        }finally{
-            session.close();
         }
+
+        return peptideList;
+    }
+
+    @Override
+    public List<Peptide> limitedList(int start, int length) {
+        Session session = sessionFactory.openSession();
+
+        List<Peptide> peptideList = session
+                .createCriteria(Peptide.class)
+                .setFirstResult(start)
+                .setMaxResults(length).list();
+        session.close();
+
+        if (peptideList == null || peptideList.isEmpty()) {
+            return null;
+        }
+
+        return peptideList;
+    }
+
+    @Override
+    public Peptide searchById(Integer peptide_id) {
+        Session session = sessionFactory.openSession();
+
+        Peptide peptide = (Peptide) session.get(Peptide.class, peptide_id);
+        session.close();
+
         return peptide;
     }
 
-    /**
-     * Searches the database for a specific Peptide
-     * @param   peptide_sequence  the peptide sequence of the desired Peptide
-     * @return  the specific Peptide with the provided peptide sequence
-     * @throws HibernateException
-     */
-    public Peptide searchBySequence(String peptide_sequence) throws HibernateException{
-        Session session = this.sessionFactory.openSession();
+    @Override
+    public Peptide searchBySequence(String peptide_sequence) {
+        Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(Peptide.class);
+        List<Peptide> results = session.createCriteria(Peptide.class)
+                .add(Restrictions.eq("peptide_sequence", peptide_sequence))
+                .setMaxResults(1)
+                .list();
+        session.close();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            //peptide = (Peptide)session.get(Peptide.class, peptide_sequence);
-            Criterion c = Restrictions.eq("peptide_sequence", peptide_sequence);
-            criteria.add(c);
-            List<Peptide> results = criteria.list();
-            tx.commit();
-            if(results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
+        if (results == null || results.isEmpty()) {
             return null;
-        }finally{
-            session.close();
         }
+
+        return results.get(0);
     }
 
-    /**
-     * Searches the database for a specific Spectrum
-     * @param   id  the ID of the desired Spectrum
-     * @return  the Spectrum with the provided ID
-     * @throws HibernateException
-     */
-    public Spectrum searchBySpecId(Integer id) throws HibernateException{
-        Session session = this.sessionFactory.openSession();
-        Spectrum spectrum = null;
+    @Override
+    public Spectrum searchBySpecId(Integer id) {
+        Session session = sessionFactory.openSession();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            spectrum = (Spectrum)session.get(Spectrum.class, id);
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        }finally{
-            session.close();
-        }
+        Spectrum spectrum = (Spectrum) session.get(Spectrum.class, id);
+        session.close();
+
         return spectrum;
     }
 
-    /**
-     * Returns a list of peptides containing the partial sequence.
-     *
-     * @param sequence Partial sequence to search.
-     * @return  List of peptides containing the partial sequence.
-     */
     @Override
     public List<Peptide> searchByPartialSequence(String sequence) {
         Session session = sessionFactory.openSession();
@@ -294,253 +187,149 @@ public class PeptideDAOImpl implements PeptideDAO {
         return peptides;
     }
 
-    /**
-     * Searches for a species object by checking species names
-     *
-     * @param name name of species
-     * @return species object that matches the given name
-     */
-    public Species searchSpecies(String name) {
-        Session session = this.sessionFactory.openSession();
-
-        Criteria criteria = session.createCriteria(Species.class);
-
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion nameRestriction = Restrictions.eq("species_name", name);
-
-            criteria.add(Restrictions.and(nameRestriction));
-            List<Species> results = criteria.list();
-            tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
-    }
-
-    public Species searchSpecies(int id) {
-        Session session = this.sessionFactory.openSession();
-
-        Criteria criteria = session.createCriteria(Species.class);
-
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion nameRestriction = Restrictions.eq("species_id", id);
-
-            criteria.add(Restrictions.and(nameRestriction));
-            List<Species> results = criteria.list();
-            tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
-    }
-
-    /**
-     * Add a species to the database
-     *
-     * @param sp defined species object with name, id, and list of relevant proteins
-     * @return species id if successful, -1 otherwise
-     * @throws HibernateException
-     */
-    public int addSpecies(Species sp) throws HibernateException {
-        int result = -1;
-
-        Species existingSpecies = searchSpecies(sp.getSpecies_name()); // add param
+    @Override
+    public int addSpecies(Species spec) {
+        Species existingSpecies = searchSpecies(spec.getSpecies_name());
         if (existingSpecies != null)
             return existingSpecies.getSpecies_id();
 
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-
-        try {
-            result = (int) session.save(sp);
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Session session = sessionFactory.openSession();
+        int result = (int) session.save(spec);
+        session.close();
 
         return result;
     }
 
-    /**
-     * Searches for a library module in the database
-     *
-     * @param id ID of library module as autogenerated by the database
-     * @return defined LibraryModule object
-     */
-    public LibraryModule searchLibraryModuleWithId(int id) {
-        Session session = this.sessionFactory.openSession();
+    @Override
+    public Species searchSpecies(String name) {
+        Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(LibraryModule.class);
+        List<Species> results = session.createCriteria(Species.class)
+                .add(Restrictions.eq("species_name", name))
+                .setMaxResults(1)
+                .list();
+        session.close();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion nameRestriction = Restrictions.eq("mod_id", id);
-
-            criteria.add(Restrictions.and(nameRestriction));
-            List<LibraryModule> results = criteria.list();
-            tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
+        if (results == null || results.isEmpty()) {
             return null;
-        } finally {
-            session.close();
         }
+
+        return results.get(0);
     }
 
-    /**
-     * Searches for library module in the database
-     * @param lib_mod name of the module; formatted all lower case with underscores between words (ex. human_heart_proteasome)
-     * @return defined LibraryModule object
-     */
-    public LibraryModule searchLibraryModuleWithModule(String lib_mod) {
-        Session session = this.sessionFactory.openSession();
+    @Override
+    public Species searchSpecies(int id) {
+        Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(LibraryModule.class);
+        List<Species> results = session.createCriteria(Species.class)
+                .add(Restrictions.eq("species_id", id))
+                .setMaxResults(1)
+                .list();
+        session.close();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion nameRestriction = Restrictions.eq("lib_mod", lib_mod);
-
-            criteria.add(Restrictions.and(nameRestriction));
-            List<LibraryModule> results = criteria.list();
-            tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
+        if (results == null || results.isEmpty()) {
             return null;
-        } finally {
-            session.close();
         }
+
+        return results.get(0);
     }
 
-    /**
-     * Adds a library module to the database
-     * @param libmod defined LibraryModule object to be added
-     * @return autogenerated library module id if successful, -1 otherwise
-     */
+    @Override
     public int addLibraryModule(LibraryModule libmod) {
-        int result = -1;
-
         LibraryModule existingLibraryModule = searchLibraryModuleWithId(libmod.getMod_id()); // add param
-        if (existingLibraryModule != null)
+        if (existingLibraryModule != null) {
             return existingLibraryModule.getMod_id();
-
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-
-        try {
-            result = (int) session.save(libmod);
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        Session session = sessionFactory.openSession();
+        int result = (int) session.save(libmod);
+        session.close();
 
         return result;
     }
 
-    /**
-     * Returns PTM object
-     * @param id PTM type as defined in the database. Ranges from 1-255 using the following code:
-     *       1	Carbamidomethylation	C,K,H	57.02000
-     *         2	Acetylation	K,N-term	42.01000
-     *         4	Oxidation	M	15.99000
-     *         8	Phosphorylation	S,T	79.97000
-     *         16	Succinylation	K	100.01860
-     *         32	Propionamide	C	71.03712
-     *         64	Pyro-carbamidomethyl	C	39.99492
-     *         128	Pyro-glu	E	-17.03000
-     * @return PTM object
-     */
-    public PTM_type searchPtmType(int id) {
-        Session session = this.sessionFactory.openSession();
+    @Override
+    public LibraryModule searchLibraryModuleWithId(int id) {
+        Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(PTM_type.class);
+        List<LibraryModule> results = session
+                .createCriteria(LibraryModule.class)
+                .add(Restrictions.eq("mod_id", id))
+                .setMaxResults(1)
+                .list();
+        session.close();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion nameRestriction = Restrictions.eq("ptm_type", id);
-
-            criteria.add(Restrictions.and(nameRestriction));
-            List<PTM_type> results = criteria.list();
-            tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
+        if (results == null || results.isEmpty()) {
             return null;
-        } finally {
-            session.close();
         }
+
+        return results.get(0);
     }
 
-    /**
-     * Add PTM information to all relevant protein objects
-     * @param type defined PTM object to be added
-     * @return PTM type if successful, empty string otherwise
-     */
-    public int addPtmType(PTM_type type) {
-        int result = -1;
+    @Override
+    public LibraryModule searchLibraryModuleWithModule(String lib_mod) {
+        Session session = sessionFactory.openSession();
 
-        PTM_type existingPtm_type = searchPtmType(type.getPtm_type()); // add param
-        if (existingPtm_type != null)
-            return existingPtm_type.getPtm_type();
+        List<LibraryModule> results = session
+                .createCriteria(LibraryModule.class)
+                .add(Restrictions.eq("lib_mod", lib_mod))
+                .setMaxResults(1)
+                .list();
+        session.close();
 
-        Session session = this.sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-
-        try {
-            result = (int) session.save(type);
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (results == null || results.isEmpty()) {
+            return null;
         }
+
+        return results.get(0);
+    }
+
+    @Override
+    public int addPtmType(PTM_type type) {
+        PTM_type existingPtm_type = searchPtmType(type.getPtm_type());
+        if (existingPtm_type != null) {
+            return existingPtm_type.getPtm_type();
+        }
+
+        Session session = sessionFactory.openSession();
+        int result = (int) session.save(type);
+        session.close();
 
         return result;
     }
 
+    @Override
+    public PTM_type searchPtmType(int id) {
+        Session session = sessionFactory.openSession();
+
+        List<PTM_type> results = session.createCriteria(PTM_type.class)
+                .add(Restrictions.eq("ptm_type", id))
+                .setMaxResults(1)
+                .list();
+
+        if (results == null || results.isEmpty()) {
+            return null;
+        }
+
+        return results.get(0);
+    }
+
+    @Override
     public String getSpectrum(int spec_id) {
-        // todo: decide location for spectra files
+        // TODO Decide location for spectra files
         String fileName = "target/" + spec_id + ".txt";
 
         String content = "";
-        String line = null;
+        String line;
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 content += line;
             }
 
             bufferedReader.close();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Unable to open spectrum file '" + spec_id + "'");
             ex.printStackTrace();
         }
@@ -548,30 +337,23 @@ public class PeptideDAOImpl implements PeptideDAO {
         return content;
     }
 
+    @Override
     public int getLocation(Peptide peptide, ProteinCurrent protein) {
+        Session session = sessionFactory.openSession();
 
-        Session session = this.sessionFactory.openSession();
+        List<SpectrumProtein> results = session
+                .createCriteria(SpectrumProtein.class)
+                .add(Restrictions.and(
+                        Restrictions.eq("peptide", peptide),
+                        Restrictions.eq("protein_acc", protein.getProtein_acc())))
+                .setMaxResults(1)
+                .list();
+        session.close();
 
-        Criteria criteria = session.createCriteria(SpectrumProtein.class);
-
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion peptideRestriction = Restrictions.eq("peptide", peptide);
-            Criterion proteinRestriction = Restrictions.eq("protein_acc", protein.getProtein_acc());
-            criteria.add(Restrictions.and(peptideRestriction));
-            criteria.add(Restrictions.and(proteinRestriction));
-            List<SpectrumProtein> results = criteria.list();
-            tx.commit();
-            if (results.isEmpty())
-                return -1;
-            return results.get(0).getLocation();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
+        if (results == null || results.isEmpty()) {
             return -1;
-        } finally {
-            session.close();
         }
-    }
 
+        return results.get(0).getLocation();
+    }
 }
