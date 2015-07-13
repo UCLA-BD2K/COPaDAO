@@ -151,17 +151,14 @@ public class PeptideDAOImpl implements PeptideDAO {
     public Peptide searchBySequence(String peptide_sequence) {
         Session session = sessionFactory.openSession();
 
-        List<Peptide> results = session.createCriteria(Peptide.class)
+        Peptide result = (Peptide) session
+                .createCriteria(Peptide.class)
                 .add(Restrictions.eq("peptide_sequence", peptide_sequence))
                 .setMaxResults(1)
-                .list();
+                .uniqueResult();
         session.close();
 
-        if (results == null || results.isEmpty()) {
-            return null;
-        }
-
-        return results.get(0);
+        return result;
     }
 
     @Override
@@ -183,8 +180,6 @@ public class PeptideDAOImpl implements PeptideDAO {
                 .createCriteria(Peptide.class)
                 .add(Restrictions.like("peptide_sequence", "%" + sequence + "%"))
                 .list();
-
-        session.beginTransaction().commit();
         session.close();
 
         return peptides;
@@ -207,34 +202,26 @@ public class PeptideDAOImpl implements PeptideDAO {
     public Species searchSpecies(String name) {
         Session session = sessionFactory.openSession();
 
-        List<Species> results = session.createCriteria(Species.class)
+        Species result = (Species) session.createCriteria(Species.class)
                 .add(Restrictions.eq("species_name", name))
                 .setMaxResults(1)
-                .list();
+                .uniqueResult();
         session.close();
 
-        if (results == null || results.isEmpty()) {
-            return null;
-        }
-
-        return results.get(0);
+        return result;
     }
 
     @Override
     public Species searchSpecies(int id) {
         Session session = sessionFactory.openSession();
 
-        List<Species> results = session.createCriteria(Species.class)
+        Species result = (Species) session.createCriteria(Species.class)
                 .add(Restrictions.eq("species_id", id))
                 .setMaxResults(1)
-                .list();
+                .uniqueResult();
         session.close();
 
-        if (results == null || results.isEmpty()) {
-            return null;
-        }
-
-        return results.get(0);
+        return result;
     }
 
     @Override
@@ -255,36 +242,28 @@ public class PeptideDAOImpl implements PeptideDAO {
     public LibraryModule searchLibraryModuleWithId(int id) {
         Session session = sessionFactory.openSession();
 
-        List<LibraryModule> results = session
+        LibraryModule result = (LibraryModule) session
                 .createCriteria(LibraryModule.class)
                 .add(Restrictions.eq("mod_id", id))
                 .setMaxResults(1)
-                .list();
+                .uniqueResult();
         session.close();
 
-        if (results == null || results.isEmpty()) {
-            return null;
-        }
-
-        return results.get(0);
+        return result;
     }
 
     @Override
     public LibraryModule searchLibraryModuleWithModule(String lib_mod) {
         Session session = sessionFactory.openSession();
 
-        List<LibraryModule> results = session
+        LibraryModule result = (LibraryModule) session
                 .createCriteria(LibraryModule.class)
                 .add(Restrictions.eq("lib_mod", lib_mod))
                 .setMaxResults(1)
-                .list();
+                .uniqueResult();
         session.close();
 
-        if (results == null || results.isEmpty()) {
-            return null;
-        }
-
-        return results.get(0);
+        return result;
     }
 
     @Override
@@ -305,16 +284,13 @@ public class PeptideDAOImpl implements PeptideDAO {
     public PTM_type searchPtmType(int id) {
         Session session = sessionFactory.openSession();
 
-        List<PTM_type> results = session.createCriteria(PTM_type.class)
+        PTM_type result = (PTM_type) session.createCriteria(PTM_type.class)
                 .add(Restrictions.eq("ptm_type", id))
                 .setMaxResults(1)
-                .list();
+                .uniqueResult();
+        session.close();
 
-        if (results == null || results.isEmpty()) {
-            return null;
-        }
-
-        return results.get(0);
+        return result;
     }
 
     @Override
@@ -344,19 +320,15 @@ public class PeptideDAOImpl implements PeptideDAO {
     public int getLocation(Peptide peptide, ProteinCurrent protein) {
         Session session = sessionFactory.openSession();
 
-        List<SpectrumProtein> results = session
+        SpectrumProtein result = (SpectrumProtein) session
                 .createCriteria(SpectrumProtein.class)
                 .add(Restrictions.and(
                         Restrictions.eq("peptide", peptide),
                         Restrictions.eq("protein_acc", protein.getProtein_acc())))
                 .setMaxResults(1)
-                .list();
+                .uniqueResult();
         session.close();
 
-        if (results == null || results.isEmpty()) {
-            return -1;
-        }
-
-        return results.get(0).getLocation();
+        return result.getLocation();
     }
 }

@@ -212,8 +212,8 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .addOrder(Order.desc("version"))
                 .setMaxResults(1)
                 .uniqueResult();
-
         session.close();
+
         return result;
     }
 
@@ -243,45 +243,28 @@ public class ProteinDAOImpl implements ProteinDAO {
     public Version searchVersion(int version) {
         Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(Version.class);
+        Version result = (Version) session
+                .createCriteria(Version.class)
+                .add(Restrictions.eq("version", version))
+                .setMaxResults(1)
+                .uniqueResult();
+        session.close();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion nameRestriction = Restrictions.eq("version", version);
-
-            criteria.add(Restrictions.and(nameRestriction));
-            List<Version> results = criteria.list();
-            tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
+        return result;
     }
 
     @Override
     public Version searchLatestVersion() {
         Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(Version.class);
+        Version latestVersion = (Version) session
+                .createCriteria(Version.class)
+                .addOrder(Order.desc("version"))
+                .setMaxResults(1)
+                .uniqueResult();
+        session.close();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            Version latestVersion = (Version) criteria.addOrder(Order.desc("version")).setMaxResults(1).uniqueResult();
-            tx.commit();
-            return latestVersion;
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
+        return latestVersion;
     }
 
     @Override
@@ -289,8 +272,8 @@ public class ProteinDAOImpl implements ProteinDAO {
         Session session = sessionFactory.openSession();
 
         ProteinCurrent protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
-
         session.close();
+
         return protein;
     }
 
@@ -303,7 +286,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .createCriteria(ProteinCurrent.class)
                 .add(Restrictions.like("protein_acc", idPrefix + "%"))
                 .list();
-
         session.close();
 
         if (proteins == null || proteins.isEmpty()) {
@@ -321,7 +303,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .createCriteria(ProteinCurrent.class)
                 .add(Restrictions.like("protein_acc", "%" + idFragment + "%"))
                 .list();
-
         session.close();
 
         if (proteins == null || proteins.isEmpty()) {
@@ -335,18 +316,14 @@ public class ProteinDAOImpl implements ProteinDAO {
     public ProteinCurrent searchByName(String protein_name) {
         Session session = sessionFactory.openSession();
 
-        List<ProteinCurrent> proteins = session
+        ProteinCurrent protein = (ProteinCurrent) session
                 .createCriteria(ProteinCurrent.class)
                 .add(Restrictions.eq("protein_name", protein_name))
-                .list();
-
+                .setMaxResults(1)
+                .uniqueResult();
         session.close();
 
-        if (proteins == null || proteins.isEmpty()) {
-            return null;
-        }
-
-        return proteins.get(0);
+        return protein;
     }
 
     @Override
@@ -357,7 +334,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .createCriteria(ProteinCurrent.class)
                 .add(Restrictions.like("sequence", "%" + sequence + "%"))
                 .list();
-
         session.close();
 
         if (proteins == null || proteins.isEmpty()) {
@@ -432,18 +408,14 @@ public class ProteinDAOImpl implements ProteinDAO {
     public DBRef searchDbRefByPDB(String pdbID) {
         Session session = sessionFactory.openSession();
 
-        List<DBRef> dbRefs = session
+        DBRef dbRef = (DBRef) session
                 .createCriteria(DBRef.class)
                 .add(Restrictions.like("pdb", "%" + pdbID + "%"))
-                .list();
-
+                .setMaxResults(1)
+                .uniqueResult();
         session.close();
 
-        if (dbRefs == null || dbRefs.isEmpty()) {
-            return null;
-        }
-
-        return dbRefs.get(0);
+        return dbRef;
     }
 
     @Override
@@ -488,19 +460,15 @@ public class ProteinDAOImpl implements ProteinDAO {
     public ProteinCurrent searchByEnsg(String ensemblID) {
         Session session = sessionFactory.openSession();
 
-        List<ProteinCurrent> proteins = session
+        ProteinCurrent protein = (ProteinCurrent) session
                 .createCriteria(ProteinCurrent.class, "protein")
                 .createAlias("protein.genes", "genes")
                 .add(Restrictions.like("genes.ensembl_id", "%" + ensemblID + "%"))
-                .list();
-
+                .setMaxResults(1)
+                .uniqueResult();
         session.close();
 
-        if (proteins.isEmpty()) {
-            return null;
-        }
-
-        return proteins.get(0);
+        return protein;
     }
 
     @Override
@@ -582,18 +550,14 @@ public class ProteinDAOImpl implements ProteinDAO {
     public Species searchSpecies(String name) {
         Session session = sessionFactory.openSession();
 
-        List<Species> species = session
+        Species species = (Species) session
                 .createCriteria(Species.class)
                 .add(Restrictions.eq("species_name", name))
-                .list();
-
+                .setMaxResults(1)
+                .uniqueResult();
         session.close();
 
-        if (species == null || species.isEmpty()) {
-            return null;
-        }
-
-        return species.get(0);
+        return species;
     }
 
     @Override
@@ -651,30 +615,17 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     public SpectrumProtein searchSpectrumProtein(Spectrum spectrum, ProteinCurrent protein) {
-        Session session = this.sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(SpectrumProtein.class);
+        SpectrumProtein result = (SpectrumProtein) session.createCriteria(SpectrumProtein.class)
+                .add(Restrictions.and(
+                        Restrictions.eq("spectrum", spectrum),
+                        Restrictions.eq("protein", protein)))
+                .setMaxResults(1)
+                .uniqueResult();
+        session.close();
 
-        Transaction tx = session.beginTransaction();
-        try {
-            Criterion specIdRestriction = Restrictions.eq("spectrum", spectrum);
-            Criterion proteinAccRestriction = Restrictions.eq("protein", protein);
-
-            criteria.add(Restrictions.and(specIdRestriction, proteinAccRestriction));
-            List<SpectrumProtein> results = criteria.list();
-
-            session.flush();
-            tx.commit();
-            if (results.isEmpty())
-                return null;
-            return results.get(0);
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
-        }
+        return result;
     }
 
     @Override
@@ -704,7 +655,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .createAlias("protein.spectra", "spectra")
                 .add(Restrictions.eq("spectra.peptide", peptide))
                 .list();
-
         session.close();
 
         if (proteins == null || proteins.isEmpty()) {
@@ -717,15 +667,11 @@ public class ProteinDAOImpl implements ProteinDAO {
     @Override
     public List<SpectrumProtein> searchSpectrumProteins(Spectrum spectrum) {
         Session session = sessionFactory.openSession();
-        //session.save(spectrum);
 
         List<SpectrumProtein> spectrumProteins = session
                 .createCriteria(SpectrumProtein.class)
                 .add(Restrictions.eq("spectrum", spectrum))
                 .list();
-
-        session.flush();
-
         session.close();
 
         if (spectrumProteins.isEmpty()) {
@@ -766,12 +712,9 @@ public class ProteinDAOImpl implements ProteinDAO {
         }
 
         Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-
         String result = (String) session.save(antibody);
-
-        tx.commit();
         session.close();
+
         return result;
     }
 
@@ -780,30 +723,20 @@ public class ProteinDAOImpl implements ProteinDAO {
         Session session = sessionFactory.openSession();
 
         Antibody antibody = (Antibody) session.get(Antibody.class, antibodyID);
-
         session.close();
+
         return antibody;
     }
 
     @Override
     public ProteinCurrent getProteinWithPTMs(String uniprotID) {
         Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-        ProteinCurrent protein = null;
 
-        try {
-            protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
-            if (protein != null) {
-                Hibernate.initialize(protein.getPTMs());
-            }
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-            return null;
-        } finally {
-            session.close();
+        ProteinCurrent protein =  (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
+        if (protein != null) {
+            Hibernate.initialize(protein.getPTMs());
         }
+        session.close();
 
         return protein;
     }
