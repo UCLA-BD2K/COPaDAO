@@ -38,10 +38,13 @@ public class PeptideDAOImpl implements PeptideDAO {
 
     @Override
     public int addSpectrum(Spectrum s) {
-        Spectrum existingSpectrum = searchSpectrum(
-                s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state()).get(0);
-        if (existingSpectrum != null) {
-            return existingSpectrum.getSpectrum_id();
+        List<Spectrum> spectrums = searchSpectrum(
+                s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state());
+        if (spectrums != null) {
+            Spectrum existingSpectrum = spectrums.get(0);
+            if (existingSpectrum != null) {
+                return existingSpectrum.getSpectrum_id();
+            }
         }
 
         Peptide peptide = searchBySequence(s.getPeptide().getPeptide_sequence());

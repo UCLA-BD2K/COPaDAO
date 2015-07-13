@@ -9,9 +9,9 @@ import static org.junit.Assert.*;
  */
 public class PeptideDAOTest {
 
-   /* @Test
+    /*@Test
     public void testSearchByPartialSequence() throws Exception {
-        System.out.println(DAOObject.getInstance().getPeptideDAO().searchByPartialSequence("AAA"));
+        System.out.println(DAOObject.getInstance().getPeptideDAO().searchByPartialSequence(""));
     }*/
 
     /*@Test
