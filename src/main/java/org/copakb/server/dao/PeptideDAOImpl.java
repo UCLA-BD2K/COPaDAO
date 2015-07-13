@@ -3,6 +3,7 @@ package org.copakb.server.dao;
 import org.copakb.server.dao.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import java.io.BufferedReader;
@@ -109,23 +110,27 @@ public class PeptideDAOImpl implements PeptideDAO {
     @Override
     public void updateSpectrumSpecies(int spec_id, Spectrum spectrum) {
         Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
 
         Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
         // Update spectrum values
         newSpectrum.setSpecies_unique(spectrum.isSpecies_unique());
         newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
         session.update(newSpectrum);
+        tx.commit();
         session.close();
     }
 
     @Override
     public void updateSpectrumFeature(int spec_id, Spectrum spectrum) {
         Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
 
         Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
         // Update spectrum values
         newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
         session.update(newSpectrum);
+        tx.commit();
         session.close();
     }
 

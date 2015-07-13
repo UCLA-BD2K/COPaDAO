@@ -2,6 +2,7 @@ package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.Peptide;
 import org.copakb.server.dao.model.ProteinCurrent;
+import org.copakb.server.dao.model.Spectrum;
 import org.junit.Test;
 
 import java.util.List;
@@ -96,12 +97,29 @@ public class PeptideDAOTest {
 
     @Test
     public void testUpdateSpectrumSpecies() throws Exception {
-        // TODO
+        int id = 9200;
+        Spectrum spectrum = peptideDAO.searchBySpecId(id);
+        assert spectrum != null;
+        spectrum.setSpecies_unique(!spectrum.isSpecies_unique());
+        spectrum.setFeature_peptide(!spectrum.isFeature_peptide());
+        peptideDAO.updateSpectrumSpecies(id, spectrum);
+
+        Spectrum updatedSpectrum = peptideDAO.searchBySpecId(id);
+        assert updatedSpectrum != null;
+        assert updatedSpectrum.isSpecies_unique() == spectrum.isSpecies_unique();
     }
 
     @Test
     public void testUpdateSpectrumFeature() throws Exception {
-        // TODO
+        int id = 9200;
+        Spectrum spectrum = peptideDAO.searchBySpecId(id);
+        assert spectrum != null;
+        spectrum.setFeature_peptide(!spectrum.isFeature_peptide());
+        peptideDAO.updateSpectrumSpecies(id, spectrum);
+
+        Spectrum updatedSpectrum = peptideDAO.searchBySpecId(id);
+        assert updatedSpectrum != null;
+        assert updatedSpectrum.isFeature_peptide() == spectrum.isFeature_peptide();
     }
 
     @Test
