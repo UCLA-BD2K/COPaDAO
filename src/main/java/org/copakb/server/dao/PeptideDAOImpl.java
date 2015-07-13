@@ -63,6 +63,29 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     @Override
+    public String getSpectrum(int spec_id) {
+        // TODO Decide location for spectra files
+        String fileName = "target/" + spec_id + ".txt";
+
+        String content = "";
+        String line;
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            while ((line = bufferedReader.readLine()) != null) {
+                content += line;
+            }
+
+            bufferedReader.close();
+        } catch (Exception ex) {
+            System.out.println("Unable to open spectrum file '" + spec_id + "'");
+            ex.printStackTrace();
+        }
+
+        return content;
+    }
+
+    @Override
     public List<Spectrum> searchSpectrum(String ptm_seq, int mod_id, int charge) {
         Session session = sessionFactory.openSession();
 
@@ -174,13 +197,15 @@ public class PeptideDAOImpl implements PeptideDAO {
     @Override
     public List<Peptide> searchByPartialSequence(String sequence) {
         Session session = sessionFactory.openSession();
-
-        // Create query
         List<Peptide> peptides = session
                 .createCriteria(Peptide.class)
                 .add(Restrictions.like("peptide_sequence", "%" + sequence + "%"))
                 .list();
         session.close();
+
+        if (peptides == null || peptides.isEmpty()) {
+            return null;
+        }
 
         return peptides;
     }
@@ -294,29 +319,6 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     @Override
-    public String getSpectrum(int spec_id) {
-        // TODO Decide location for spectra files
-        String fileName = "target/" + spec_id + ".txt";
-
-        String content = "";
-        String line;
-
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-            while ((line = bufferedReader.readLine()) != null) {
-                content += line;
-            }
-
-            bufferedReader.close();
-        } catch (Exception ex) {
-            System.out.println("Unable to open spectrum file '" + spec_id + "'");
-            ex.printStackTrace();
-        }
-
-        return content;
-    }
-
-    @Override
     public int getLocation(Peptide peptide, ProteinCurrent protein) {
         Session session = sessionFactory.openSession();
 
@@ -324,10 +326,14 @@ public class PeptideDAOImpl implements PeptideDAO {
                 .createCriteria(SpectrumProtein.class)
                 .add(Restrictions.and(
                         Restrictions.eq("peptide", peptide),
-                        Restrictions.eq("protein_acc", protein.getProtein_acc())))
+                        Restrictions.eq("protein", protein)))
                 .setMaxResults(1)
                 .uniqueResult();
         session.close();
+
+        if (result == null) {
+            return -1;
+        }
 
         return result.getLocation();
     }
