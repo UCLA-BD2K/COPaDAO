@@ -30,8 +30,6 @@ public class DiseaseDAOImpl implements DiseaseDAO {
 
     @Override
     public int addDisease(Disease d) {
-        int result = -1;
-
         Disease disease = searchDisease(d.getDOID());
         if (disease != null) {
             return disease.getDOID();
@@ -40,14 +38,15 @@ public class DiseaseDAOImpl implements DiseaseDAO {
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
         try {
-            result = (int) (session.save(d));
+            int result = (int) session.save(d);
             tx.commit();
-            session.close();
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
+            return -1;
+        } finally {
+            session.close();
         }
-
-        return result;
     }
 
     @Override
@@ -69,17 +68,17 @@ public class DiseaseDAOImpl implements DiseaseDAO {
                 .createAlias("d.genes", "genes")
                 .add(Restrictions.eq("genes.gene_name", geneName))
                 .list();
-
-        session.beginTransaction().commit();
         session.close();
+
+        if (diseases == null || diseases.isEmpty()) {
+            return null;
+        }
 
         return diseases;
     }
 
     @Override
     public int addDiseaseGene(DiseaseGene d) {
-        int result = 0;
-
         DiseaseGene diseaseGene = searchDiseaseGene(d.getDisease(), d.getGene());
         if (diseaseGene != null) {
             return diseaseGene.getDisease().getDOID();
@@ -89,15 +88,14 @@ public class DiseaseDAOImpl implements DiseaseDAO {
         Transaction tx = session.beginTransaction();
         try {
             session.save(d);
-            //result = (int) session.save(d);
             tx.commit();
-            session.close();
+            return 0;
         } catch (Exception e) {
-            result = -1;
             e.printStackTrace();
+            return -1;
+        } finally {
+            session.close();
         }
-
-        return result;
     }
 
     @Override
@@ -119,8 +117,17 @@ public class DiseaseDAOImpl implements DiseaseDAO {
     @Override
     public List<Gene> limitedGeneList(int start, int length) {
         Session session = sessionFactory.openSession();
-        List<Gene> genes = session.createCriteria(Gene.class).setFirstResult(start).setMaxResults(length).list();
+        List<Gene> genes = session
+                .createCriteria(Gene.class)
+                .setFirstResult(start)
+                .setMaxResults(length)
+                .list();
         session.close();
+
+        if (genes == null || genes.isEmpty()) {
+            return null;
+        }
+
         return genes;
     }
 }
