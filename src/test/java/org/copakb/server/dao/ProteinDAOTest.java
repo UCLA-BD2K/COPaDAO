@@ -326,7 +326,7 @@ public class ProteinDAOTest {
 
     @Test
     public void testSearchSpectrumProtein() throws Exception {
-        Spectrum spectrum = DAOObject.getInstance().getPeptideDAO().searchBySpecId(9122);
+        Spectrum spectrum = DAOObject.getInstance().getPeptideDAO().searchBySpecId(9200);
         assert spectrum != null;
         ProteinCurrent protein = proteinDAO.searchByID("G5EC63");
         assert protein != null;
@@ -340,7 +340,7 @@ public class ProteinDAOTest {
         assert protein != null;
         assert proteinDAO.searchSpectrumProteins(protein) != null;
 
-        Spectrum spectrum = DAOObject.getInstance().getPeptideDAO().searchBySpecId(9122);
+        Spectrum spectrum = DAOObject.getInstance().getPeptideDAO().searchBySpecId(9200);
         assert spectrum != null;
         assert proteinDAO.searchSpectrumProteins(spectrum) != null;
     }
