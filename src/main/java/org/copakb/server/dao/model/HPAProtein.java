@@ -53,7 +53,7 @@ public class HPAProtein {
         this.ensemblID = ensemblID;
     }
 
-    @Column(name = "name")
+    @Column(name = "gene_name")
     public String getProteinName() {
         return proteinName;
     }
@@ -125,8 +125,7 @@ public class HPAProtein {
         this.assaySummary = assaySummary;
     }
 
-    // TODO Map to Antibodies table
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ensemblID")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensemblID")
     public Set<Antibody> getAntibodies() {
         return antibodies;
     }

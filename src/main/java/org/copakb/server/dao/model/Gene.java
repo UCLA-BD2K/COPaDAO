@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 /**
+ * Gene model
  * Created by Kevin on 4/30/2015.
  */
 @Entity
@@ -11,7 +12,6 @@ import java.util.Set;
 public class Gene {
     private String gene_name;
     private String ensembl_id;
-    private String chromosome;
     private Set<HPAProtein> hpaProteins;
     private Set<Disease> diseases;
     private Set<ProteinCurrent> proteins;
@@ -31,22 +31,37 @@ public class Gene {
 
     @Id
     @Column(name = "gene_name")
-    public String getGene_name() { return gene_name; }
-    public void setGene_name(String gene_name) { this.gene_name = gene_name; }
+    public String getGene_name() {
+        return gene_name;
+    }
+
+    public void setGene_name(String gene_name) {
+        this.gene_name = gene_name;
+    }
 
     @Column(name = "ensembl_id")
-    public String getEnsembl_id() { return ensembl_id; }
-    public void setEnsembl_id(String ensembl_id) { this.ensembl_id = ensembl_id; }
+    public String getEnsembl_id() {
+        return ensembl_id;
+    }
+
+    public void setEnsembl_id(String ensembl_id) {
+        this.ensembl_id = ensembl_id;
+    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensemblID")
-    public Set<HPAProtein> getHpaProteins() { return hpaProteins; }
-    public void setHpaProteins(Set<HPAProtein> hpas1) { this.hpaProteins = hpas1; }
+    public Set<HPAProtein> getHpaProteins() {
+        return hpaProteins;
+    }
+
+    public void setHpaProteins(Set<HPAProtein> hpas1) {
+        this.hpaProteins = hpas1;
+    }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Disease_Gene", joinColumns = {
-            @JoinColumn(name = "gene_name", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "DOID",
-                    nullable = false, updatable = false) })
+            @JoinColumn(name = "gene_name", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "DOID",
+                    nullable = false, updatable = false)})
     public Set<Disease> getDiseases() {
         return diseases;
     }
@@ -57,9 +72,9 @@ public class Gene {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Protein_Gene", joinColumns = {
-            @JoinColumn(name = "gene_name", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "protein_acc",
-                    nullable = false, updatable = false) })
+            @JoinColumn(name = "gene_name", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "protein_acc",
+                    nullable = false, updatable = false)})
     public Set<ProteinCurrent> getProteins() {
         return proteins;
     }
@@ -70,14 +85,8 @@ public class Gene {
 
     @Override
     public String toString() {
-        String ans = "gene_name: " + gene_name + "\n" +
+        return "gene_name: " + gene_name + "\n" +
                 "ensembl_id: " + ensembl_id + "\n" + "disease: ";
-
-        //ans += diseases.size() + "";
-        for(Disease disease : diseases) {
-            ans += disease.toString() + "\n";
-        }
-        return ans;
     }
 
     @Override
