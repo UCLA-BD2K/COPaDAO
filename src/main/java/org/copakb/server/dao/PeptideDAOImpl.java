@@ -115,7 +115,6 @@ public class PeptideDAOImpl implements PeptideDAO {
         Spectrum newSpectrum = (Spectrum) session.get(Spectrum.class, spec_id);
         // Update spectrum values
         newSpectrum.setSpecies_unique(spectrum.isSpecies_unique());
-        newSpectrum.setFeature_peptide(spectrum.isFeature_peptide());
         session.update(newSpectrum);
         tx.commit();
         session.close();
