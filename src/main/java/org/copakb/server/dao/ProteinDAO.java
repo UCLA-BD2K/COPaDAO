@@ -53,6 +53,14 @@ public interface ProteinDAO {
     ProteinCurrent searchByID(String uniprotID);
 
     /**
+     * Searches for a protein with the given UniProt ID and returns it fully initialized.
+     *
+     * @param uniprotID UniProt ID of the protein.
+     * @return ProteinCurrent object, fully initialized. Null if not found.
+     */
+    ProteinCurrent getInitializedProtein(String uniprotID);
+
+    /**
      * Searches all proteins that start with the given UniProt ID prefix.
      *
      * @param idPrefix UniProt ID prefix.

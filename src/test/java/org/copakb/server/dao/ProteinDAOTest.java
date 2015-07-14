@@ -144,6 +144,15 @@ public class ProteinDAOTest {
         ProteinCurrent protein = proteinDAO.searchByID(UNIPROT_ID);
         assert protein != null;
         assert protein.getProtein_acc().equals(UNIPROT_ID);
+    }
+
+    @Test
+    public void testGetInitializedProtein() throws Exception {
+        assert proteinDAO.searchByID("") == null;
+
+        ProteinCurrent protein = proteinDAO.getInitializedProtein(UNIPROT_ID);
+        assert protein != null;
+        assert protein.getProtein_acc().equals(UNIPROT_ID);
         assert protein.getDbRef().getProtein_acc().equals(UNIPROT_ID);
     }
 

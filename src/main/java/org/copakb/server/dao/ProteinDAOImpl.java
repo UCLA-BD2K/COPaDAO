@@ -277,6 +277,24 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     @Override
+    public ProteinCurrent getInitializedProtein(String uniprotID) {
+        Session session = sessionFactory.openSession();
+
+        ProteinCurrent protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
+        if (protein != null) {
+            Hibernate.initialize(protein.getDbRef());
+            Hibernate.initialize(protein.getSpecies());
+            Hibernate.initialize(protein.getGenes());
+            Hibernate.initialize(protein.getGoTerms());
+            Hibernate.initialize(protein.getPTMs());
+            Hibernate.initialize(protein.getSpectra());
+        }
+        session.close();
+
+        return protein;
+    }
+
+    @Override
     public List<ProteinCurrent> searchByLikeID(String idPrefix) {
         Session session = sessionFactory.openSession();
 
