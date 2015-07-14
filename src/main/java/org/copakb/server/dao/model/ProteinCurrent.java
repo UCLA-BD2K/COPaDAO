@@ -93,7 +93,7 @@ public class ProteinCurrent {
         this.signal_peptide = signal_peptide;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "proteinCurrent", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "proteinCurrent", cascade = CascadeType.ALL, optional = false)
     public DBRef getDbRef() {
         return dbRef;
     }
@@ -117,7 +117,7 @@ public class ProteinCurrent {
         this.feature_table = feature_table;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "species_id", nullable = false)
     public Species getSpecies() {
         return species;
@@ -134,7 +134,7 @@ public class ProteinCurrent {
         this.chromosome = chromosome;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Protein_Gene", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "gene_name",
@@ -175,13 +175,13 @@ public class ProteinCurrent {
         sb.append("Cytoplasmatic Domain: " + cytoplasmatic_domain + "\n");
         sb.append("Noncytoplasmatic Domain: " + noncytoplasmatic_domain + "\n");
         sb.append("Signal peptide: " + signal_peptide + "\n");
-        //sb.append("DBRefs:\n" + dbRef.toString() + "\n");
+        // sb.append("DBRefs:\n" + dbRef.toString() + "\n");
         sb.append("Keywords: " + keywords + "\n");
         sb.append("Feature table:\n"  + feature_table + "\n");
-        sb.append("Species:\n" + species.toString());
+        // sb.append("Species:\n" + species.toString());
         sb.append("Chromosome: " + chromosome + "\n");
-        //sb.append("Genes:\n" + genes.toString());
-        //sb.append("GoTerms: " + goTerms.toString() + "\n");
+        // sb.append("Genes:\n" + genes.toString());
+        // sb.append("GoTerms: " + goTerms.toString() + "\n");
         // sb.append("PTMs: " + PTMs.toString() + "\n");
         // sb.append("Spectra: " + spectra.toString() + "\n");
 

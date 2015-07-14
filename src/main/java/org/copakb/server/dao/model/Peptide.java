@@ -76,7 +76,7 @@ public class Peptide {
         this.sequence_length = sequence_length;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "peptide")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "peptide")
     public Set<Spectrum> getSpectra() {
         return spectra;
     }
@@ -87,13 +87,6 @@ public class Peptide {
 
     @Override
     public String toString(){
-        String spectraList = "spectra: ";
-        if(spectra!=null)
-        for(Spectrum s: spectra){
-            spectraList+="\n"+s.getPtm_sequence()+", xcorr: "+s.getXcorr();
-            if(s.getModule()!=null)
-                spectraList+=", module: "+s.getModule().getLib_mod()+", species: "+s.getModule().getSpecies().getSpecies_name();
-        }
-        return "ID: "+Integer.toString(this.getPeptide_id())+"\n"+"sequence: "+this.getPeptide_sequence()+"\n"+spectraList+"\n**";
+        return "ID: "+Integer.toString(this.getPeptide_id())+"\n"+"sequence: "+this.getPeptide_sequence()+"\n**";
     }
 }
