@@ -305,10 +305,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
         session.close();
 
-        if (proteins == null || proteins.isEmpty()) {
-            return null;
-        }
-
         return proteins;
     }
 
@@ -321,10 +317,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .add(Restrictions.like("protein_acc", "%" + idFragment + "%"))
                 .list();
         session.close();
-
-        if (proteins == null || proteins.isEmpty()) {
-            return null;
-        }
 
         return proteins;
     }
@@ -353,10 +345,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
         session.close();
 
-        if (proteins == null || proteins.isEmpty()) {
-            return null;
-        }
-
         return proteins;
     }
 
@@ -369,10 +357,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
 
         session.close();
-
-        if (proteins == null || proteins.isEmpty()) {
-            return null;
-        }
 
         return proteins;
     }
@@ -388,10 +372,6 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
 
         session.close();
-
-        if (proteins == null || proteins.isEmpty()) {
-            return null;
-        }
 
         return proteins;
     }
@@ -653,12 +633,20 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .createCriteria(SpectrumProtein.class)
                 .add(Restrictions.eq("protein", proteinCurrent))
                 .list();
-
         session.close();
 
-        if (spectrumProteins == null || spectrumProteins.isEmpty()) {
-            return null;
-        }
+        return spectrumProteins;
+    }
+
+    @Override
+    public List<SpectrumProtein> searchSpectrumProteins(Spectrum spectrum) {
+        Session session = sessionFactory.openSession();
+
+        List<SpectrumProtein> spectrumProteins = session
+                .createCriteria(SpectrumProtein.class)
+                .add(Restrictions.eq("spectrum", spectrum))
+                .list();
+        session.close();
 
         return spectrumProteins;
     }
@@ -674,28 +662,7 @@ public class ProteinDAOImpl implements ProteinDAO {
                 .list();
         session.close();
 
-        if (proteins == null || proteins.isEmpty()) {
-            return null;
-        }
-
         return proteins;
-    }
-
-    @Override
-    public List<SpectrumProtein> searchSpectrumProteins(Spectrum spectrum) {
-        Session session = sessionFactory.openSession();
-
-        List<SpectrumProtein> spectrumProteins = session
-                .createCriteria(SpectrumProtein.class)
-                .add(Restrictions.eq("spectrum", spectrum))
-                .list();
-        session.close();
-
-        if (spectrumProteins.isEmpty()) {
-            return null;
-        }
-
-        return spectrumProteins;
     }
 
     @Override
@@ -707,8 +674,8 @@ public class ProteinDAOImpl implements ProteinDAO {
         Session session = sessionFactory.openSession();
 
         String result = (String) session.save(protein);
-
         session.close();
+
         return result;
     }
 
@@ -717,8 +684,8 @@ public class ProteinDAOImpl implements ProteinDAO {
         Session session = sessionFactory.openSession();
 
         HPAProtein protein = (HPAProtein) session.get(HPAProtein.class, ensemblID);
-
         session.close();
+
         return protein;
     }
 

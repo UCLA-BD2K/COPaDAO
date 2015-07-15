@@ -34,7 +34,7 @@ public interface DiseaseDAO {
      * @param geneName Name of gene to search.
      * @return List of diseases with the given gene.
      */
-    List<Disease> searchDiseaseByGene(String geneName);
+    List<Disease> searchDiseasesByGene(String geneName);
 
     /**
      * Add disease gene information to the database

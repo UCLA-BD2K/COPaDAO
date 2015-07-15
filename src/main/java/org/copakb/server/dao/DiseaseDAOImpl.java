@@ -60,7 +60,7 @@ public class DiseaseDAOImpl implements DiseaseDAO {
     }
 
     @Override
-    public List<Disease> searchDiseaseByGene(String geneName) {
+    public List<Disease> searchDiseasesByGene(String geneName) {
         Session session = sessionFactory.openSession();
 
         List<Disease> diseases = session
@@ -69,10 +69,6 @@ public class DiseaseDAOImpl implements DiseaseDAO {
                 .add(Restrictions.eq("genes.gene_name", geneName))
                 .list();
         session.close();
-
-        if (diseases == null || diseases.isEmpty()) {
-            return null;
-        }
 
         return diseases;
     }
@@ -123,10 +119,6 @@ public class DiseaseDAOImpl implements DiseaseDAO {
                 .setMaxResults(length)
                 .list();
         session.close();
-
-        if (genes == null || genes.isEmpty()) {
-            return null;
-        }
 
         return genes;
     }

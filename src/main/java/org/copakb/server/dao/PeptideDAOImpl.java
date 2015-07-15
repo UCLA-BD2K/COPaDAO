@@ -100,10 +100,6 @@ public class PeptideDAOImpl implements PeptideDAO {
                 .list();
         session.close();
 
-        if (results == null || results.isEmpty()) {
-            return null;
-        }
-
         return results;
     }
 
@@ -140,10 +136,6 @@ public class PeptideDAOImpl implements PeptideDAO {
         List<Peptide> peptideList = session.createCriteria(Peptide.class).list();
         session.close();
 
-        if (peptideList == null || peptideList.isEmpty()) {
-            return null;
-        }
-
         return peptideList;
     }
 
@@ -156,10 +148,6 @@ public class PeptideDAOImpl implements PeptideDAO {
                 .setFirstResult(start)
                 .setMaxResults(length).list();
         session.close();
-
-        if (peptideList == null || peptideList.isEmpty()) {
-            return null;
-        }
 
         return peptideList;
     }
@@ -206,10 +194,6 @@ public class PeptideDAOImpl implements PeptideDAO {
                 .add(Restrictions.like("peptide_sequence", "%" + sequence + "%"))
                 .list();
         session.close();
-
-        if (peptides == null || peptides.isEmpty()) {
-            return null;
-        }
 
         return peptides;
     }

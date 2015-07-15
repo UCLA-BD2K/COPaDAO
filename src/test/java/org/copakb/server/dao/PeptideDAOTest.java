@@ -21,13 +21,13 @@ public class PeptideDAOTest {
 
     @Test
     public void testList() throws Exception {
-        assert peptideDAO.list() != null;
+        assert !peptideDAO.list().isEmpty();
     }
 
     @Test
     public void testLimitedList() throws Exception {
-        assert peptideDAO.limitedList(-1, 0) == null;
-        assert peptideDAO.limitedList(-1, -1) == null;
+        assert peptideDAO.limitedList(-1, 0).isEmpty();
+        assert peptideDAO.limitedList(-1, -1).isEmpty();
         List<Peptide> peptides;
         peptides = peptideDAO.limitedList(0, 0);
         assert peptides != null;
@@ -74,9 +74,9 @@ public class PeptideDAOTest {
 
     @Test
     public void testSearchByPartialSequence() throws Exception {
-        assert peptideDAO.searchByPartialSequence(null) == null;
-        assert peptideDAO.searchByPartialSequence("XXXXXXXX") == null;
-        assert peptideDAO.searchByPartialSequence("AAA") != null;
+        assert peptideDAO.searchByPartialSequence(null).isEmpty();
+        assert peptideDAO.searchByPartialSequence("XXXXXXXX").isEmpty();
+        assert !peptideDAO.searchByPartialSequence("AAA").isEmpty();
     }
 
     @Test
@@ -115,7 +115,7 @@ public class PeptideDAOTest {
         Spectrum spectrum = peptideDAO.searchBySpecId(id);
         assert spectrum != null;
         spectrum.setFeature_peptide(!spectrum.isFeature_peptide());
-        peptideDAO.updateSpectrumSpecies(id, spectrum);
+        peptideDAO.updateSpectrumFeature(id, spectrum);
 
         Spectrum updatedSpectrum = peptideDAO.searchBySpecId(id);
         assert updatedSpectrum != null;

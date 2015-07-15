@@ -25,10 +25,10 @@ public class DiseaseDAOTest {
     }
 
     @Test
-    public void testSearchDiseaseByGene() throws Exception {
-        assert diseaseDAO.searchDiseaseByGene(null) == null;
-        assert diseaseDAO.searchDiseaseByGene("XXXX") == null;
-        assert diseaseDAO.searchDiseaseByGene("PTEN") != null;
+    public void testSearchDiseasesByGene() throws Exception {
+        assert diseaseDAO.searchDiseasesByGene(null).isEmpty();
+        assert diseaseDAO.searchDiseasesByGene("XXXX").isEmpty();
+        assert !diseaseDAO.searchDiseasesByGene("PTEN").isEmpty();
     }
 
     @Test
@@ -50,7 +50,7 @@ public class DiseaseDAOTest {
 
     @Test
     public void testLimitedGeneList() throws Exception {
-        assert diseaseDAO.limitedGeneList(-1, 0) == null;
+        assert diseaseDAO.limitedGeneList(-1, 0).isEmpty();
         List<Gene> genes = diseaseDAO.limitedGeneList(1, 0);
         assert genes != null;
         assert genes.size() > 1;
