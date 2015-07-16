@@ -29,6 +29,14 @@ public interface DiseaseDAO {
     Disease searchDisease(int doid);
 
     /**
+     * Gets a fully initialized Disease.
+     *
+     * @param doid Disease OMIM ID to search.
+     * @return Fully initialized Disease; null if not found.
+     */
+    Disease getInitializedDisease(int doid);
+
+    /**
      * Returns a diseases with the given gene.
      *
      * @param geneName Name of gene to search.

@@ -70,16 +70,6 @@ public interface PeptideDAO {
     List<Peptide> searchByPartialSequence(String sequence);
 
     /**
-     * Searches the MySQL database for a specific Spectrum
-     *
-     * @param ptm_seq ptm_seq of the Spectrum
-     * @param mod_id  mod_id of the Spectrum
-     * @param charge  charge of the Spectrum
-     * @return The spectrum with the specified ptm_seq, mod_id, and charge
-     */
-    List<Spectrum> searchSpectrum(String ptm_seq, int mod_id, int charge);
-
-    /**
      * Adds a spectrum into the MySQL database
      *
      * @param s model of the Spectrum that needs to be added
@@ -91,9 +81,27 @@ public interface PeptideDAO {
     // TODO Return string of spectrum file (stored on harddrive)
     String getSpectrum(int spec_id);
 
+    /**
+     * Gets a fully initialized Spectrum.
+     *
+     * @param spec_id SpectrumID to search.
+     * @return Fully initialized Spectrum; null if not found.
+     */
+    Spectrum getInitializedSpectrum(int spec_id);
+
     void updateSpectrumSpecies(int spec_id, Spectrum spectrum);
 
     void updateSpectrumFeature(int spec_id, Spectrum spectrum);
+
+    /**
+     * Searches the MySQL database for a specific Spectrum
+     *
+     * @param ptm_seq ptm_seq of the Spectrum
+     * @param mod_id  mod_id of the Spectrum
+     * @param charge  charge of the Spectrum
+     * @return The spectrum with the specified ptm_seq, mod_id, and charge
+     */
+    List<Spectrum> searchSpectrum(String ptm_seq, int mod_id, int charge);
 
     /**
      * Add a species to the database

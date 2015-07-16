@@ -1,17 +1,19 @@
 package org.copakb.server.dao.model;
 
+import org.copakb.server.dao.DAOObject;
+
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 /**
+ * Spectrum model
  * Created by vincekyi on 4/19/15.
  */
 
 @Entity
 @Table(name = "Spectrum")
-public class Spectrum {
-
-
+public class Spectrum extends Model {
     private int spectrum_id;
     private String ptm_sequence;
     private int charge_state;
@@ -44,17 +46,18 @@ public class Spectrum {
         this.peptide = peptide;
     }
 
-    public Spectrum(){
+    public Spectrum() {
         //empty
     }
 
 
     @Id
-    @Column(name="spectrum_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "spectrum_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getSpectrum_id() {
         return spectrum_id;
     }
+
     public void setSpectrum_id(int spectrum_id) {
         this.spectrum_id = spectrum_id;
     }
@@ -200,20 +203,35 @@ public class Spectrum {
         this.spectrumProtein = spectrumProtein;
     }
 
+    /**
+     * Initializes the model's lazy loaded objects.
+     */
     @Override
-    public String toString(){
-        return "seq: "+this.ptm_sequence+"\npeptide sequence: "+this.peptide.getPeptide_sequence()+"/n--";
-        //return "";
+    public Spectrum initialize() {
+        Spectrum initialized = DAOObject.getInstance().getPeptideDAO().getInitializedSpectrum(spectrum_id);
+        if (initialized != null) {
+            setModule(initialized.getModule());
+            setPtm(initialized.getPtm());
+            setPeptide(initialized.getPeptide());
+            setSpectrumProtein(initialized.getSpectrumProtein());
+        }
+
+        return initialized;
+    }
+
+    @Override
+    public String toString() {
+        return "seq: " + this.ptm_sequence + "\npeptide sequence: " + this.peptide.getPeptide_sequence() + "/n--";
     }
 
     public int compare(Spectrum spectrum) {
-        if(this.getCharge_state() == spectrum.getCharge_state() &&
+        if (this.getCharge_state() == spectrum.getCharge_state() &&
                 this.getDelta_cn() == spectrum.getDelta_cn() &&
                 this.getModule().getMod_id() == spectrum.getModule().getMod_id() &&
                 this.getPeptide().getPeptide_id() == spectrum.getPeptide().getPeptide_id() &&
                 this.getPrecursor_mz() == spectrum.getPrecursor_mz() &&
                 this.getPtm().getPtm_type() == spectrum.getPtm().getPtm_type() &&
-                this.getRawfile_id() == spectrum.getRawfile_id())
+                Objects.equals(this.getRawfile_id(), spectrum.getRawfile_id()))
             return 0;
         else
             return -1;

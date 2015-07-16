@@ -559,19 +559,12 @@ public class ProteinDAOImpl implements ProteinDAO {
 
     @Override
     public int addSpectrumProtein(SpectrumProtein p) throws HibernateException {
-        int result = -1;
-
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-
-        try {
-            result = (int) session.save(p);
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        int result = (int) session.save(p);
+        tx.commit();
         session.close();
+
         return result;
     }
 
@@ -684,6 +677,19 @@ public class ProteinDAOImpl implements ProteinDAO {
         Session session = sessionFactory.openSession();
 
         HPAProtein protein = (HPAProtein) session.get(HPAProtein.class, ensemblID);
+        session.close();
+
+        return protein;
+    }
+
+    @Override
+    public HPAProtein getInitializedHPAProtein(String ensemblID) {
+        Session session = sessionFactory.openSession();
+
+        HPAProtein protein = (HPAProtein) session.get(HPAProtein.class, ensemblID);
+        if (protein != null) {
+            Hibernate.initialize(protein.getAntibodies());
+        }
         session.close();
 
         return protein;
