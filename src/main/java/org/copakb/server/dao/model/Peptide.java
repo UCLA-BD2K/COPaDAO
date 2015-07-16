@@ -90,10 +90,10 @@ public class Peptide extends Model {
     public Peptide initialize() {
         Peptide initialized = DAOObject.getInstance().getPeptideDAO().getInitializedPeptide(peptide_id);
         if (initialized != null) {
-            setSpectra(getSpectra());
+            setSpectra(initialized.getSpectra());
         }
 
-        return initialized;
+        return this;
     }
 
     @Override
