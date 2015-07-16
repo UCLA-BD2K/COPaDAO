@@ -1,23 +1,26 @@
 package org.copakb.server.dao.model;
 
+import org.copakb.server.dao.DAOObject;
+
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Peptide model
  * Created by vincekyi on 4/16/15.
  */
-
 @Entity
 @Table(name = "Peptide")
-public class Peptide {
-// http://www.mkyong.com/hibernate/hibernate-one-to-many-relationship-example-annotation/
-
+public class Peptide extends Model {
     private int peptide_id;
     private String peptide_sequence;
     private double molecular_weight;
     private int sequence_length;
     private Set<Spectrum> spectra;
+
+    public Peptide() {
+
+    }
 
     public Peptide(String peptide_sequence, double mol_weight, int sequence_length) {
         this.peptide_sequence = peptide_sequence;
@@ -33,14 +36,9 @@ public class Peptide {
         this.spectra = spectra;
     }
 
-    public Peptide() {
-        //default
-    }
-
-
     @Id
-    @Column(name="peptide_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "peptide_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getPeptide_id() {
         return peptide_id;
     }
@@ -85,8 +83,21 @@ public class Peptide {
         this.spectra = spectra;
     }
 
+    /**
+     * Initializes the model's lazy loaded objects.
+     */
     @Override
-    public String toString(){
-        return "ID: "+Integer.toString(this.getPeptide_id())+"\n"+"sequence: "+this.getPeptide_sequence()+"\n**";
+    public Peptide initialize() {
+        Peptide initialized = DAOObject.getInstance().getPeptideDAO().getInitializedPeptide(peptide_id);
+        if (initialized != null) {
+            setSpectra(getSpectra());
+        }
+
+        return initialized;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + Integer.toString(this.getPeptide_id()) + "\n" + "sequence: " + this.getPeptide_sequence() + "\n**";
     }
 }

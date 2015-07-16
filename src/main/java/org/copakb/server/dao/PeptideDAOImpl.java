@@ -172,10 +172,23 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     @Override
-    public Peptide searchById(Integer peptide_id) {
+    public Peptide searchById(int peptide_id) {
         Session session = sessionFactory.openSession();
 
         Peptide peptide = (Peptide) session.get(Peptide.class, peptide_id);
+        session.close();
+
+        return peptide;
+    }
+
+    @Override
+    public Peptide getInitializedPeptide(int peptide_id) {
+        Session session = sessionFactory.openSession();
+
+        Peptide peptide = (Peptide) session.get(Peptide.class, peptide_id);
+        if (peptide != null) {
+            Hibernate.initialize(peptide.getSpectra());
+        }
         session.close();
 
         return peptide;

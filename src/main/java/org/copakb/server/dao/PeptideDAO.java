@@ -43,7 +43,15 @@ public interface PeptideDAO {
      * @param peptide_id the ID of the desired Peptide
      * @return the specific Peptide with the provided ID
      */
-    Peptide searchById(Integer peptide_id);
+    Peptide searchById(int peptide_id);
+
+    /**
+     * Gets a fully initialized peptide.
+     *
+     * @param peptide_id Peptide ID to search.
+     * @return A fully initialized peptide; null if not found.
+     */
+    Peptide getInitializedPeptide(int peptide_id);
 
     /**
      * Searches the database for a specific Peptide
