@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 /**
  * DBRef object
- *
  * Created by Alan on 6/30/2015.
  */
 @Entity
@@ -17,7 +16,7 @@ public class DBRef implements Serializable {
     private String geneWiki;
 
     @Id
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "protein_acc", nullable = false)
     public ProteinCurrent getProtein() {
         return protein;
@@ -52,6 +51,22 @@ public class DBRef implements Serializable {
 
     public void setGeneWiki(String geneWiki) {
         this.geneWiki = geneWiki;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DBRef) {
+            // TODO Implement actual equals
+            return protein.equals(((DBRef) obj).getProtein());
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO Implement actual hashCode
+        return protein.hashCode();
     }
 
     @Override

@@ -103,7 +103,7 @@ public class ProteinCurrent extends Model {
         this.signal_peptide = signal_peptide;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "protein_acc", nullable = false)
     public DBRef getDbRef() {
         return dbRef;
@@ -131,7 +131,7 @@ public class ProteinCurrent extends Model {
         this.feature_table = feature_table;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "species_id", nullable = false)
     public Species getSpecies() {
         return species;
