@@ -36,8 +36,7 @@ public class ProteinDAOTest {
 //        p.setSpecies(DAOObject.getInstance().getProteinDAO().searchSpecies("Human"));
 //        p.setChromosome("X");
 //        DBRef dbRef = new DBRef();
-//        dbRef.setProtein_acc(p.getProtein_acc());
-//        dbRef.setProteinCurrent(p);
+//        dbRef.setProtein(p);
 //        p.setDbRef(dbRef);
 //
 //        proteinDAO.addProteinCurrent(p);
