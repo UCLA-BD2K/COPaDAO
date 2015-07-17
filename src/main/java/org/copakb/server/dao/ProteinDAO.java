@@ -241,6 +241,14 @@ public interface ProteinDAO {
 
     HPAProtein searchHPAByID(String ensemblID);
 
+    /**
+     * Gets a fully initialized HPAProtein.
+     *
+     * @param ensemblID EnsemblID to search.
+     * @return Fully initialized HPAProtein; null if not found.
+     */
+    HPAProtein getInitializedHPAProtein(String ensemblID);
+
     String addAntibody(Antibody antibody);
 
     Antibody searchAntibodyByID(String antibodyID);

@@ -1,19 +1,26 @@
 package org.copakb.server.dao.model;
+
+import org.copakb.server.dao.DAOObject;
+
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
+
 /**
+ * Disease model
  * Created by Kevin on 4/30/2015.
  */
-
 @Entity
 @Table(name = "Disease")
-public class Disease {
+public class Disease extends Model {
     private int DOID;
     private String name;
     private String description;
     private String heart_disease;
     private Set<Gene> genes;
+
+    public Disease() {
+
+    }
 
     public Disease(int DOID, String name, String description, String heart_disease, Set<Gene> genes) {
         this.DOID = DOID;
@@ -21,10 +28,6 @@ public class Disease {
         this.description = description;
         this.heart_disease = heart_disease;
         this.genes = genes;
-    }
-
-    public Disease() {
-        //empty
     }
 
     @Id
@@ -64,18 +67,30 @@ public class Disease {
         this.heart_disease = heart_disease;
     }
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "Disease_Gene", joinColumns = {
-            @JoinColumn(name = "DOID", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "gene_name",
-                    nullable = false, updatable = false) })
+            @JoinColumn(name = "DOID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "gene_name",
+                    nullable = false, updatable = false)})
     public Set<Gene> getGenes() {
         return genes;
     }
 
     public void setGenes(Set<Gene> genes) {
         this.genes = genes;
+    }
+
+    /**
+     * Initializes the model's lazy loaded objects.
+     */
+    @Override
+    public Disease initialize() {
+        Disease initialized = DAOObject.getInstance().getDiseaseDAO().getInitializedDisease(DOID);
+        if (initialized != null) {
+            setGenes(initialized.getGenes());
+        }
+
+        return initialized;
     }
 
     @Override
@@ -87,6 +102,5 @@ public class Disease {
                 ", heart_disease='" + heart_disease + '\'' +
                 //", genes=" + getGenes() +
                 '}';
-        //return "Disease: " + DOID;
     }
 }

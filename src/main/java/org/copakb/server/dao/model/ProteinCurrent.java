@@ -11,7 +11,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "Protein_Current")
-public class ProteinCurrent {
+public class ProteinCurrent extends Model {
     private String protein_acc;
     private String sequence;
     private String protein_name;
@@ -194,16 +194,19 @@ public class ProteinCurrent {
         this.spectra = spectra;
     }
 
-    public void initialize() {
-        ProteinCurrent initializedProtein = DAOObject.getInstance().getProteinDAO().getInitializedProtein(protein_acc);
-        if (initializedProtein != null) {
-            setDbRef(initializedProtein.getDbRef());
-            setSpecies(initializedProtein.getSpecies());
-            setGenes(initializedProtein.getGenes());
-            setGoTerms(initializedProtein.getGoTerms());
-            setPTMs(initializedProtein.getPTMs());
-            setSpectra(initializedProtein.getSpectra());
+    @Override
+    public ProteinCurrent initialize() {
+        ProteinCurrent initialized = DAOObject.getInstance().getProteinDAO().getInitializedProtein(protein_acc);
+        if (initialized != null) {
+            setDbRef(initialized.getDbRef());
+            setSpecies(initialized.getSpecies());
+            setGenes(initialized.getGenes());
+            setGoTerms(initialized.getGoTerms());
+            setPTMs(initialized.getPTMs());
+            setSpectra(initialized.getSpectra());
         }
+
+        return this;
     }
 
     @Override

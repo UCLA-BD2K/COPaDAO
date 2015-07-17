@@ -1,5 +1,7 @@
 package org.copakb.server.dao.model;
 
+import org.copakb.server.dao.DAOObject;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,7 +12,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "HPAProteins")
-public class HPAProtein {
+public class HPAProtein extends Model {
     private String ensemblID;
     private String proteinName;
     private String expressionSummary;
@@ -132,6 +134,19 @@ public class HPAProtein {
 
     public void setAntibodies(Set<Antibody> antibodies) {
         this.antibodies = antibodies;
+    }
+
+    /**
+     * Initializes the model's lazy loaded objects.
+     */
+    @Override
+    public HPAProtein initialize() {
+        HPAProtein initialized = DAOObject.getInstance().getProteinDAO().getInitializedHPAProtein(ensemblID);
+        if (initialized != null) {
+            setAntibodies(initialized.getAntibodies());
+        }
+
+        return initialized;
     }
 
     @Override

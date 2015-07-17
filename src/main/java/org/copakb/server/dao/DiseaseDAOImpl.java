@@ -3,6 +3,7 @@ package org.copakb.server.dao;
 import org.copakb.server.dao.model.Disease;
 import org.copakb.server.dao.model.DiseaseGene;
 import org.copakb.server.dao.model.Gene;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -54,6 +55,19 @@ public class DiseaseDAOImpl implements DiseaseDAO {
         Session session = sessionFactory.openSession();
 
         Disease disease = (Disease) session.get(Disease.class, doid);
+        session.close();
+
+        return disease;
+    }
+
+    @Override
+    public Disease getInitializedDisease(int doid) {
+        Session session = sessionFactory.openSession();
+
+        Disease disease = (Disease) session.get(Disease.class, doid);
+        if (disease != null) {
+            Hibernate.initialize(disease.getGenes());
+        }
         session.close();
 
         return disease;

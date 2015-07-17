@@ -1,6 +1,7 @@
 package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.*;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -41,7 +42,7 @@ public class PeptideDAOImpl implements PeptideDAO {
     public int addSpectrum(Spectrum s) {
         List<Spectrum> spectrums = searchSpectrum(
                 s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state());
-        if (!spectrums.isEmpty()) {
+        if (spectrums != null && !spectrums.isEmpty()) {
             Spectrum existingSpectrum = spectrums.get(0);
             if (existingSpectrum != null) {
                 return existingSpectrum.getSpectrum_id();
@@ -57,7 +58,9 @@ public class PeptideDAOImpl implements PeptideDAO {
         }
 
         Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
         int result = (int) session.save(s);
+        tx.commit();
         session.close();
 
         return result;
@@ -66,7 +69,7 @@ public class PeptideDAOImpl implements PeptideDAO {
     @Override
     public String getSpectrum(int spec_id) {
         // TODO Decide location for spectra files
-        String fileName = "" + spec_id + ".txt";
+        String fileName = "target/" + spec_id + ".txt";
 
         String content = "";
         String line;
@@ -84,6 +87,22 @@ public class PeptideDAOImpl implements PeptideDAO {
         }
 
         return content;
+    }
+
+    @Override
+    public Spectrum getInitializedSpectrum(int spec_id) {
+        Session session = sessionFactory.openSession();
+
+        Spectrum spectrum = (Spectrum) session.get(Spectrum.class, spec_id);
+        if (spectrum != null) {
+            Hibernate.initialize(spectrum.getModule());
+            Hibernate.initialize(spectrum.getPtm());
+            Hibernate.initialize(spectrum.getPeptide());
+            Hibernate.initialize(spectrum.getSpectrumProtein());
+        }
+        session.close();
+
+        return spectrum;
     }
 
     @Override
@@ -153,10 +172,23 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     @Override
-    public Peptide searchById(Integer peptide_id) {
+    public Peptide searchById(int peptide_id) {
         Session session = sessionFactory.openSession();
 
         Peptide peptide = (Peptide) session.get(Peptide.class, peptide_id);
+        session.close();
+
+        return peptide;
+    }
+
+    @Override
+    public Peptide getInitializedPeptide(int peptide_id) {
+        Session session = sessionFactory.openSession();
+
+        Peptide peptide = (Peptide) session.get(Peptide.class, peptide_id);
+        if (peptide != null) {
+            Hibernate.initialize(peptide.getSpectra());
+        }
         session.close();
 
         return peptide;
@@ -239,13 +271,15 @@ public class PeptideDAOImpl implements PeptideDAO {
 
     @Override
     public int addLibraryModule(LibraryModule libmod) {
-        LibraryModule existingLibraryModule = searchLibraryModuleWithId(libmod.getMod_id()); // add param
+        LibraryModule existingLibraryModule = searchLibraryModuleWithModule(libmod.getLib_mod());
         if (existingLibraryModule != null) {
             return existingLibraryModule.getMod_id();
         }
 
         Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
         int result = (int) session.save(libmod);
+        tx.commit();
         session.close();
 
         return result;
@@ -255,11 +289,7 @@ public class PeptideDAOImpl implements PeptideDAO {
     public LibraryModule searchLibraryModuleWithId(int id) {
         Session session = sessionFactory.openSession();
 
-        LibraryModule result = (LibraryModule) session
-                .createCriteria(LibraryModule.class)
-                .add(Restrictions.eq("mod_id", id))
-                .setMaxResults(1)
-                .uniqueResult();
+        LibraryModule result = (LibraryModule) session.get(LibraryModule.class, id);
         session.close();
 
         return result;
@@ -287,7 +317,9 @@ public class PeptideDAOImpl implements PeptideDAO {
         }
 
         Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
         int result = (int) session.save(type);
+        tx.commit();
         session.close();
 
         return result;
