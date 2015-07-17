@@ -1,6 +1,7 @@
 package org.copakb.server.dao.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * DBRef object
@@ -9,31 +10,21 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "DBRef")
-public class DBRef {
-    private String protein_acc;
-    private ProteinCurrent proteinCurrent;
+public class DBRef implements Serializable {
+    private ProteinCurrent protein;
     private String pdb;
     private String reactome;
     private String geneWiki;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
-    public ProteinCurrent getProteinCurrent() {
-        return proteinCurrent;
-    }
-
-    public void setProteinCurrent(ProteinCurrent proteinCurrent) {
-        this.proteinCurrent = proteinCurrent;
-    }
-
     @Id
-    @Column(name = "protein_acc")
-    public String getProtein_acc() {
-        return protein_acc;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "protein_acc", nullable = false)
+    public ProteinCurrent getProtein() {
+        return protein;
     }
 
-    public void setProtein_acc(String protein_acc) {
-        this.protein_acc = protein_acc;
+    public void setProtein(ProteinCurrent protein) {
+        this.protein = protein;
     }
 
     @Column(name = "pdb")
@@ -66,7 +57,7 @@ public class DBRef {
     @Override
     public String toString() {
         return "DBRef{" +
-                "uniprotID='" + proteinCurrent.getProtein_acc() + '\'' +
+                "uniprotID='" + protein.getProtein_acc() + '\'' +
                 ", pdb='" + pdb + '\'' +
                 ", reactome='" + reactome + '\'' +
                 ", geneWiki='" + geneWiki + '\'' +

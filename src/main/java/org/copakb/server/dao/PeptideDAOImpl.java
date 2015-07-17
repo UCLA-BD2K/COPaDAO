@@ -41,7 +41,7 @@ public class PeptideDAOImpl implements PeptideDAO {
     public int addSpectrum(Spectrum s) {
         List<Spectrum> spectrums = searchSpectrum(
                 s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state());
-        if (spectrums != null) {
+        if (!spectrums.isEmpty()) {
             Spectrum existingSpectrum = spectrums.get(0);
             if (existingSpectrum != null) {
                 return existingSpectrum.getSpectrum_id();
@@ -66,7 +66,7 @@ public class PeptideDAOImpl implements PeptideDAO {
     @Override
     public String getSpectrum(int spec_id) {
         // TODO Decide location for spectra files
-        String fileName = "target/" + spec_id + ".txt";
+        String fileName = "" + spec_id + ".txt";
 
         String content = "";
         String line;

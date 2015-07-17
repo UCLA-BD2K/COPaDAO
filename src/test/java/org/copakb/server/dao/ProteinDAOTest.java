@@ -158,7 +158,7 @@ public class ProteinDAOTest {
         ProteinCurrent protein = proteinDAO.getInitializedProtein(UNIPROT_ID);
         assert protein != null;
         assert protein.getProtein_acc().equals(UNIPROT_ID);
-        assert protein.getDbRef().getProtein_acc().equals(UNIPROT_ID);
+        assert protein.getDbRef().getProtein().getProtein_acc().equals(UNIPROT_ID);
     }
 
     @Test
@@ -231,7 +231,7 @@ public class ProteinDAOTest {
 
         DBRef dbRef = proteinDAO.searchDbRefByID(UNIPROT_ID);
         assert dbRef != null;
-        assert dbRef.getProtein_acc().equals(UNIPROT_ID);
+        assert dbRef.getProtein().getProtein_acc().equals(UNIPROT_ID);
     }
 
     @Test
@@ -406,5 +406,28 @@ public class ProteinDAOTest {
         assert protein != null;
         assert protein.getProtein_acc().equals(UNIPROT_ID);
         assert protein.getPTMs() != null;
+    }
+
+    @Test
+    public void testSpeed() throws Exception {
+        Date beg = new Date();
+        //List<ProteinCurrent> list = proteinDAO.list();
+        List<ProteinCurrent> proteins = proteinDAO.searchByPartialID("P9");
+        Date end = new Date();
+        System.out.println("Started: " + beg);
+        System.out.println("Ended: " + end);
+        System.out.println();
+    }
+
+    @Test
+    public void test() throws Exception {
+        long start_time = System.currentTimeMillis();
+
+        //Peptide peptide = DAOObject.getInstance().getPeptideDAO().searchById(1);
+        //DAOObject.getInstance().getProteinDAO().searchProteinsByPeptide(peptide);
+        DAOObject.getInstance().getProteinDAO().searchByPartialID("P");
+
+        long end_time = System.currentTimeMillis();
+        System.out.println("Time Elapsed: " + (end_time - start_time));
     }
 }
