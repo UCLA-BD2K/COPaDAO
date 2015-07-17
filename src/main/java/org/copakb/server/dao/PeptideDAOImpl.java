@@ -271,13 +271,15 @@ public class PeptideDAOImpl implements PeptideDAO {
 
     @Override
     public int addLibraryModule(LibraryModule libmod) {
-        LibraryModule existingLibraryModule = searchLibraryModuleWithId(libmod.getMod_id()); // add param
+        LibraryModule existingLibraryModule = searchLibraryModuleWithModule(libmod.getLib_mod());
         if (existingLibraryModule != null) {
             return existingLibraryModule.getMod_id();
         }
 
         Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
         int result = (int) session.save(libmod);
+        tx.commit();
         session.close();
 
         return result;
@@ -287,11 +289,7 @@ public class PeptideDAOImpl implements PeptideDAO {
     public LibraryModule searchLibraryModuleWithId(int id) {
         Session session = sessionFactory.openSession();
 
-        LibraryModule result = (LibraryModule) session
-                .createCriteria(LibraryModule.class)
-                .add(Restrictions.eq("mod_id", id))
-                .setMaxResults(1)
-                .uniqueResult();
+        LibraryModule result = (LibraryModule) session.get(LibraryModule.class, id);
         session.close();
 
         return result;
