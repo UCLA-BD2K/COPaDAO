@@ -107,7 +107,6 @@ public class ProteinDAOImpl implements ProteinDAO {
             proteinCurrent.setProtein_name(p.getProtein_name());
             proteinCurrent.setSequence(p.getSequence());
             proteinCurrent.setMolecular_weight(p.getMolecular_weight());
-            //proteinCurrent.setChromosome(p.getChromosome());
 
             session.update(proteinCurrent);
             tx.commit();
@@ -153,7 +152,6 @@ public class ProteinDAOImpl implements ProteinDAO {
 
     @Override
     public String addProteinHistory(ProteinHistory p) {
-        //ProteinHistory existingProteinHistory = searchProteinHistory(p.getProtein_acc()); // add param
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
@@ -663,8 +661,11 @@ public class ProteinDAOImpl implements ProteinDAO {
         }
 
         Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
 
         String result = (String) session.save(protein);
+
+        tx.commit();
         session.close();
 
         return result;
