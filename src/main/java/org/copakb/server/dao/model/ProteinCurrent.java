@@ -1,8 +1,12 @@
 package org.copakb.server.dao.model;
 
 import org.copakb.server.dao.DAOObject;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Set;
 
 /**
@@ -103,8 +107,8 @@ public class ProteinCurrent extends Model {
         this.signal_peptide = signal_peptide;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "protein_acc", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "protein_acc", unique = true, insertable = false, updatable = false)
     public DBRef getDbRef() {
         return dbRef;
     }
@@ -131,8 +135,8 @@ public class ProteinCurrent extends Model {
         this.feature_table = feature_table;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "species_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "species_id", nullable = false, updatable = false)
     public Species getSpecies() {
         return species;
     }

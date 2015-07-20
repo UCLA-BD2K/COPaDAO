@@ -378,7 +378,7 @@ public class ProteinDAOImpl implements ProteinDAO {
 
     @Override
     public String addDbRef(DBRef dbRef) {
-        if (searchDbRefByID(dbRef.getProtein().getProtein_acc()) != null) {
+        if (searchDbRefByID(dbRef.getProtein_acc()) != null) {
             return "Existed";
         }
 
@@ -422,7 +422,7 @@ public class ProteinDAOImpl implements ProteinDAO {
             return null;
         }
 
-        return searchByID(dbRef.getProtein().getProtein_acc());
+        return searchByID(dbRef.getProtein_acc());
     }
 
     @Override

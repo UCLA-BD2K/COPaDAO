@@ -1,6 +1,12 @@
 package org.copakb.server.dao.model;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+import org.springframework.cglib.beans.BeanCopier;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -10,20 +16,18 @@ import java.io.Serializable;
 @Entity
 @Table(name = "DBRef")
 public class DBRef implements Serializable {
-    private ProteinCurrent protein;
+    private String protein_acc;
     private String pdb;
     private String reactome;
     private String geneWiki;
 
     @Id
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "protein_acc", nullable = false)
-    public ProteinCurrent getProtein() {
-        return protein;
+    public String getProtein_acc() {
+        return protein_acc;
     }
 
-    public void setProtein(ProteinCurrent protein) {
-        this.protein = protein;
+    public void setProtein_acc(String protein_acc) {
+        this.protein_acc = protein_acc;
     }
 
     @Column(name = "pdb")
@@ -53,7 +57,7 @@ public class DBRef implements Serializable {
         this.geneWiki = geneWiki;
     }
 
-    @Override
+    /*@Override
     public boolean equals(Object obj) {
         if (obj instanceof DBRef) {
             // TODO Implement actual equals
@@ -68,11 +72,12 @@ public class DBRef implements Serializable {
         // TODO Implement actual hashCode
         return protein.hashCode();
     }
+*/
 
     @Override
     public String toString() {
         return "DBRef{" +
-                "uniprotID='" + protein.getProtein_acc() + '\'' +
+                //"uniprotID='" + proteinCurrent.getProtein_acc() + '\'' +
                 ", pdb='" + pdb + '\'' +
                 ", reactome='" + reactome + '\'' +
                 ", geneWiki='" + geneWiki + '\'' +

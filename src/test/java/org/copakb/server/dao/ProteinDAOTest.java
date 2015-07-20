@@ -27,7 +27,7 @@ public class ProteinDAOTest {
 
     @Test
     public void testDeleteProteinCurrent() throws Exception {
-        // TODO
+//        // TODO
 //        ProteinCurrent p = new ProteinCurrent();
 //        p.setProtein_acc("FP1234");
 //        p.setSequence("NEWSEQUENCEHERE");
@@ -36,7 +36,7 @@ public class ProteinDAOTest {
 //        p.setSpecies(DAOObject.getInstance().getProteinDAO().searchSpecies("Human"));
 //        p.setChromosome("X");
 //        DBRef dbRef = new DBRef();
-//        dbRef.setProtein(p);
+//        dbRef.setProtein_acc(p);
 //        p.setDbRef(dbRef);
 //
 //        proteinDAO.addProteinCurrent(p);
@@ -157,7 +157,7 @@ public class ProteinDAOTest {
         ProteinCurrent protein = proteinDAO.getInitializedProtein(UNIPROT_ID);
         assert protein != null;
         assert protein.getProtein_acc().equals(UNIPROT_ID);
-        assert protein.getDbRef().getProtein().getProtein_acc().equals(UNIPROT_ID);
+        assert protein.getDbRef().getProtein_acc().equals(UNIPROT_ID);
     }
 
     @Test
@@ -230,7 +230,7 @@ public class ProteinDAOTest {
 
         DBRef dbRef = proteinDAO.searchDbRefByID(UNIPROT_ID);
         assert dbRef != null;
-        assert dbRef.getProtein().getProtein_acc().equals(UNIPROT_ID);
+        assert dbRef.getProtein_acc().equals(UNIPROT_ID);
     }
 
     @Test
@@ -424,9 +424,28 @@ public class ProteinDAOTest {
 
         //Peptide peptide = DAOObject.getInstance().getPeptideDAO().searchById(1);
         //DAOObject.getInstance().getProteinDAO().searchProteinsByPeptide(peptide);
-        DAOObject.getInstance().getProteinDAO().searchByPartialID("P");
+        DAOObject.getInstance().getProteinDAO().list();
 
         long end_time = System.currentTimeMillis();
         System.out.println("Time Elapsed: " + (end_time - start_time));
+
+        ProteinCurrent p = new ProteinCurrent();
+        p.setProtein_acc("FP1234");
+        p.setSequence("NEWSEQUENCEHERE");
+        p.setProtein_name("NEWNAMEHERE");
+        p.setMolecular_weight(1234.1234);
+        p.setSpecies(DAOObject.getInstance().getProteinDAO().searchSpecies("Human"));
+        p.setChromosome("X");
+        DBRef dbRef = new DBRef();
+        String acc = p.getProtein_acc();
+        dbRef.setProtein_acc(p.getProtein_acc());
+        p.setDbRef(dbRef);
+
+        proteinDAO.addProteinCurrent(p);
+
+        proteinDAO.addDbRef(dbRef);
+
+        long end_time2 = System.currentTimeMillis();
+        System.out.println("Time Elapsed: " + (end_time2 - end_time));
     }
 }
