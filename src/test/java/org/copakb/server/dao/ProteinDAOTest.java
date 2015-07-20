@@ -27,7 +27,7 @@ public class ProteinDAOTest {
 
     @Test
     public void testDeleteProteinCurrent() throws Exception {
-//        // TODO
+        // TODO
 //        ProteinCurrent p = new ProteinCurrent();
 //        p.setProtein_acc("FP1234");
 //        p.setSequence("NEWSEQUENCEHERE");
@@ -216,11 +216,6 @@ public class ProteinDAOTest {
         List<ProteinCurrent> proteins = proteinDAO.limitedList(0, 5);
         assert proteins != null;
         assert proteins.size() == 5;
-    }
-
-    @Test
-    public void testAddDbRef() throws Exception {
-        // TODO
     }
 
     @Test
@@ -437,13 +432,10 @@ public class ProteinDAOTest {
         p.setSpecies(DAOObject.getInstance().getProteinDAO().searchSpecies("Human"));
         p.setChromosome("X");
         DBRef dbRef = new DBRef();
-        String acc = p.getProtein_acc();
         dbRef.setProtein_acc(p.getProtein_acc());
         p.setDbRef(dbRef);
 
         proteinDAO.addProteinCurrent(p);
-
-        proteinDAO.addDbRef(dbRef);
 
         long end_time2 = System.currentTimeMillis();
         System.out.println("Time Elapsed: " + (end_time2 - end_time));

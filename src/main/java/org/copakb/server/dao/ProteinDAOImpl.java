@@ -39,12 +39,17 @@ public class ProteinDAOImpl implements ProteinDAO {
         String uniprot = "";
         try {
             uniprot = (String) session.save(protein);
+
+            if (protein.getDbRef() != null) {
+                session.saveOrUpdate(protein.getDbRef());
+            } else {
+                throw new RuntimeException("ProteinCurrent.DBRef cannot be null.");
+            }
+
             tx.commit();
-            session.close();
         } catch (Exception e) {
             e.printStackTrace();
             tx.rollback();
-            session.close();
             String temp = "";
             if (e instanceof org.hibernate.exception.LockTimeoutException) {
                 temp = addProteinCurrentLast(protein);
@@ -52,6 +57,8 @@ public class ProteinDAOImpl implements ProteinDAO {
             if (temp.equals("")) {
                 return "Failed";
             }
+        } finally {
+            session.close();
         }
 
         return uniprot;
@@ -72,6 +79,13 @@ public class ProteinDAOImpl implements ProteinDAO {
             Session session = sessionFactory.openSession();
             Transaction tx = session.beginTransaction();
             String uniprot = (String) session.save(protein);
+
+            if (protein.getDbRef() != null) {
+                session.saveOrUpdate(protein.getDbRef());
+            } else {
+                throw new RuntimeException("ProteinCurrent.DBRef cannot be null.");
+            }
+
             tx.commit();
             session.close();
             return uniprot;
@@ -374,22 +388,6 @@ public class ProteinDAOImpl implements ProteinDAO {
         session.close();
 
         return proteins;
-    }
-
-    @Override
-    public String addDbRef(DBRef dbRef) {
-        if (searchDbRefByID(dbRef.getProtein_acc()) != null) {
-            return "Existed";
-        }
-
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-
-        String result = (String) session.save(dbRef);
-
-        tx.commit();
-        session.close();
-        return result;
     }
 
     @Override

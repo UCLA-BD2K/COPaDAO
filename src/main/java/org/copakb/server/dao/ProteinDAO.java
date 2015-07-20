@@ -109,14 +109,6 @@ public interface ProteinDAO {
     List<ProteinCurrent> limitedList(int start, int length);
 
     /**
-     * Adds a DBRef object to the database.
-     *
-     * @param dbRef DBRef object to be added.
-     * @return Uniprot ID of associated protein if successful, empty string otherwise.
-     */
-    String addDbRef(DBRef dbRef);
-
-    /**
      * Returns the first DBRef which references the given PDB ID.
      *
      * @param uniprotID The PDB ID to search for.

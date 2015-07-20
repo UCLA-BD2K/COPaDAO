@@ -57,23 +57,6 @@ public class DBRef implements Serializable {
         this.geneWiki = geneWiki;
     }
 
-    /*@Override
-    public boolean equals(Object obj) {
-        if (obj instanceof DBRef) {
-            // TODO Implement actual equals
-            return protein.equals(((DBRef) obj).getProtein());
-        }
-
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        // TODO Implement actual hashCode
-        return protein.hashCode();
-    }
-*/
-
     @Override
     public String toString() {
         return "DBRef{" +
