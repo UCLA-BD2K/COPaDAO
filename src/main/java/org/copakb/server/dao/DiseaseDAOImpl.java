@@ -7,6 +7,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
@@ -129,6 +130,7 @@ public class DiseaseDAOImpl implements DiseaseDAO {
         Session session = sessionFactory.openSession();
         List<Gene> genes = session
                 .createCriteria(Gene.class)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
                 .setFirstResult(start)
                 .setMaxResults(length)
                 .list();

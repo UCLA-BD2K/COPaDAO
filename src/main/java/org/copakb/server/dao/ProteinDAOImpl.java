@@ -3,6 +3,7 @@ package org.copakb.server.dao;
 import org.copakb.server.dao.model.*;
 import org.copakb.server.dao.model.Version;
 import org.hibernate.*;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -366,6 +367,7 @@ public class ProteinDAOImpl implements ProteinDAO {
 
         List<ProteinCurrent> proteins = session
                 .createCriteria(ProteinCurrent.class)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
                 .list();
 
         session.close();
@@ -379,6 +381,7 @@ public class ProteinDAOImpl implements ProteinDAO {
 
         List<ProteinCurrent> proteins = session
                 .createCriteria(ProteinCurrent.class)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
                 .setFirstResult(start)
                 .setMaxResults(length)
                 .list();

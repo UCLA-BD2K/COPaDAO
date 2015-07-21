@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 
 import java.io.BufferedReader;
@@ -152,7 +153,10 @@ public class PeptideDAOImpl implements PeptideDAO {
     public List<Peptide> list() {
         Session session = sessionFactory.openSession();
 
-        List<Peptide> peptideList = session.createCriteria(Peptide.class).list();
+        List<Peptide> peptideList = session
+                .createCriteria(Peptide.class)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
+                .list();
         session.close();
 
         return peptideList;
@@ -164,6 +168,7 @@ public class PeptideDAOImpl implements PeptideDAO {
 
         List<Peptide> peptideList = session
                 .createCriteria(Peptide.class)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
                 .setFirstResult(start)
                 .setMaxResults(length).list();
         session.close();
