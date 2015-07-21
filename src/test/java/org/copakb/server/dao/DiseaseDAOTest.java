@@ -41,7 +41,7 @@ public class DiseaseDAOTest {
         assert diseaseDAO.searchDiseaseGene(null, null) == null;
         Disease disease = diseaseDAO.searchDisease(153480);
         assert disease != null;
-        Gene gene = DAOObject.getInstance().getProteinDAO().searchByGeneName("PTEN");
+        Gene gene = DAOObject.getInstance().getProteinDAO().searchGeneByName("PTEN");
         assert gene != null;
         assert diseaseDAO.searchDiseaseGene(disease, null) == null;
         assert diseaseDAO.searchDiseaseGene(null, gene) == null;

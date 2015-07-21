@@ -100,11 +100,11 @@ public interface ProteinDAO {
     List<ProteinCurrent> list();
 
     /**
-     * Searches a limited list of ProteinCurrent objects from the database
+     * Searches a limited list of ProteinCurrent objects from the database.
      *
-     * @param start  beginning index for list
-     * @param length number of Protein Currents to be returned
-     * @return partial list of specified length of ProteinCurrent objects beginning at the start index
+     * @param start  beginning index for list.
+     * @param length number of Protein Currents to be returned.
+     * @return partial list of specified length of ProteinCurrent objects beginning at the start index.
      */
     List<ProteinCurrent> limitedList(int start, int length);
 
@@ -112,7 +112,7 @@ public interface ProteinDAO {
      * Returns the first DBRef which references the given PDB ID.
      *
      * @param uniprotID The PDB ID to search for.
-     * @return A protein that references the given PDB IDl
+     * @return A protein that references the given PDB IDl.
      */
     DBRef searchDbRefByID(String uniprotID);
 
@@ -120,25 +120,33 @@ public interface ProteinDAO {
      * Returns the first protein which references the given PDB ID.
      *
      * @param pdbID The PDB ID to search for.
-     * @return A protein that references the given PDB IDl
+     * @return A protein that references the given PDB IDl.
      */
     ProteinCurrent searchByPDB(String pdbID);
 
     /**
      * Add gene information to all relevant protein objects.
      *
-     * @param gene defined Gene to be added
-     * @return gene name if successful, empty string otherwise
+     * @param gene defined Gene to be added.
+     * @return gene name if successful, empty string otherwise.
      */
     String addGene(Gene gene);
 
     /**
-     * Searches for a gene with the given name
+     * Searches for a gene with the given name.
      *
-     * @param name Gene name of the protein
-     * @return Gene object that contains the gene information, disease relevance, and relevant proteins
+     * @param name Gene name of the protein.
+     * @return Gene object that contains the gene information, disease relevance, and relevant proteins.
      */
-    Gene searchByGeneName(String name);
+    Gene searchGeneByName(String name);
+
+    /**
+     * Searches for a gene with the given Ensembl ID.
+     *
+     * @param ensemblID Ensembl ID to search.
+     * @return Gene object with the given Ensembl ID; null if not found.
+     */
+    Gene searchGeneByEnsemblID(String ensemblID);
 
     /**
      * Searches for a protein with a gene with the given ensembl ID.

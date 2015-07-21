@@ -245,10 +245,10 @@ public class ProteinDAOTest {
 
     @Test
     public void testSearchByGeneName() throws Exception {
-        assert proteinDAO.searchByGeneName("XXXXXXXXXXX") == null;
+        assert proteinDAO.searchGeneByName("XXXXXXXXXXX") == null;
 
         String geneName = "YWHAB";
-        Gene gene = proteinDAO.searchByGeneName(geneName);
+        Gene gene = proteinDAO.searchGeneByName(geneName);
         assert gene != null;
         assert gene.getGene_name().equals(geneName);
     }

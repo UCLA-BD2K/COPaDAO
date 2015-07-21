@@ -426,7 +426,7 @@ public class ProteinDAOImpl implements ProteinDAO {
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
 
-        Gene existingGene = searchByGeneName(gene.getGene_name());
+        Gene existingGene = searchGeneByName(gene.getGene_name());
         if (existingGene != null) {
             session.close();
             return existingGene.getGene_name();
@@ -440,10 +440,24 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     @Override
-    public Gene searchByGeneName(String name) {
+    public Gene searchGeneByName(String name) {
         Session session = sessionFactory.openSession();
 
         Gene gene = (Gene) session.get(Gene.class, name);
+
+        session.close();
+        return gene;
+    }
+
+    @Override
+    public Gene searchGeneByEnsemblID(String ensemblID) {
+        Session session = sessionFactory.openSession();
+
+        Gene gene = (Gene) session
+                .createCriteria(Gene.class)
+                .add(Restrictions.eq("ensembl_id", ensemblID))
+                .setMaxResults(1)
+                .uniqueResult();
 
         session.close();
         return gene;
