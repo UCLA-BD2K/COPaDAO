@@ -22,7 +22,7 @@ public class Antibody {
     private String sampleImage;
 
     @Id
-    @Column(name = "antibodyID")
+    @Column(name = "antibody_id")
     public String getAntibodyID() {
         return antibodyID;
     }
@@ -31,7 +31,7 @@ public class Antibody {
         this.antibodyID = antibodyID;
     }
 
-    @Column(name = "ensemblID")
+    @Column(name = "ensembl_id")
     public String getEnsemblID() {
         return ensemblID;
     }

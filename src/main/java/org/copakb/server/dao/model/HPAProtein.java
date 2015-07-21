@@ -46,7 +46,7 @@ public class HPAProtein extends Model {
     }
 
     @Id
-    @Column(name = "ensemblID")
+    @Column(name = "ensembl_id")
     public String getEnsemblID() {
         return ensemblID;
     }
@@ -146,7 +146,7 @@ public class HPAProtein extends Model {
             setAntibodies(initialized.getAntibodies());
         }
 
-        return initialized;
+        return this;
     }
 
     @Override
