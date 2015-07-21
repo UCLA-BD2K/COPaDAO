@@ -135,7 +135,7 @@ public class ProteinCurrent extends Model {
         this.feature_table = feature_table;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "species_id", nullable = false, updatable = false)
     public Species getSpecies() {
         return species;

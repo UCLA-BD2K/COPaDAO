@@ -135,6 +135,20 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     @Override
+    public List<Spectrum> searchSpectrumBySequenceAndCharge(String ptm_seq, int charge) {
+        Session session = sessionFactory.openSession();
+
+        List<Spectrum> results = session
+                .createCriteria(Spectrum.class)
+                .add(Restrictions.eq("ptm_sequence", ptm_seq))
+                .add(Restrictions.eq("charge_state", charge))
+                .list();
+        session.close();
+
+        return results;
+    }
+
+    @Override
     public void updateSpectrumSpecies(int spec_id, Spectrum spectrum) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
