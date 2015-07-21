@@ -109,7 +109,15 @@ public interface PeptideDAO {
      * @param charge  charge of the Spectrum
      * @return The spectrum with the specified ptm_seq, mod_id, and charge
      */
-    List<Spectrum> searchSpectrum(String ptm_seq, int mod_id, int charge);
+    Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge);
+
+    /**
+     * Searches the MySQL database for all specta with the given seqeucen.
+     *
+     * @param ptm_seq Sequence to search for.
+     * @return A list of matching spectra.
+     */
+    List<Spectrum> searchSpectrumBySequence(String ptm_seq);
 
     /**
      * Add a species to the database

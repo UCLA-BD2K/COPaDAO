@@ -41,13 +41,9 @@ public class PeptideDAOImpl implements PeptideDAO {
 
     @Override
     public int addSpectrum(Spectrum s) {
-        List<Spectrum> spectrums = searchSpectrum(
-                s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state());
-        if (spectrums != null && !spectrums.isEmpty()) {
-            Spectrum existingSpectrum = spectrums.get(0);
-            if (existingSpectrum != null) {
-                return existingSpectrum.getSpectrum_id();
-            }
+        Spectrum existingSpectrum = searchSpectrum(s.getPtm_sequence(), s.getModule().getMod_id(), s.getCharge_state());
+        if (existingSpectrum != null) {
+            return existingSpectrum.getSpectrum_id();
         }
 
         Peptide peptide = searchBySequence(s.getPeptide().getPeptide_sequence());
@@ -107,16 +103,31 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     @Override
-    public List<Spectrum> searchSpectrum(String ptm_seq, int mod_id, int charge) {
+    public Spectrum searchSpectrum(String ptm_seq, int mod_id, int charge) {
         Session session = sessionFactory.openSession();
 
         LibraryModule mod = new LibraryModule();
         mod.setMod_id(mod_id);
-        List<Spectrum> results = session.createCriteria(Spectrum.class)
+        Spectrum spectrum = (Spectrum) session
+                .createCriteria(Spectrum.class)
                 .add(Restrictions.and(
                         Restrictions.eq("ptm_sequence", ptm_seq),
                         Restrictions.and(Restrictions.eq("module", mod),
                                 Restrictions.eq("charge_state", charge))))
+                .setMaxResults(1)
+                .uniqueResult();
+        session.close();
+
+        return spectrum;
+    }
+
+    @Override
+    public List<Spectrum> searchSpectrumBySequence(String ptm_seq) {
+        Session session = sessionFactory.openSession();
+
+        List<Spectrum> results = session
+                .createCriteria(Spectrum.class)
+                .add(Restrictions.eq("ptm_sequence", ptm_seq))
                 .list();
         session.close();
 
