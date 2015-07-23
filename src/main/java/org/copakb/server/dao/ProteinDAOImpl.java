@@ -453,20 +453,6 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     @Override
-    public Gene searchGeneByEnsemblID(String ensemblID) {
-        Session session = sessionFactory.openSession();
-
-        Gene gene = (Gene) session
-                .createCriteria(Gene.class)
-                .add(Restrictions.eq("ensembl_id", ensemblID))
-                .setMaxResults(1)
-                .uniqueResult();
-
-        session.close();
-        return gene;
-    }
-
-    @Override
     public ProteinCurrent searchByEnsg(String ensemblID) {
         Session session = sessionFactory.openSession();
 

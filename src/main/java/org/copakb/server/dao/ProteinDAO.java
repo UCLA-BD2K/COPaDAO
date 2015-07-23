@@ -141,14 +141,6 @@ public interface ProteinDAO {
     Gene searchGeneByName(String name);
 
     /**
-     * Searches for a gene with the given Ensembl ID.
-     *
-     * @param ensemblID Ensembl ID to search.
-     * @return Gene object with the given Ensembl ID; null if not found.
-     */
-    Gene searchGeneByEnsemblID(String ensemblID);
-
-    /**
      * Searches for a protein with a gene with the given ensembl ID.
      *
      * @param ensemblID Ensembl id of the protein as given by the www.ensembl.org
