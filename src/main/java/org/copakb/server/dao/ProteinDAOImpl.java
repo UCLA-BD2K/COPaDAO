@@ -698,19 +698,6 @@ public class ProteinDAOImpl implements ProteinDAO {
     }
 
     @Override
-    public String addAntibody(Antibody antibody) {
-        if (searchAntibodyByID(antibody.getAntibodyID()) != null) {
-            return "Existed";
-        }
-
-        Session session = sessionFactory.openSession();
-        String result = (String) session.save(antibody);
-        session.close();
-
-        return result;
-    }
-
-    @Override
     public Antibody searchAntibodyByID(String antibodyID) {
         Session session = sessionFactory.openSession();
 

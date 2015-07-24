@@ -241,8 +241,6 @@ public interface ProteinDAO {
      */
     HPAProtein getInitializedHPAProtein(String ensemblID);
 
-    String addAntibody(Antibody antibody);
-
     Antibody searchAntibodyByID(String antibodyID);
 
     /**
