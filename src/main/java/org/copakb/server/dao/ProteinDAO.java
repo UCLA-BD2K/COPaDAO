@@ -85,6 +85,14 @@ public interface ProteinDAO {
     ProteinCurrent searchByName(String proteinName);
 
     /**
+     * Search by species.
+     *
+     * @param species_id species id that is given by database
+     * @return
+     */
+    List<ProteinCurrent> searchBySpecies(int species_id);
+
+    /**
      * Searches for proteins containing the partial sequence.
      *
      * @param sequence Partial sequence.

@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Antibodies")
 public class Antibody {
-    private String antibodyID;
-    private String ensemblID;
+    private String antibody_id;
+    private String ensembl_id;
     private String summary;
     private String myocyteStaining;
     private String myocyteIntensity;
@@ -23,21 +23,21 @@ public class Antibody {
 
     @Id
     @Column(name = "antibody_id")
-    public String getAntibodyID() {
-        return antibodyID;
+    public String getAntibody_id() {
+        return antibody_id;
     }
 
-    public void setAntibodyID(String antibodyID) {
-        this.antibodyID = antibodyID;
+    public void setAntibody_id(String antibody_id) {
+        this.antibody_id = antibody_id;
     }
 
     @Column(name = "ensembl_id")
-    public String getEnsemblID() {
-        return ensemblID;
+    public String getEnsembl_id() {
+        return ensembl_id;
     }
 
-    public void setEnsemblID(String ensemblID) {
-        this.ensemblID = ensemblID;
+    public void setEnsembl_id(String ensembl_id) {
+        this.ensembl_id = ensembl_id;
     }
 
     @Column(name = "summary")
@@ -105,8 +105,8 @@ public class Antibody {
 
     @Override
     public String toString() {
-        return ("Antibody ID: " + antibodyID + "\n") +
-                "Ensembl ID: " + ensemblID + "\n" +
+        return ("Antibody ID: " + antibody_id + "\n") +
+                "Ensembl ID: " + ensembl_id + "\n" +
                 "Staining: " + myocyteStaining + "\n" +
                 "Intensity: " + myocyteIntensity + "\n" +
                 "Patient Sex: " + samplePatientSex + "\n" +

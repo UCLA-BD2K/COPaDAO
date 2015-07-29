@@ -48,7 +48,7 @@ public class Gene {
         this.ensembl_id = ensembl_id;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensemblID")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensembl_id")
     public Set<HPAProtein> getHpaProteins() {
         return hpaProteins;
     }

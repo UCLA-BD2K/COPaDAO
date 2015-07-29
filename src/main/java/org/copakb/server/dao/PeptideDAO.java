@@ -129,6 +129,17 @@ public interface PeptideDAO {
     List<Spectrum> searchSpectrumBySequenceAndCharge(String ptm_seq, int charge);
 
     /**
+     *
+     * @param ptm_seq
+     * @param mod_id
+     * @param charge
+     * @param xcorr
+     * @param rawfileid
+     * @return
+     */
+    Spectrum searchSpectrumByAll(String ptm_seq, int mod_id, int charge, double xcorr, String rawfileid);
+
+    /**
      * Add a species to the database
      *
      * @param spec defined species object with name, id, and list of relevant proteins

@@ -108,6 +108,7 @@ public class ProteinDAOImpl implements ProteinDAO {
             proteinCurrent.setProtein_name(p.getProtein_name());
             proteinCurrent.setSequence(p.getSequence());
             proteinCurrent.setMolecular_weight(p.getMolecular_weight());
+            proteinCurrent.setSpecies(p.getSpecies());
 
             session.update(proteinCurrent);
             tx.commit();
@@ -346,6 +347,19 @@ public class ProteinDAOImpl implements ProteinDAO {
         session.close();
 
         return protein;
+    }
+
+    @Override
+    public List<ProteinCurrent> searchBySpecies(int species_id) {
+        Session session = sessionFactory.openSession();
+
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class)
+                .add(Restrictions.eq("species_id", species_id))
+                .list();
+        session.close();
+
+        return proteins;
     }
 
     @Override
@@ -659,7 +673,7 @@ public class ProteinDAOImpl implements ProteinDAO {
 
     @Override
     public String addHPAProtein(HPAProtein protein) {
-        if (searchHPAByID(protein.getEnsemblID()) != null) {
+        if (searchHPAByID(protein.getEnsembl_id()) != null) {
             return "Existed";
         }
 
@@ -695,6 +709,21 @@ public class ProteinDAOImpl implements ProteinDAO {
         session.close();
 
         return protein;
+    }
+
+    @Override
+    public String addAntibody(Antibody antibody) {
+        if (searchAntibodyByID(antibody.getAntibody_id()) != null) {
+            return "Existed";
+        }
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        String result = (String) session.save(antibody);
+        tx.commit();
+        session.close();
+
+        return result;
     }
 
     @Override

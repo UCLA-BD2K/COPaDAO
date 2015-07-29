@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "HPAProteins")
 public class HPAProtein extends Model {
-    private String ensemblID;
+    private String ensembl_id;
     private String proteinName;
     private String expressionSummary;
     private String proteinClass;
@@ -30,10 +30,10 @@ public class HPAProtein extends Model {
 
     }
 
-    public HPAProtein(String ensemblID, String proteinName, String expressionSummary, String proteinClass,
+    public HPAProtein(String ensembl_id, String proteinName, String expressionSummary, String proteinClass,
                       String subcellSummary, String subcellImage, String mainLocations, String altLocations,
                       String assaySummary, Set<Antibody> antibodies) {
-        this.ensemblID = ensemblID;
+        this.ensembl_id = ensembl_id;
         this.proteinName = proteinName;
         this.expressionSummary = expressionSummary;
         this.proteinClass = proteinClass;
@@ -47,12 +47,12 @@ public class HPAProtein extends Model {
 
     @Id
     @Column(name = "ensembl_id")
-    public String getEnsemblID() {
-        return ensemblID;
+    public String getEnsembl_id() {
+        return ensembl_id;
     }
 
-    public void setEnsemblID(String ensemblID) {
-        this.ensemblID = ensemblID;
+    public void setEnsembl_id(String ensembl_id) {
+        this.ensembl_id = ensembl_id;
     }
 
     @Column(name = "gene_name")
@@ -127,7 +127,7 @@ public class HPAProtein extends Model {
         this.assaySummary = assaySummary;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensemblID", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensembl_id")
     public Set<Antibody> getAntibodies() {
         return antibodies;
     }
@@ -141,7 +141,7 @@ public class HPAProtein extends Model {
      */
     @Override
     public HPAProtein initialize() {
-        HPAProtein initialized = DAOObject.getInstance().getProteinDAO().getInitializedHPAProtein(ensemblID);
+        HPAProtein initialized = DAOObject.getInstance().getProteinDAO().getInitializedHPAProtein(ensembl_id);
         if (initialized != null) {
             setAntibodies(initialized.getAntibodies());
         }
@@ -151,7 +151,7 @@ public class HPAProtein extends Model {
 
     @Override
     public String toString() {
-        return ("Ensembl ID: " + ensemblID + "\n") +
+        return ("Ensembl ID: " + ensembl_id + "\n") +
                 "Protein Name: " + proteinName + "\n" +
                 "Protein Expression Summary:\n" + expressionSummary + "\n" +
                 "Protein Class: " + proteinClass + "\n" +

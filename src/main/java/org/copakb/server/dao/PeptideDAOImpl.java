@@ -149,6 +149,23 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     @Override
+    public Spectrum searchSpectrumByAll(String ptm_seq, int mod_id, int charge, double xcorr, String rawfileid) {
+        Session session = sessionFactory.openSession();
+
+        Spectrum result = (Spectrum) session
+                .createCriteria(Spectrum.class)
+                .add(Restrictions.eq("ptm_sequence", ptm_seq))
+                .add(Restrictions.eq("charge_state", charge))
+                .add(Restrictions.eq("xcorr", xcorr))
+                .add(Restrictions.eq("rawfileid", rawfileid))
+                .setMaxResults(1)
+                .uniqueResult();
+        session.close();
+
+        return result;
+    }
+
+    @Override
     public void updateSpectrumSpecies(int spec_id, Spectrum spectrum) {
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();

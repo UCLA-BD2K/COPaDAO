@@ -1,6 +1,10 @@
 package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.*;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.junit.Test;
 
 import java.util.*;
@@ -372,7 +376,7 @@ public class ProteinDAOTest {
         String ensemblID = "ENSG00000000003";
         HPAProtein hpaProtein = proteinDAO.searchHPAByID(ensemblID);
         assert hpaProtein != null;
-        assert hpaProtein.getEnsemblID().equals(ensemblID);
+        assert hpaProtein.getEnsembl_id().equals(ensemblID);
     }
 
     @Test
@@ -387,7 +391,7 @@ public class ProteinDAOTest {
         String antibodyID = "HPA004109";
         Antibody antibody = proteinDAO.searchAntibodyByID(antibodyID);
         assert antibody != null;
-        assert antibody.getAntibodyID().equals(antibodyID);
+        assert antibody.getAntibody_id().equals(antibodyID);
     }
 
     @Test
@@ -506,5 +510,70 @@ public class ProteinDAOTest {
             }
         }
 
+    }
+
+    @Test
+    public void testSeparateGeneEnsembl() throws Exception {
+
+    }
+
+    @Test
+    public void testFixSpeciesIds() throws Exception {
+        List<ProteinCurrent> proteinCurrents = proteinDAO.searchBySpecies(5);
+        Species celegans = proteinDAO.searchSpecies("Caenorhabditis elegans");
+        for (ProteinCurrent p : proteinCurrents) {
+            p.setSpecies(celegans);
+            proteinDAO.updateProteinCurrent(p.getProtein_acc(), p);
+        }
+
+        proteinCurrents = proteinDAO.searchBySpecies(6);
+        Species fruitfly = proteinDAO.searchSpecies("Fruit fly");
+        for (ProteinCurrent p : proteinCurrents) {
+            p.setSpecies(fruitfly);
+            proteinDAO.updateProteinCurrent(p.getProtein_acc(), p);
+        }
+    }
+
+    @Test
+    public void testParseName() throws Exception {
+        String file = "./src/main/resources/copa_to_do/Mouse_Whole_heart_lysate.copa";
+        String organelle = "";
+        String libmod = "";
+        String[] shortFileName = file.split("/");
+        String shortName = shortFileName[shortFileName.length - 1];
+        shortName = shortName.substring(0, shortName.length() - 5);
+        String[] parsedShortName = shortName.split("_");
+        String parseShortName = parsedShortName[parsedShortName.length - 1];
+        System.out.println("Short Name: " + shortName);
+        System.out.println("Parsed Short Name: " + parseShortName);
+
+        try { // last section of file name is an integer, truncate
+            Integer.parseInt(parseShortName);
+            organelle = parsedShortName[parsedShortName.length - 2];
+            for (int i = 0; i < parsedShortName.length - 1; i++) {
+                libmod += parsedShortName[i] + "_";
+            }
+            libmod = libmod.substring(0, libmod.length() - 1);
+        } catch (NumberFormatException e) { // last section of file name is not an integer, must be organelle
+            organelle = parseShortName;
+            libmod = shortName;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Filename formatted incorrectly");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String species = parsedShortName[0];
+        if (species.length() < 2) {
+            String temp = " " + parsedShortName[1];
+            species = species.concat(temp);
+        }
+        // match to formatted species name
+        species = species.substring(0, 1).toUpperCase() + species.substring(1).toLowerCase();
+
+        System.out.println("Module Name: " + libmod);
+        System.out.println("Organelle: " + organelle);
+        System.out.println("Species: " + species);
     }
 }
