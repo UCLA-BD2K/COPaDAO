@@ -16,21 +16,15 @@ public class SpectrumProtein {
     private ProteinCurrent protein;
     private Spectrum spectrum;
     private LibraryModule libraryModule;
-    @Type(type = "numeric_boolean")
-    private boolean feature_peptide;
-    @Type(type = "numeric_boolean")
-    private boolean species_unique;
     private char prevAA;
     private char nextAA;
     private int location;
     private Peptide peptide;
 
-    public SpectrumProtein(ProteinCurrent protein, Spectrum spectrum, LibraryModule libraryModule, boolean feature_peptide, boolean species_unique, char prevAA, char nextAA, int location, Peptide peptide) {
+    public SpectrumProtein(ProteinCurrent protein, Spectrum spectrum, LibraryModule libraryModule, char prevAA, char nextAA, int location, Peptide peptide) {
         this.protein = protein;
         this.spectrum = spectrum;
         this.libraryModule = libraryModule;
-        this.feature_peptide = feature_peptide;
-        this.species_unique = species_unique;
         this.prevAA = prevAA;
         this.nextAA = nextAA;
         this.location = location;
@@ -77,23 +71,6 @@ public class SpectrumProtein {
     }
     public void setLibraryModule(LibraryModule libraryModule) {
         this.libraryModule = libraryModule;
-    }
-
-    @Column(name = "feature_peptide")
-    public boolean isFeature_peptide() {
-        return feature_peptide;
-    }
-    public void setFeature_peptide(boolean feature_peptide) {
-        this.feature_peptide = feature_peptide;
-    }
-
-    @Column(name = "species_unique")
-    public boolean isSpecies_unique() {
-        return species_unique;
-    }
-
-    public void setSpecies_unique(boolean species_unique) {
-        this.species_unique = species_unique;
     }
 
     @Column(name = "prevAA")
