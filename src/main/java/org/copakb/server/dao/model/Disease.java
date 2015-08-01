@@ -15,14 +15,14 @@ public class Disease extends Model {
     private int DOID;
     private String name;
     private String description;
-    private String heart_disease;
+    private boolean heart_disease;
     private Set<Gene> genes;
 
     public Disease() {
 
     }
 
-    public Disease(int DOID, String name, String description, String heart_disease, Set<Gene> genes) {
+    public Disease(int DOID, String name, String description, boolean heart_disease, Set<Gene> genes) {
         this.DOID = DOID;
         this.name = name;
         this.description = description;
@@ -59,11 +59,11 @@ public class Disease extends Model {
     }
 
     @Column(name = "heart_disease")
-    public String getHeart_disease() {
+    public boolean getHeart_disease() {
         return heart_disease;
     }
 
-    public void setHeart_disease(String heart_disease) {
+    public void setHeart_disease(boolean heart_disease) {
         this.heart_disease = heart_disease;
     }
 
