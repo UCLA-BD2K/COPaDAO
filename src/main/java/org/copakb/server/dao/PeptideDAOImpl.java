@@ -242,6 +242,20 @@ public class PeptideDAOImpl implements PeptideDAO {
     }
 
     @Override
+    public List<Peptide> searchPeptidesByProtein(ProteinCurrent protein) {
+        Session session = sessionFactory.openSession();
+
+        List<Peptide> results = session.createCriteria(Peptide.class, "peptide")
+                .createAlias("peptide.spectra", "spectra")
+                .createAlias("spectra.spectrumProtein", "sp")
+                .add(Restrictions.eq("sp.protein", protein))
+                .list();
+        session.close();
+
+        return results;
+    }
+
+    @Override
     public Peptide searchBySequence(String peptide_sequence) {
         Session session = sessionFactory.openSession();
 

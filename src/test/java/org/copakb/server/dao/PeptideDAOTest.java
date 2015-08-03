@@ -60,6 +60,17 @@ public class PeptideDAOTest {
     }
 
     @Test
+    public void testSearchPeptidesByProtein() throws Exception {
+        ProteinCurrent protein = DAOObject.getInstance().getProteinDAO().getInitializedProtein("P99999");
+        long start_time = System.currentTimeMillis();
+        List<Peptide> peptides = peptideDAO.searchPeptidesByProtein(protein);
+        long end_time = System.currentTimeMillis();
+        System.out.println("Time Elapsed: " + (end_time - start_time));
+
+        System.out.println("Peptides found: " + peptides.size());
+    }
+
+    @Test
     public void testSearchBySequence() throws Exception {
         assert peptideDAO.searchBySequence("") == null;
         assert peptideDAO.searchBySequence("COPAKB") == null;

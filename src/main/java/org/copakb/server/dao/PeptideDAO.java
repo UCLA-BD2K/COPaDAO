@@ -62,6 +62,14 @@ public interface PeptideDAO {
     Peptide searchBySequence(String peptide_sequence);
 
     /**
+     * Searches for all peptides related to a protein.
+     *
+     * @param protein ProteinCurrent object to search.
+     * @return List of all related peptides.
+     */
+    List<Peptide> searchPeptidesByProtein(ProteinCurrent protein);
+
+    /**
      * Searches the database for a specific Spectrum
      *
      * @param id the ID of the desired Spectrum
