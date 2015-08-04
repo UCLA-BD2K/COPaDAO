@@ -15,19 +15,7 @@ import java.util.List;
  * Created by vincekyi on 5/2/15.
  */
 @SuppressWarnings("unchecked")
-public class ProteinDAOImpl implements ProteinDAO {
-
-    private SessionFactory sessionFactory;
-
-    /**
-     * Default sets the session factory.
-     *
-     * @param sessionFactory Session factory to use.
-     */
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
     @Override
     public String addProteinCurrent(ProteinCurrent protein) throws HibernateException {
         ProteinCurrent existingProtein = searchByID(protein.getProtein_acc());

@@ -17,19 +17,7 @@ import java.util.List;
  * Created by Ping PC1 on 7/1/2015.
  */
 @SuppressWarnings("unchecked")
-public class DiseaseDAOImpl implements DiseaseDAO {
-
-    private SessionFactory sessionFactory;
-
-    /**
-     * Default sets the session factory
-     *
-     * @param sessionFactory SessionFactory to use
-     */
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+public class DiseaseDAOImpl extends DAOImpl implements DiseaseDAO {
     @Override
     public int addDisease(Disease d) {
         Disease disease = searchDisease(d.getDOID());

@@ -17,19 +17,7 @@ import java.util.List;
  * Created by vincekyi on 4/16/15.
  */
 @SuppressWarnings("unchecked")
-public class PeptideDAOImpl implements PeptideDAO {
-
-    private SessionFactory sessionFactory;
-
-    /**
-     * Initializes the sessionFactory to run database operations
-     *
-     * @param sessionFactory Session factory to use.
-     */
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+public class PeptideDAOImpl extends DAOImpl implements PeptideDAO {
     @Override
     public int addPeptide(Peptide p) {
         Session session = sessionFactory.openSession();
