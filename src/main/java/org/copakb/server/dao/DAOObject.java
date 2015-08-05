@@ -19,6 +19,9 @@ public class DAOObject {
     private static StatisticsDAO statisticsDAO;
     private static ServiceDAO serviceDAO;
 
+    protected DAOObject() {
+    }
+
     /**
      * Used to get the unique instance.
      * Returns the unique instance or construct a new one if doesn't exist.
@@ -61,11 +64,9 @@ public class DAOObject {
         return statisticsDAO;
     }
 
-    public static ServiceDAO getServiceDAO() {
-        return serviceDAO;
     }
 
-    protected DAOObject() {
-
+    public ServiceDAO getServiceDAO() {
+        return serviceDAO;
     }
 }
