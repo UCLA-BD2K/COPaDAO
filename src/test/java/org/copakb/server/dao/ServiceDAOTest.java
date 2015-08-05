@@ -13,7 +13,7 @@ public class ServiceDAOTest {
 
     @Test
     public void testGetReferenceProteinBundle() throws Exception {
-        ProteinCurrent protein = DAOObject.getInstance().getProteinDAO().getInitializedProtein("P99999");
+        ProteinCurrent protein = DAOObject.getInstance().getProteinDAO().getInitializedProtein("A5A8P9");
         long start_time = System.currentTimeMillis();
         ReferenceProteinBundle bundle = serviceDAO.getReferenceProteinBundle(protein);
         long end_time = System.currentTimeMillis();

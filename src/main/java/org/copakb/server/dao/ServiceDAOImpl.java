@@ -8,6 +8,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.DistinctRootEntityResultTransformer;
 
+import java.util.ArrayList;
+
 /**
  * ServiceDAO implementation.
  * Created by Alan on 8/3/2015.
@@ -19,15 +21,9 @@ public class ServiceDAOImpl extends DAOImpl implements ServiceDAO {
         Session session = sessionFactory.openSession();
 
         String uniprotID = protein.getProtein_acc();
-        Gene gene = protein.getGenes().iterator().next(); // Use first gene only
 
         ReferenceProteinBundle result = new ReferenceProteinBundle();
         result.setUniprotID(uniprotID);
-        result.setDiseases(session.createCriteria(Disease.class)
-                .createAlias("genes", "g")
-                .add(Restrictions.eq("g.gene_name", gene.getGene_name()))
-                .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
-                .list());
         result.setSpectrumProteins(session.createCriteria(SpectrumProtein.class)
                 .add(Restrictions.eq("protein.protein_acc", uniprotID))
                 .createAlias("peptide", "p")
@@ -40,18 +36,30 @@ public class ServiceDAOImpl extends DAOImpl implements ServiceDAO {
                         .add(Projections.property("p.peptide_sequence"), "peptide.peptide_sequence")
                         .add(Projections.property("p.molecular_weight"), "peptide.molecular_weight")
                         .add(Projections.property("l.enzyme_Specificity"), "libraryModule.enzyme_Specificity")))
-                        .setResultTransformer(new AliasToBeanNestedResultTransformer(SpectrumProtein.class))
-                        .list());
+                .setResultTransformer(new AliasToBeanNestedResultTransformer(SpectrumProtein.class))
+                .list());
         result.setGoTerms(session.createCriteria(GoTerms.class)
                 .createAlias("proteins", "p")
                 .add(Restrictions.eq("p.protein_acc", uniprotID))
                 .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
                 .list());
-        result.setHPA((HPAProtein) session.createCriteria(HPAProtein.class)
-                .add(Restrictions.eq("ensembl_id", gene.getEnsembl_id().split(", ")[0])) // Use first Ensembl ID only
-                .setFetchMode("antibodies", FetchMode.JOIN)
-                .setMaxResults(1)
-                .uniqueResult());
+
+        if (protein.getGenes() != null && !protein.getGenes().isEmpty()) {
+            Gene gene = protein.getGenes().iterator().next(); // Use first gene only
+            result.setDiseases(session.createCriteria(Disease.class)
+                    .createAlias("genes", "g")
+                    .add(Restrictions.eq("g.gene_name", gene.getGene_name()))
+                    .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
+                    .list());
+            result.setHPA((HPAProtein) session.createCriteria(HPAProtein.class)
+                    .add(Restrictions.eq("ensembl_id", gene.getEnsembl_id().split(", ")[0])) // Use first Ensembl ID
+                    .setFetchMode("antibodies", FetchMode.JOIN)
+                    .setMaxResults(1)
+                    .uniqueResult());
+        } else {
+            result.setDiseases(new ArrayList<Disease>());
+            result.setHPA(null);
+        }
 
         session.close();
         return result;
