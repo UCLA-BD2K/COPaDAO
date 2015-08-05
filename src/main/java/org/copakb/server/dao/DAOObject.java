@@ -1,10 +1,7 @@
 package org.copakb.server.dao;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by Ping PC1 on 6/4/2015.
@@ -14,13 +11,13 @@ import javax.annotation.PostConstruct;
 @Controller
 public class DAOObject {
 
-    private static ClassPathXmlApplicationContext context;
     private volatile static DAOObject uniqueInstance;
-    public static PeptideDAO peptideDAO;
-    public static ProteinDAO proteinDAO;
-    public static DiseaseDAO diseaseDAO;
-    public static ReportDAO reportDAO;
-    public static StatisticsDAO statisticsDAO;
+    private static PeptideDAO peptideDAO;
+    private static ProteinDAO proteinDAO;
+    private static DiseaseDAO diseaseDAO;
+    private static ReportDAO reportDAO;
+    private static StatisticsDAO statisticsDAO;
+    private static ServiceDAO serviceDAO;
 
     /**
      * Used to get the unique instance.
@@ -31,12 +28,13 @@ public class DAOObject {
             synchronized (DAOObject.class) {
                 if(uniqueInstance == null) {
                     uniqueInstance = new DAOObject();
-                    context = new ClassPathXmlApplicationContext("spring.xml");
+                    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
                     peptideDAO = context.getBean(PeptideDAO.class);
                     proteinDAO = context.getBean(ProteinDAO.class);
                     diseaseDAO = context.getBean(DiseaseDAO.class);
                     reportDAO = context.getBean(ReportDAO.class);
                     statisticsDAO = context.getBean(StatisticsDAO.class);
+                    serviceDAO = context.getBean(ServiceDAO.class);
                 }
             }
         }
@@ -63,6 +61,9 @@ public class DAOObject {
         return statisticsDAO;
     }
 
+    public static ServiceDAO getServiceDAO() {
+        return serviceDAO;
+    }
 
     protected DAOObject() {
 

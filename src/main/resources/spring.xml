@@ -73,6 +73,9 @@
         <property name="sessionFactory" ref="hibernateSessionFactory"/>
     </bean>
 
+    <bean id="serviceDAO" class="org.copakb.server.dao.ServiceDAOImpl">
+        <property name="sessionFactory" ref="hibernateSessionFactory"/>
+    </bean>
 
     <bean name="obj" class="org.copakb.server.dao.DAOObject">
     </bean>
