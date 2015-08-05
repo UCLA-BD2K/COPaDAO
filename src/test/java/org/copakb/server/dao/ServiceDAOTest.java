@@ -1,6 +1,8 @@
 package org.copakb.server.dao;
 
+import org.copakb.server.dao.model.Peptide;
 import org.copakb.server.dao.model.ProteinCurrent;
+import org.copakb.server.dao.model.service.ReferencePeptideBundle;
 import org.copakb.server.dao.model.service.ReferenceProteinBundle;
 import org.junit.Test;
 
@@ -23,5 +25,16 @@ public class ServiceDAOTest {
         assert bundle.getSpectrumProteins().get(0).getNextAA() == 'N';
         assert bundle.getSpectrumProteins().get(0).getPeptide().getPeptide_id() == 50511;
         assert bundle.getGoTerms().size() == 1;
+    }
+
+    @Test
+    public void testGetReferencePeptideBundle() throws Exception {
+        Peptide peptide = DAOObject.getInstance().getPeptideDAO().searchById(1);
+        long start_time = System.currentTimeMillis();
+        ReferencePeptideBundle bundle = serviceDAO.getReferencePeptideBundle(peptide);
+        long end_time = System.currentTimeMillis();
+        System.out.println("Time Elapsed: " + (end_time - start_time));
+
+        assert bundle != null;
     }
 }

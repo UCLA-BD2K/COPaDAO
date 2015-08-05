@@ -1,6 +1,7 @@
 package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.*;
+import org.copakb.server.dao.model.service.ReferencePeptideBundle;
 import org.copakb.server.dao.model.service.ReferenceProteinBundle;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -60,6 +61,29 @@ public class ServiceDAOImpl extends DAOImpl implements ServiceDAO {
             result.setDiseases(new ArrayList<Disease>());
             result.setHPA(null);
         }
+
+        session.close();
+        return result;
+    }
+
+    @Override
+    public ReferencePeptideBundle getReferencePeptideBundle(Peptide peptide) {
+        Session session = sessionFactory.openSession();
+
+        ReferencePeptideBundle result = new ReferencePeptideBundle();
+        result.setPeptideID(peptide.getPeptide_id());
+        result.setSpectrumProteins(session.createCriteria(SpectrumProtein.class)
+                .add(Restrictions.eq("peptide.peptide_id", peptide.getPeptide_id()))
+                .createAlias("protein", "p")
+                .setProjection(Projections.distinct(Projections.projectionList()
+                        .add(Projections.property("location"), "location")
+                        .add(Projections.property("p.protein_acc"), "protein.protein_acc")
+                        .add(Projections.property("p.protein_name"), "protein.protein_name")
+                        .add(Projections.property("p.species"), "protein.species")
+                        .add(Projections.property("p.chromosome"), "protein.chromosome")
+                        .add(Projections.property("spectrum"), "spectrum")))
+                .setResultTransformer(new AliasToBeanNestedResultTransformer(SpectrumProtein.class))
+                .list());
 
         session.close();
         return result;
