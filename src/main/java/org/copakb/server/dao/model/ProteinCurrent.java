@@ -1,12 +1,8 @@
 package org.copakb.server.dao.model;
 
 import org.copakb.server.dao.DAOObject;
-import org.hibernate.annotations.*;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.Set;
 
 /**
@@ -211,6 +207,22 @@ public class ProteinCurrent extends Model {
         }
 
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProteinCurrent that = (ProteinCurrent) o;
+
+        return protein_acc.equals(that.protein_acc);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return protein_acc.hashCode();
     }
 
     @Override
