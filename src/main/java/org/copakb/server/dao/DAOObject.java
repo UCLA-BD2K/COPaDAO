@@ -64,8 +64,6 @@ public class DAOObject {
         return statisticsDAO;
     }
 
-    }
-
     public ServiceDAO getServiceDAO() {
         return serviceDAO;
     }
