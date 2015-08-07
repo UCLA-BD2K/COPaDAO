@@ -24,6 +24,7 @@ public class ProteinCurrent extends Model {
     private String keywords;
     private String feature_table;
     private Species species;
+    private Set<Gene2> gene;
     private String chromosome;
     private Set<Gene> genes;
     private Set<GoTerms> goTerms;
@@ -139,6 +140,19 @@ public class ProteinCurrent extends Model {
 
     public void setSpecies(Species species) {
         this.species = species;
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "Protein_Gene2", joinColumns = {
+            @JoinColumn(name = "protein_acc", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ensembl_id",
+                    nullable = false, updatable = false)})
+    public Set<Gene2> getGene() {
+        return gene;
+    }
+
+    public void setGene(Set<Gene2> gene) {
+        this.gene = gene;
     }
 
     @Column(name = "chromosome")

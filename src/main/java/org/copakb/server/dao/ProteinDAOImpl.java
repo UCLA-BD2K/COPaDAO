@@ -97,8 +97,9 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
             proteinCurrent.setSequence(p.getSequence());
             proteinCurrent.setMolecular_weight(p.getMolecular_weight());
             proteinCurrent.setSpecies(p.getSpecies());
+            proteinCurrent.setGene(p.getGene());
 
-            session.update(proteinCurrent);
+            session.merge(proteinCurrent);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -452,6 +453,16 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
 
         session.close();
         return gene;
+    }
+
+    @Override
+    public Gene2 searchGene(String ensemblID) {
+        Session session = sessionFactory.openSession();
+
+        Gene2 result = (Gene2) session.get(Gene2.class, ensemblID);
+
+        session.close();
+        return result;
     }
 
     @Override
