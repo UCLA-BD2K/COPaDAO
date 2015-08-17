@@ -1,8 +1,5 @@
-import org.copakb.server.dao.DAOObject;
-import org.copakb.server.dao.PeptideDAO;
-import org.copakb.server.dao.ReportDAO;
+import org.copakb.server.dao.*;
 import org.copakb.server.dao.model.*;
-import org.copakb.server.dao.ProteinDAO;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.*;
@@ -17,6 +14,9 @@ public class TestEnvironment {
         ProteinDAO proteinDAO = context.getBean(ProteinDAO.class);
         PeptideDAO peptideDAO = context.getBean(PeptideDAO.class);
         ReportDAO reportDAO = context.getBean(ReportDAO.class);
+        ServiceDAO serviceDAO = context.getBean(ServiceDAO.class);
+        SpectrumDAO spectrumDAO = context.getBean(SpectrumDAO.class);
+
 
         /*Date date = new Date();
         LibraryModule mod = new LibraryModule("module_name", "LTQ", "proteasome", date, "Trypsin", proteinDAO.searchSpecies("Human"));
@@ -29,7 +29,7 @@ public class TestEnvironment {
 
         reportDAO.addTask(task);*/
 
-
+        //System.out.println(reportDAO.searchReport("f916bae895b146629a3cb32f64370287"));
 
 
         context.close();

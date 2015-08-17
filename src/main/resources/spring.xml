@@ -77,22 +77,45 @@
     <bean id="serviceDAO" class="org.copakb.server.dao.ServiceDAOImpl">
         <property name="sessionFactory" ref="hibernateSessionFactory"/>
     </bean>
+    <bean id="spectrumDAO" class="org.copakb.server.dao.SpectrumDAOImpl">
+        <property name="sessionFactory" ref="hibernateSessionFactory"/>
+        <constructor-arg name="mongoOps" ref="spectraTemplate"/>
+    </bean>
 
     <bean name="obj" class="org.copakb.server.dao.DAOObject">
     </bean>
 
     <!--http://stackoverflow.com/questions/17893293/spring-mongodb-xml-configuration-with-credentials-fails-->
 
-    <mongo:mongo host="10.44.115.51" port="27017" id="mongo"/>
-    <mongo:db-factory dbname="Analysis-Test" mongo-ref="mongo" id="mongoDbFactory"/>
+    <mongo:mongo host="@mongoHost@" port="@mongoPort@" id="mongo"/>
+    <mongo:db-factory dbname="@spectraDBName@" mongo-ref="mongo" id="spectraDbFactory"/>
+    <mongo:db-factory dbname="@reportsDBName@" mongo-ref="mongo" id="reportsDbFactory"/>
 
-    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+    <bean id="spectraTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="spectraDbFactory" />
     </bean>
 
-    <bean id="reportDAO" class="org.copakb.server.dao.ReportDAOImpl">
-        <constructor-arg name="mongoOps" ref="mongoTemplate"/>
-        <property name="sessionFactory" ref="hibernateSessionFactory"/>
+    <bean id="reportsTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="reportsDbFactory" />
     </bean>
 
+    <bean id="reportsDAO" class="org.copakb.server.dao.ReportDAOImpl">
+        <constructor-arg name="mongoOps" ref="reportsTemplate"/>
+    </bean>
+
+
+
+    <bean id="mappingContext"
+          class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
+    <bean id="defaultMongoTypeMapper"
+          class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
+        <constructor-arg name="typeKey"><null/></constructor-arg>
+    </bean>
+
+    <bean id="mappingMongoConverter"
+          class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+        <constructor-arg name="mongoDbFactory" ref="spectraDbFactory" />
+        <constructor-arg name="mappingContext" ref="mappingContext" />
+        <property name="typeMapper" ref="defaultMongoTypeMapper" />
+    </bean>
 </beans>

@@ -18,6 +18,7 @@ public class DAOObject {
     private static ReportDAO reportDAO;
     private static StatisticsDAO statisticsDAO;
     private static ServiceDAO serviceDAO;
+    private static SpectrumDAO spectrumDAO;
 
     protected DAOObject() {
     }
@@ -38,6 +39,7 @@ public class DAOObject {
                     reportDAO = context.getBean(ReportDAO.class);
                     statisticsDAO = context.getBean(StatisticsDAO.class);
                     serviceDAO = context.getBean(ServiceDAO.class);
+                    spectrumDAO = context.getBean(SpectrumDAO.class);
                 }
             }
         }
@@ -67,4 +69,6 @@ public class DAOObject {
     public ServiceDAO getServiceDAO() {
         return serviceDAO;
     }
+
+    public SpectrumDAO getSpectrumDAO() { return spectrumDAO; }
 }
