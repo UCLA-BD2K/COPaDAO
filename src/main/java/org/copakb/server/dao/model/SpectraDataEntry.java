@@ -1,6 +1,7 @@
 package org.copakb.server.dao.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -11,6 +12,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class SpectraDataEntry {
     @Id
     private int spectrum_id;
+
+    @Indexed
     private double precursor_mz;
     private String ptm_sequence;
     private int charge_state;
@@ -30,6 +33,30 @@ public class SpectraDataEntry {
         this.species_name = species_name;
         this.organelle = organelle;
         this.peaks = peaks;
+    }
+
+    public SpectraDataEntry(int spectrum_id, String ptm_sequence, double precursor_mz, int charge_state, String species_name, String organelle) {
+        this.spectrum_id = spectrum_id;
+        this.precursor_mz = precursor_mz;
+        this.ptm_sequence = ptm_sequence;
+        this.charge_state = charge_state;
+        this.species_name = species_name;
+        this.organelle = organelle;
+        peaks = null;
+        fdr = -1;
+        peptide = null;
+    }
+
+    public SpectraDataEntry(){
+        this.spectrum_id = -1;
+        this.precursor_mz = -1;
+        this.ptm_sequence = null;
+        this.charge_state = -1;
+        this.peptide = null;
+        this.fdr = -1;
+        this.species_name = null;
+        this.organelle = null;
+        this.peaks = null;
     }
 
     public int getSpectrum_id() {
@@ -107,8 +134,10 @@ public class SpectraDataEntry {
     @Override
     public String toString() {
         String spectraString = "";
-        for (double[] doubles : peaks) {
-            spectraString+="["+Double.toString(doubles[0])+", "+Double.toString(doubles[1])+"]";
+        if(peaks!=null) {
+            for (double[] doubles : peaks) {
+                spectraString += "[" + Double.toString(doubles[0]) + ", " + Double.toString(doubles[1]) + "]";
+            }
         }
         return "SpectraDataEntry{" +
                 "spectrum_id=" + spectrum_id +

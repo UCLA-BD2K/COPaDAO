@@ -268,4 +268,6 @@ public interface ProteinDAO {
      * @return ProteinCurrent object with the PTM defined
      */
     ProteinCurrent getProteinWithPTMs(String uniprotID);
+
+
 }

@@ -56,4 +56,13 @@ public class SpectrumDAOImpl extends DAOImpl implements SpectrumDAO {
 
     }
 
+    public List<SpectraDataEntry> retrieveSpectraList(int precursor_mz){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("precursor_mz").lte(precursor_mz+1).gte(precursor_mz-1));
+        query.fields().include("spectrum_id").include("ptm_sequence").include("precursor_mz").include("charge_state").include("species_name").include("organelle");
+        List<SpectraDataEntry> results = mongoOps.find(query, SpectraDataEntry.class);
+        return results;
+    }
+
+
 }
