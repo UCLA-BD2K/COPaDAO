@@ -1,19 +1,19 @@
 package org.copakb.server.dao.model.service;
 
-import org.copakb.server.dao.model.SpectraDataEntry;
+import org.copakb.server.dao.model.Spectrum;
 
 /**
+ * ReferenceSpectrumBundle
  * Created by vincekyi on 8/16/15.
  */
 public class ReferenceSpectrumBundle {
-
-    private SpectraDataEntry specData;
+    private Spectrum specData;
     private double xcorr;
     private double delta_cn;
     private double th_precursor_mz;
     private String rawfileid;
 
-    public ReferenceSpectrumBundle(SpectraDataEntry specData, double xcorr, double delta_cn, double th_precursor_mz, String rawfileid) {
+    public ReferenceSpectrumBundle(Spectrum specData, double xcorr, double delta_cn, double th_precursor_mz, String rawfileid) {
         this.specData = specData;
         this.xcorr = xcorr;
         this.delta_cn = delta_cn;
@@ -21,11 +21,11 @@ public class ReferenceSpectrumBundle {
         this.rawfileid = rawfileid;
     }
 
-    public SpectraDataEntry getSpecData() {
+    public Spectrum getSpecData() {
         return specData;
     }
 
-    public void setSpecData(SpectraDataEntry specData) {
+    public void setSpecData(Spectrum specData) {
         this.specData = specData;
     }
 

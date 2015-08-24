@@ -1,18 +1,20 @@
 package org.copakb.server.dao.model;
 
 import org.copakb.server.dao.DAOObject;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
 /**
- * Spectrum model
+ * Spectrum model.
  * Created by vincekyi on 4/19/15.
  */
-
 @Entity
 @Table(name = "Spectrum")
+@Document(collection = "SpectraInfo")
 public class Spectrum extends Model {
     private int spectrum_id;
     private String ptm_sequence;
@@ -22,6 +24,7 @@ public class Spectrum extends Model {
     private double delta_cn;
     private double zscore;
     private double fdr;
+    @Indexed
     private double precursor_mz;
     private double th_precursor_mz;
     private boolean species_unique;
@@ -30,6 +33,10 @@ public class Spectrum extends Model {
     private String rawfile_id;
     private Peptide peptide;
     private Set<SpectrumProtein> spectrumProtein;
+    private double[][] peaks;
+    private String peptide_sequence;
+    private String mod_lib;
+    private String species;
 
     public Spectrum(String ptm_sequence, int charge_state, LibraryModule module, double xcorr, double delta_cn, double zscore, double fdr, double precursor_mz, double th_precursor_mz, PTM_type ptm, String rawfile_id, Peptide peptide) {
         this.ptm_sequence = ptm_sequence;
@@ -50,10 +57,10 @@ public class Spectrum extends Model {
         //empty
     }
 
-
     @Id
     @Column(name = "spectrum_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @org.springframework.data.annotation.Id
     public int getSpectrum_id() {
         return spectrum_id;
     }
@@ -82,6 +89,7 @@ public class Spectrum extends Model {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mod_id", nullable = false)
+    @org.springframework.data.annotation.Transient
     public LibraryModule getModule() {
         return module;
     }
@@ -103,6 +111,7 @@ public class Spectrum extends Model {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "peptide_id")
+    @org.springframework.data.annotation.Transient
     public Peptide getPeptide() {
         return peptide;
     }
@@ -148,6 +157,7 @@ public class Spectrum extends Model {
     }
 
     @Column(name = "th_precursor_mz")
+    @org.springframework.data.annotation.Transient
     public double getTh_precursor_mz() {
         return th_precursor_mz;
     }
@@ -158,6 +168,7 @@ public class Spectrum extends Model {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ptm_type")
+    @org.springframework.data.annotation.Transient
     public PTM_type getPtm() {
         return ptm;
     }
@@ -167,6 +178,7 @@ public class Spectrum extends Model {
     }
 
     @Column(name = "rawfileid")
+    @org.springframework.data.annotation.Transient
     public String getRawfile_id() {
         return rawfile_id;
     }
@@ -176,6 +188,7 @@ public class Spectrum extends Model {
     }
 
     @Column(name = "feature_peptide")
+    @org.springframework.data.annotation.Transient
     public boolean isFeature_peptide() {
         return feature_peptide;
     }
@@ -185,6 +198,7 @@ public class Spectrum extends Model {
     }
 
     @Column(name = "species_unique")
+    @org.springframework.data.annotation.Transient
     public boolean isSpecies_unique() {
         return species_unique;
     }
@@ -201,6 +215,42 @@ public class Spectrum extends Model {
 
     public void setSpectrumProtein(Set<SpectrumProtein> spectrumProtein) {
         this.spectrumProtein = spectrumProtein;
+    }
+
+    @Transient
+    public double[][] getPeaks() {
+        return peaks;
+    }
+
+    public void setPeaks(double[][] peaks) {
+        this.peaks = peaks;
+    }
+
+    @Transient
+    public String getPeptide_sequence() {
+        return peptide_sequence;
+    }
+
+    public void setPeptide_sequence(String peptide_sequence) {
+        this.peptide_sequence = peptide_sequence;
+    }
+
+    @Transient
+    public String getMod_lib() {
+        return mod_lib;
+    }
+
+    public void setMod_lib(String mod_lib) {
+        this.mod_lib = mod_lib;
+    }
+
+    @Transient
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     /**
