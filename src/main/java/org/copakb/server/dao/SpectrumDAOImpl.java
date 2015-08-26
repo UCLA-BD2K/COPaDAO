@@ -1,6 +1,6 @@
 package org.copakb.server.dao;
 
-import org.copakb.server.dao.model.Spectrum;
+import org.copakb.server.dao.model.SpectraDataEntry;
 import org.copakb.server.dao.model.service.ReferenceSpectrumBundle;
 import org.hibernate.Session;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -15,7 +15,6 @@ import java.util.List;
  * Created by vincekyi on 8/15/15.
  */
 public class SpectrumDAOImpl extends DAOImpl implements SpectrumDAO {
-    private static final String SPECTRA_COLLECTION = "MongoSpectraInfo";
     private MongoOperations mongoOps;
 
     /**
@@ -27,9 +26,9 @@ public class SpectrumDAOImpl extends DAOImpl implements SpectrumDAO {
         this.mongoOps = mongoOps;
     }
 
-    public Spectrum searchBySpecID(int spectrum_id) {
+    public SpectraDataEntry searchBySpecID(int spectrum_id) {
         BasicQuery query = new BasicQuery("{ _id: " + Integer.toString(spectrum_id) + " }");
-        List<Spectrum> results = mongoOps.find(query, Spectrum.class);
+        List<SpectraDataEntry> results = mongoOps.find(query, SpectraDataEntry.class);
         if (results.isEmpty()) {
             return null;
         }
@@ -58,7 +57,7 @@ public class SpectrumDAOImpl extends DAOImpl implements SpectrumDAO {
                 );
     }
 
-    public List<Spectrum> retrieveSpectraList(int precursor_mz) {
+    public List<SpectraDataEntry> retrieveSpectraList(int precursor_mz) {
         Query query = new Query();
         query.addCriteria(Criteria.where("precursor_mz").lte(precursor_mz+1).gte(precursor_mz-1));
         query.fields()
@@ -68,10 +67,10 @@ public class SpectrumDAOImpl extends DAOImpl implements SpectrumDAO {
                 .include("charge_state")
                 .include("species_name")
                 .include("organelle");
-        return mongoOps.find(query, Spectrum.class);
+        return mongoOps.find(query, SpectraDataEntry.class);
     }
 
-    public void addSpectraInfo(Spectrum s) {
+    public void addSpectraInfo(SpectraDataEntry s) {
         mongoOps.save(s);
     }
 }
