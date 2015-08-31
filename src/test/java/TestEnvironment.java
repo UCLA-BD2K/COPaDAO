@@ -30,6 +30,7 @@ public class TestEnvironment {
         reportDAO.addTask(task);*/
 
         //System.out.println(reportDAO.searchReport("f916bae895b146629a3cb32f64370287"));
+        System.out.println(spectrumDAO.searchByID(1));
 
 
         context.close();

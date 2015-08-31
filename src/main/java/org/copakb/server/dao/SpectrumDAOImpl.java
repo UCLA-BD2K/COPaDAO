@@ -37,24 +37,7 @@ public class SpectrumDAOImpl extends DAOImpl implements SpectrumDAO {
     }
 
     public ReferenceSpectrumBundle searchByID(int spectrum_id){
-        Session session = sessionFactory.openSession();
-        org.hibernate.Query query = session.createQuery("SELECT " +
-                "xcorr, delta_cn, th_precursor_mz, rawfile_id " +
-                "FROM " +
-                "Spectrum " +
-                "WHERE " +
-                "spectrum_id = " + Integer.toString(spectrum_id));
-        List<Object[]> list = query.list();
-        Object[] result = list.get(0);
-
-        session.close();
-
-        return new ReferenceSpectrumBundle(searchBySpecID(spectrum_id),
-                Double.parseDouble(result[0].toString()),
-                Double.parseDouble(result[1].toString()),
-                Double.parseDouble(result[2].toString()),
-                result[3].toString()
-                );
+        return new ReferenceSpectrumBundle(searchBySpecID(spectrum_id));
     }
 
     public List<SpectraDataEntry> retrieveSpectraList(int precursor_mz) {

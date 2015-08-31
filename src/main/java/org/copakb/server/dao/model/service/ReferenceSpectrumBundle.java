@@ -9,67 +9,85 @@ import org.copakb.server.dao.model.SpectraDataEntry;
 public class ReferenceSpectrumBundle {
 
     private SpectraDataEntry specData;
-    private double xcorr;
-    private double delta_cn;
-    private double th_precursor_mz;
-    private String rawfileid;
 
-    public ReferenceSpectrumBundle(SpectraDataEntry specData, double xcorr, double delta_cn, double th_precursor_mz, String rawfileid) {
-        this.specData = specData;
-        this.xcorr = xcorr;
-        this.delta_cn = delta_cn;
-        this.th_precursor_mz = th_precursor_mz;
-        this.rawfileid = rawfileid;
-    }
 
-    public SpectraDataEntry getSpecData() {
-        return specData;
-    }
-
-    public void setSpecData(SpectraDataEntry specData) {
+    public ReferenceSpectrumBundle(SpectraDataEntry specData) {
         this.specData = specData;
     }
+
+    public int getSpectrum_id() {
+        return specData.getSpectrum_id();
+    }
+
+    public String getPtm_sequence() {
+        return specData.getPtm_sequence();
+    }
+
+
+    public int getCharge_state() {
+        return specData.getCharge_state();
+    }
+
 
     public double getXcorr() {
-        return xcorr;
+        return specData.getXcorr();
     }
 
-    public void setXcorr(double xcorr) {
-        this.xcorr = xcorr;
-    }
 
     public double getDelta_cn() {
-        return delta_cn;
+        return specData.getDelta_cn();
     }
 
-    public void setDelta_cn(double delta_cn) {
-        this.delta_cn = delta_cn;
+
+    public double getZscore() {
+        return specData.getZscore();
     }
+
+
+    public double getFdr() {
+        return specData.getFdr();
+    }
+
+
+    public double getPrecursor_mz() {
+        return specData.getPrecursor_mz();
+    }
+
 
     public double getTh_precursor_mz() {
-        return th_precursor_mz;
+        return specData.getTh_precursor_mz();
     }
 
-    public void setTh_precursor_mz(double th_precursor_mz) {
-        this.th_precursor_mz = th_precursor_mz;
+
+    public double[][] getPeaks() {
+        return specData.getPeaks();
     }
 
-    public String getRawfileid() {
-        return rawfileid;
+
+    public String getPeptide_sequence() {
+        return specData.getPeptide_sequence();
     }
 
-    public void setRawfileid(String rawfileid) {
-        this.rawfileid = rawfileid;
+
+    public int getMod_id() {
+        return specData.getMod_id();
     }
+
+
+    public String getOrganelle() {
+        return specData.getOrganelle();
+    }
+
+
+    public String getSpecies_name() {
+        return specData.getSpecies_name();
+    }
+
 
     @Override
     public String toString() {
         return "ReferenceSpectrumBundle{" +
                 "specData=" + specData +
-                ", xcorr=" + xcorr +
-                ", delta_cn=" + delta_cn +
-                ", th_precursor_mz=" + th_precursor_mz +
-                ", rawfileid='" + rawfileid + '\'' +
                 '}';
     }
 }
