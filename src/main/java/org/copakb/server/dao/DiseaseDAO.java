@@ -1,8 +1,6 @@
 package org.copakb.server.dao;
 
-import org.copakb.server.dao.model.Disease;
-import org.copakb.server.dao.model.DiseaseGene;
-import org.copakb.server.dao.model.Gene;
+import org.copakb.server.dao.model.*;
 
 import java.util.List;
 
@@ -70,4 +68,31 @@ public interface DiseaseDAO {
      * @return partial list of specified length of Gene objects beginning at the start index
      */
     List<Gene> limitedGeneList(int start, int length);
+
+    /**
+     * Add disease gene information to the database
+     *
+     * @param d defined diseasegene object to be added
+     * @return disease OMIM id if successful, -1 otherwise
+     */
+    int addDiseaseGene2(DiseaseGene2 d);
+
+    /**
+     * Searches for the DiseaseGene information from the database using the disease and gene symbol as the objects.
+     * Mapped using the Disease and Gene objects through hibernate
+     *
+     * @param disease Disease to be matched
+     * @param gene    Gene to be matched
+     * @return defined DiseaseGene object with information from the database
+     */
+    DiseaseGene2 searchDiseaseGene2(Disease disease, Gene2 gene);
+
+    /**
+     * Searches a limited list of Gene objects from the database
+     *
+     * @param start  beginning index for list
+     * @param length number of genes to be returned
+     * @return partial list of specified length of Gene objects beginning at the start index
+     */
+    List<Gene2> limitedGene2List(int start, int length);
 }

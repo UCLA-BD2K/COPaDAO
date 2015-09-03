@@ -17,6 +17,7 @@ public class Disease extends Model {
     private String description;
     private boolean heart_disease;
     private Set<Gene> genes;
+    private Set<Gene2> gene;
 
     public Disease() {
 
@@ -78,6 +79,19 @@ public class Disease extends Model {
 
     public void setGenes(Set<Gene> genes) {
         this.genes = genes;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "Disease_Gene2", joinColumns = {
+            @JoinColumn(name = "DOID", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "ensembl_id",
+                    nullable = false, updatable = false)})
+    public Set<Gene2> getGene() {
+        return gene;
+    }
+
+    public void setGene(Set<Gene2> genes) {
+        this.gene = gene;
     }
 
     /**

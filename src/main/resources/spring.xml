@@ -28,6 +28,7 @@
                 <value>org.copakb.server.dao.model.PTM_type</value>
                 <value>org.copakb.server.dao.model.Disease</value>
                 <value>org.copakb.server.dao.model.DiseaseGene</value>
+                <value>org.copakb.server.dao.model.DiseaseGene2</value>
                 <value>org.copakb.server.dao.model.Gene</value>
                 <value>org.copakb.server.dao.model.Gene2</value>
                 <value>org.copakb.server.dao.model.Antibody</value>
