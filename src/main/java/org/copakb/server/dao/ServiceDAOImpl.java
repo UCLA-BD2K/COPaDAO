@@ -45,15 +45,15 @@ public class ServiceDAOImpl extends DAOImpl implements ServiceDAO {
                 .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
                 .list());
 
-        if (protein.getGenes() != null && !protein.getGenes().isEmpty()) {
-            Gene gene = protein.getGenes().iterator().next(); // Use first gene only
+        if (protein.getGene() != null && !protein.getGene().isEmpty()) {
+            Gene2 gene = protein.getGene().iterator().next(); // Use first gene only
             result.setDiseases(session.createCriteria(Disease.class)
                     .createAlias("genes", "g")
-                    .add(Restrictions.eq("g.gene_name", gene.getGene_name()))
+                    .add(Restrictions.eq("g.ensembl_id", gene.getEnsembl_id()))
                     .setResultTransformer(DistinctRootEntityResultTransformer.INSTANCE)
                     .list());
             result.setHPA((HPAProtein) session.createCriteria(HPAProtein.class)
-                    .add(Restrictions.eq("ensembl_id", gene.getEnsembl_id().split(", ")[0])) // Use first Ensembl ID
+                    .add(Restrictions.eq("ensembl_id", gene.getEnsembl_id()))
                     .setFetchMode("antibodies", FetchMode.JOIN)
                     .setMaxResults(1)
                     .uniqueResult());
