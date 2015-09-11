@@ -37,4 +37,9 @@ public class ServiceDAOTest {
 
         assert bundle != null;
     }
+
+    @Test
+    public void testGetLibModNames() throws Exception {
+        System.out.println(serviceDAO.getLibModNames());
+    }
 }

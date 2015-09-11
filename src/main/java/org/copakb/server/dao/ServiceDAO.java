@@ -5,6 +5,8 @@ import org.copakb.server.dao.model.ProteinCurrent;
 import org.copakb.server.dao.model.service.ReferencePeptideBundle;
 import org.copakb.server.dao.model.service.ReferenceProteinBundle;
 
+import java.util.List;
+
 /**
  * ServiceDAO interface for CopakbRestService
  * Created by Alan on 8/3/2015.
@@ -25,4 +27,11 @@ public interface ServiceDAO {
      * @return ReferencePeptideBundle with necessary objects.
      */
     ReferencePeptideBundle getReferencePeptideBundle(Peptide peptide);
+
+    /**
+     * Returns a list of all library module string names sorted by module ID.
+     *
+     * @return List of strings.
+     */
+    List<String> getLibModNames();
 }
