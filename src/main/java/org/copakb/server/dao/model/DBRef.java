@@ -14,7 +14,7 @@ import java.io.Serializable;
  * Created by Alan on 6/30/2015.
  */
 @Entity
-@Table(name = "DBRef")
+@Table(name = "dbref")
 public class DBRef implements Serializable {
     private String protein_acc;
     private String pdb;

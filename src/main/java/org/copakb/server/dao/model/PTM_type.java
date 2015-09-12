@@ -1,20 +1,18 @@
 package org.copakb.server.dao.model;
 
-/**
- * Created by vincekyi on 4/28/15.
- */
-
 import org.hibernate.annotations.SQLInsert;
 
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * PTM_type model.
+ * Created by vincekyi on 4/28/15.
+ */
 @Entity
-@Table(name = "PTM_type")
-@SQLInsert(sql="INSERT IGNORE INTO PTM_type (mass, modification, residues, ptm_type) VALUES (?, ?, ?, ?)")
-
+@Table(name = "ptm_type")
+@SQLInsert(sql = "INSERT IGNORE INTO ptm_type (mass, modification, residues, ptm_type) VALUES (?, ?, ?, ?)")
 public class PTM_type {
-
     private int ptm_type;
     private String modification;
     private String residues;
@@ -38,7 +36,7 @@ public class PTM_type {
     }
 
     @Id
-    @Column(name="ptm_type")
+    @Column(name = "ptm_type")
     public int getPtm_type() {
         return ptm_type;
     }
@@ -47,7 +45,7 @@ public class PTM_type {
         this.ptm_type = ptm_type;
     }
 
-    @Column(name="modification")
+    @Column(name = "modification")
     public String getModification() {
         return modification;
     }
@@ -56,7 +54,7 @@ public class PTM_type {
         this.modification = modification;
     }
 
-    @Column(name="residues")
+    @Column(name = "residues")
     public String getResidues() {
         return residues;
     }
@@ -65,7 +63,7 @@ public class PTM_type {
         this.residues = residues;
     }
 
-    @Column(name="mass")
+    @Column(name = "mass")
     public double getMass() {
         return mass;
     }

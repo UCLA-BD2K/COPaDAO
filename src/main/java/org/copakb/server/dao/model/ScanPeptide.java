@@ -3,9 +3,9 @@ package org.copakb.server.dao.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
+ * ScanPeptide model.
  * Created by Kevin on 5/28/2015.
  */
-
 @Document
 public class ScanPeptide {
     private String mzFile;
@@ -151,20 +151,18 @@ public class ScanPeptide {
 
     @Override
     public String toString() {
-        String result = "mzFile: " + mzFile + "\n" +
-                        "scan: " + scan + "\n" +
-                        "peptideSequence: " + peptideSequence + "\n" +
-                        "peptide: " + peptide + "\n" +
-                        "similarityScore: " + similarityScore + "\n" +
-                        "deltaMZ: " + deltaMZ + "\n" +
-                        "spectrum: " + spectrum + "\n" +
-                        "finalScore: " + finalScore + "\n" +
-                        "unique: " + unique + "\n" +
-                        "charge: " + charge + "\n" +
-                        "precurMZ: " + precurMZ + "\n" +
-                        "thPrecurMZ: " + thPrecurMZ + "\n" +
-                        "feature: " + feature + "\n";
-
-        return result;
+        return "mzFile: " + mzFile + "\n" +
+                "scan: " + scan + "\n" +
+                "peptideSequence: " + peptideSequence + "\n" +
+                "peptide: " + peptide + "\n" +
+                "similarityScore: " + similarityScore + "\n" +
+                "deltaMZ: " + deltaMZ + "\n" +
+                "spectrum: " + spectrum + "\n" +
+                "finalScore: " + finalScore + "\n" +
+                "unique: " + unique + "\n" +
+                "charge: " + charge + "\n" +
+                "precurMZ: " + precurMZ + "\n" +
+                "thPrecurMZ: " + thPrecurMZ + "\n" +
+                "feature: " + feature + "\n";
     }
 }

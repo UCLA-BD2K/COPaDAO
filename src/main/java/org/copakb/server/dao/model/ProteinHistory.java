@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by Kevin on 5/1/2015.
  */
 @Entity
-@Table(name = "Protein_History")
+@Table(name = "protein_history")
 public class ProteinHistory {
     private String protein_acc;
     private Version version;

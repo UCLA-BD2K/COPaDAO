@@ -1,17 +1,13 @@
 package org.copakb.server.dao.model;
 
-
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
+ * ReportProtein model.
  * Created by Kevin on 5/28/2015.
  */
-
-
 public class ReportProtein {
     private String iPI;
     private String cOPaID;
@@ -130,7 +126,6 @@ public class ReportProtein {
         this.length = length;
     }
 
-
     @Field("scanPeptides")
     public ArrayList<ScanPeptide> getScanPeptides() {
         return scanPeptides;
@@ -142,16 +137,14 @@ public class ReportProtein {
 
     @Override
     public String toString() {
-        String result = "iPI: " + iPI + "\n" +
-                        "cOPaID: " + cOPaID + "\n" +
-                        "proteinName: " + proteinName + "\n" +
-                        "geneSymbol: " + geneSymbol + "\n" +
-                        "organism: " + organism + "\n" +
-                        "spectraCount: " + spectraCount + "\n" +
-                        "normalizCount: " + normalizCount + "\n" +
-                        "probability: " + probability + "\n" +
-                        "length: " + length + "\n";
-
-        return result;
+        return "iPI: " + iPI + "\n" +
+                "cOPaID: " + cOPaID + "\n" +
+                "proteinName: " + proteinName + "\n" +
+                "geneSymbol: " + geneSymbol + "\n" +
+                "organism: " + organism + "\n" +
+                "spectraCount: " + spectraCount + "\n" +
+                "normalizCount: " + normalizCount + "\n" +
+                "probability: " + probability + "\n" +
+                "length: " + length + "\n";
     }
 }

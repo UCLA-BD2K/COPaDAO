@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Kevin on 4/30/2015.
  */
 @Entity
-@Table(name = "Disease_Gene2")
+@Table(name = "disease_gene2")
 public class DiseaseGene2 implements Serializable {
     private Disease disease;
     private Gene2 gene;

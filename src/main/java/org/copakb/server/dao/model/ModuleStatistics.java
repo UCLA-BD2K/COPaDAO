@@ -6,7 +6,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "Module_Statistics")
+@Table(name = "module_statistics")
 public class ModuleStatistics
 {
     private int mod_id;

@@ -8,7 +8,7 @@ import javax.persistence.*;
  * Created by Alan on 6/26/2015.
  */
 @Entity
-@Table(name = "Antibodies")
+@Table(name = "antibodies")
 public class Antibody {
     private String antibody_id;
     private String ensembl_id;

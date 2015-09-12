@@ -11,7 +11,7 @@ import java.util.Set;
  * Created by Alan on 6/26/2015.
  */
 @Entity
-@Table(name = "HPAProteins")
+@Table(name = "hpaproteins")
 public class HPAProtein extends Model {
     private String ensembl_id;
     private String proteinName;

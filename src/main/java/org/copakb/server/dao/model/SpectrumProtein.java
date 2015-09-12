@@ -1,16 +1,13 @@
 package org.copakb.server.dao.model;
 
-import org.hibernate.annotations.Type;
-import javax.persistence.*;
-
 import javax.persistence.*;
 
 /**
+ * SpectrumProtein model.
  * Created by Kevin on 5/1/2015.
  */
-
 @Entity
-@Table(name = "Spectrum_Protein")
+@Table(name = "spectrum_protein")
 public class SpectrumProtein {
     private int spec_protein_id;
     private ProteinCurrent protein;
@@ -32,15 +29,16 @@ public class SpectrumProtein {
     }
 
     public SpectrumProtein() {
-        //default
+        // default
     }
 
     @Id
-    @Column(name="spec_protein_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "spec_protein_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getSpectrumProtein_id() {
         return spec_protein_id;
     }
+
     public void setSpectrumProtein_id(int spec_protein_id) {
         this.spec_protein_id = spec_protein_id;
     }
@@ -60,6 +58,7 @@ public class SpectrumProtein {
     public Spectrum getSpectrum() {
         return spectrum;
     }
+
     public void setSpectrum(Spectrum spectrum) {
         this.spectrum = spectrum;
     }
@@ -69,6 +68,7 @@ public class SpectrumProtein {
     public LibraryModule getLibraryModule() {
         return libraryModule;
     }
+
     public void setLibraryModule(LibraryModule libraryModule) {
         this.libraryModule = libraryModule;
     }
@@ -77,6 +77,7 @@ public class SpectrumProtein {
     public char getPrevAA() {
         return prevAA;
     }
+
     public void setPrevAA(char prevAA) {
         this.prevAA = prevAA;
     }
@@ -85,6 +86,7 @@ public class SpectrumProtein {
     public char getNextAA() {
         return nextAA;
     }
+
     public void setNextAA(char nextAA) {
         this.nextAA = nextAA;
     }
@@ -93,6 +95,7 @@ public class SpectrumProtein {
     public int getLocation() {
         return location;
     }
+
     public void setLocation(int location) {
         this.location = location;
     }
@@ -102,13 +105,14 @@ public class SpectrumProtein {
     public Peptide getPeptide() {
         return peptide;
     }
-    public void setPeptide(Peptide peptide) { this.peptide = peptide; }
+
+    public void setPeptide(Peptide peptide) {
+        this.peptide = peptide;
+    }
 
     @Override
     public String toString() {
-        String result = "protein_acc: " + getProtein().getProtein_acc() + "\n" +
+        return "protein_acc: " + getProtein().getProtein_acc() + "\n" +
                 "spectrum_id " + getSpectrum().getSpectrum_id();
-
-        return result;
     }
 }

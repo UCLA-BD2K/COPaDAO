@@ -8,7 +8,7 @@ import javax.persistence.*;
  * Created by Kevin on 5/1/2015.
  */
 @Entity
-@Table(name = "GO_Terms")
+@Table(name = "go_terms")
 public class GoTerms {
     private int GO_accession;
     private String Terms;
@@ -59,7 +59,7 @@ public class GoTerms {
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "GO_Protein", joinColumns = {
+    @JoinTable(name = "go_protein", joinColumns = {
             @JoinColumn(name = "GO_accession", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "protein_acc",
                     nullable = false, updatable = false) })

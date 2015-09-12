@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "Library_Module")
+@Table(name = "library_module")
 public class LibraryModule {
 
     private int mod_id;

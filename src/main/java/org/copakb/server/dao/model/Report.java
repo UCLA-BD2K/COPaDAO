@@ -4,12 +4,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.*;
+import java.util.ArrayList;
 
 /**
+ * Report model.
  * Created by Kevin on 5/28/2015.
  */
-
 @Document
 public class Report {
     //mongodb ID
@@ -109,12 +109,10 @@ public class Report {
 
     @Override
     public String toString() {
-        String result = "id: " + id + "\n" +
-                        "mzFile: " + mzFile + "\n" +
-                        "libModule: " + libModule + "\n" +
-                        "searchFilter: " + searchFilter + "\n" +
-                        "idProteins: " + idProteins + "\n";
-
-        return result;
+        return "id: " + id + "\n" +
+                "mzFile: " + mzFile + "\n" +
+                "libModule: " + libModule + "\n" +
+                "searchFilter: " + searchFilter + "\n" +
+                "idProteins: " + idProteins + "\n";
     }
 }

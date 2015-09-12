@@ -8,7 +8,7 @@ import java.util.Set;
  * Created by Kevin on 4/30/2015.
  */
 @Entity
-@Table(name = "Gene")
+@Table(name = "gene")
 public class Gene {
     private String gene_name;
     private String ensembl_id;
@@ -58,7 +58,7 @@ public class Gene {
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Disease_Gene", joinColumns = {
+    @JoinTable(name = "disease_gene", joinColumns = {
             @JoinColumn(name = "gene_name", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "DOID",
                     nullable = false, updatable = false)})
@@ -71,7 +71,7 @@ public class Gene {
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Protein_Gene", joinColumns = {
+    @JoinTable(name = "protein_gene", joinColumns = {
             @JoinColumn(name = "gene_name", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "protein_acc",
                     nullable = false, updatable = false)})

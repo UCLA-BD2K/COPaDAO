@@ -1,17 +1,15 @@
 package org.copakb.server.dao.model;
 
-/**
- * Created by vincekyi on 4/27/15.
- */
-
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Species model.
+ * Created by vincekyi on 4/27/15.
+ */
 @Entity
-@Table(name = "Species")
+@Table(name = "species")
 public class Species {
-
     private int species_id;
     private String species_name;
     private Set<LibraryModule> modules;
@@ -30,12 +28,12 @@ public class Species {
     }
 
     public Species() {
-        //default
+        // default
     }
 
     @Id
-    @Column(name="species_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "species_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getSpecies_id() {
         return species_id;
     }
@@ -44,7 +42,7 @@ public class Species {
         this.species_id = species_id;
     }
 
-    @Column(name="species_name")
+    @Column(name = "species_name")
     public String getSpecies_name() {
         return species_name;
     }
@@ -62,7 +60,6 @@ public class Species {
         this.modules = modules;
     }
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "species")
     public Set<ProteinCurrent> getProteinCurrents() {
         return proteinCurrents;
@@ -74,10 +71,6 @@ public class Species {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Species ID: " + species_id + "\n");
-        sb.append("Species Name: " + species_name + "\n");
-
-        return sb.toString();
+        return ("Species ID: " + species_id + "\n") + "Species Name: " + species_name + "\n";
     }
 }

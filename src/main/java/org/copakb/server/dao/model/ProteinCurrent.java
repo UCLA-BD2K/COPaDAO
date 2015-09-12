@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by Kevin on 4/30/2015.
  */
 @Entity
-@Table(name = "Protein_Current")
+@Table(name = "protein_current")
 public class ProteinCurrent extends Model {
     private String protein_acc;
     private String sequence;
@@ -143,7 +143,7 @@ public class ProteinCurrent extends Model {
     }
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "Protein_Gene2", joinColumns = {
+    @JoinTable(name = "protein_gene2", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ensembl_id",
                     nullable = false, updatable = false)})
@@ -165,7 +165,7 @@ public class ProteinCurrent extends Model {
     }
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "Protein_Gene", joinColumns = {
+    @JoinTable(name = "protein_gene", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "gene_name",
                     nullable = false, updatable = false)})
@@ -187,7 +187,7 @@ public class ProteinCurrent extends Model {
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "GO_Protein", joinColumns = {
+    @JoinTable(name = "go_protein", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "GO_accession",
                     nullable = false, updatable = false)})

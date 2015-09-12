@@ -10,9 +10,8 @@ import java.util.Set;
  * Spectrum model
  * Created by vincekyi on 4/19/15.
  */
-
 @Entity
-@Table(name = "Spectrum")
+@Table(name = "spectrum")
 public class Spectrum extends Model {
     private int spectrum_id;
     private String ptm_sequence;
@@ -49,7 +48,6 @@ public class Spectrum extends Model {
     public Spectrum() {
         //empty
     }
-
 
     @Id
     @Column(name = "spectrum_id")
@@ -89,7 +87,6 @@ public class Spectrum extends Model {
     public void setModule(LibraryModule module) {
         this.module = module;
     }
-
 
     @Column(name = "xcorr")
     public double getXcorr() {
@@ -231,9 +228,10 @@ public class Spectrum extends Model {
                 this.getPeptide().getPeptide_id() == spectrum.getPeptide().getPeptide_id() &&
                 this.getPrecursor_mz() == spectrum.getPrecursor_mz() &&
                 this.getPtm().getPtm_type() == spectrum.getPtm().getPtm_type() &&
-                Objects.equals(this.getRawfile_id(), spectrum.getRawfile_id()))
+                Objects.equals(this.getRawfile_id(), spectrum.getRawfile_id())) {
             return 0;
-        else
+        } else {
             return -1;
+        }
     }
 }

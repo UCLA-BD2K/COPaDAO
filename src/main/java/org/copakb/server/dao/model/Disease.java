@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by Kevin on 4/30/2015.
  */
 @Entity
-@Table(name = "Disease")
+@Table(name = "disease")
 public class Disease extends Model {
     private int DOID;
     private String name;
@@ -69,7 +69,7 @@ public class Disease extends Model {
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Disease_Gene", joinColumns = {
+    @JoinTable(name = "disease_gene", joinColumns = {
             @JoinColumn(name = "DOID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "gene_name",
                     nullable = false, updatable = false)})
@@ -82,7 +82,7 @@ public class Disease extends Model {
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "Disease_Gene2", joinColumns = {
+    @JoinTable(name = "disease_gene2", joinColumns = {
             @JoinColumn(name = "DOID", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ensembl_id",
                     nullable = false, updatable = false)})

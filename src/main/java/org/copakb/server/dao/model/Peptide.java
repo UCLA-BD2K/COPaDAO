@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by vincekyi on 4/16/15.
  */
 @Entity
-@Table(name = "Peptide")
+@Table(name = "peptide")
 public class Peptide extends Model {
     private int peptide_id;
     private String peptide_sequence;

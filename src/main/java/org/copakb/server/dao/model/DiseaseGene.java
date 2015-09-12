@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 
 @Entity
-@Table(name = "Disease_Gene")
+@Table(name = "disease_gene")
 public class DiseaseGene implements Serializable{
     private Disease disease;
     private Gene gene;

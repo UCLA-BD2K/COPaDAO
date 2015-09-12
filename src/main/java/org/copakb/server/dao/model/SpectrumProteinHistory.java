@@ -6,10 +6,11 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
+ * SpectrumProteinHistory model.
  * Created by Ping PC1 on 7/6/2015.
  */
 @Entity
-@Table(name = "Spectrum_Protein_History")
+@Table(name = "spectrum_protein_history")
 public class SpectrumProteinHistory {
     private int spec_protein_id;
     private Version version;
@@ -38,37 +39,43 @@ public class SpectrumProteinHistory {
     }
 
     public SpectrumProteinHistory() {
-        //default
+        // default
     }
 
     @Id
-    @Column(name="spec_protein_id")
+    @Column(name = "spec_protein_id")
     public int getSpectrumProtein_id() {
         return spec_protein_id;
     }
+
     public void setSpectrumProtein_id(int spec_protein_id) {
         this.spec_protein_id = spec_protein_id;
     }
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "version", nullable = false)
     public Version getVersion() {
         return version;
     }
+
     public void setVersion(Version version) {
         this.version = version;
     }
 
-
     @Column(name = "protein_acc")
-    public String getProtein_acc() {return protein_acc;}
-    public void setProtein_acc(String protein_acc) {this.protein_acc = protein_acc;}
+    public String getProtein_acc() {
+        return protein_acc;
+    }
+
+    public void setProtein_acc(String protein_acc) {
+        this.protein_acc = protein_acc;
+    }
 
     @Column(name = "spectrum_id")
     public int getSpectrum_id() {
         return spectrum_id;
     }
+
     public void setSpectrum_id(int spectrum_id) {
         this.spectrum_id = spectrum_id;
     }
@@ -77,6 +84,7 @@ public class SpectrumProteinHistory {
     public int getLibraryModule() {
         return libraryModule;
     }
+
     public void setLibraryModule(int libraryModule) {
         this.libraryModule = libraryModule;
     }
@@ -85,6 +93,7 @@ public class SpectrumProteinHistory {
     public boolean isFeature_peptide() {
         return feature_peptide;
     }
+
     public void setFeature_peptide(boolean feature_peptide) {
         this.feature_peptide = feature_peptide;
     }
@@ -102,6 +111,7 @@ public class SpectrumProteinHistory {
     public char getPrevAA() {
         return prevAA;
     }
+
     public void setPrevAA(char prevAA) {
         this.prevAA = prevAA;
     }
@@ -110,6 +120,7 @@ public class SpectrumProteinHistory {
     public char getNextAA() {
         return nextAA;
     }
+
     public void setNextAA(char nextAA) {
         this.nextAA = nextAA;
     }
@@ -118,6 +129,7 @@ public class SpectrumProteinHistory {
     public int getLocation() {
         return location;
     }
+
     public void setLocation(int location) {
         this.location = location;
     }
@@ -126,8 +138,8 @@ public class SpectrumProteinHistory {
     public Date getDelete_date() {
         return delete_date;
     }
+
     public void setDelete_date(Date delete_date) {
         this.delete_date = delete_date;
     }
-
 }

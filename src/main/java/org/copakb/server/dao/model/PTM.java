@@ -8,7 +8,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "PTM")
+@Table(name = "ptm")
 public class PTM {
     private ProteinCurrent proteinCurrent;
     private int ptm_type;

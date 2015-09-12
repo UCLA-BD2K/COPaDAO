@@ -1,16 +1,16 @@
 package org.copakb.server.dao.model;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-
 
 /**
+ * Version model.
  * Created by Kevin on 5/1/2015.
  */
 @Entity
-@Table(name = "Version")
+@Table(name = "version")
 public class Version {
     private int version;
     private Date date;
@@ -27,7 +27,7 @@ public class Version {
     }
 
     public Version() {
-        //default
+        // default
     }
 
     @Id
@@ -35,6 +35,7 @@ public class Version {
     public int getVersion() {
         return version;
     }
+
     public void setVersion(int version) {
         this.version = version;
     }
@@ -44,6 +45,7 @@ public class Version {
     public Date getDate() {
         return date;
     }
+
     public void setDate(Date date) {
         this.date = date;
     }
@@ -52,6 +54,7 @@ public class Version {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -60,12 +63,17 @@ public class Version {
     public Set<ProteinHistory> getProteinHistories() {
         return proteinHistories;
     }
+
     public void setProteinHistories(Set<ProteinHistory> proteinHistories) {
         this.proteinHistories = proteinHistories;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "version")
-    public Set<AnalysisTask> getAnalysisTask() {return tasks;}
-    public void setAnalysisTask(Set<AnalysisTask> tasks) { this.tasks = tasks;}
+    public Set<AnalysisTask> getAnalysisTask() {
+        return tasks;
+    }
 
+    public void setAnalysisTask(Set<AnalysisTask> tasks) {
+        this.tasks = tasks;
+    }
 }
