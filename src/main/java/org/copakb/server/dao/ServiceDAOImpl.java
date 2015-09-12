@@ -106,6 +106,7 @@ public class ServiceDAOImpl extends DAOImpl implements ServiceDAO {
                     module.getMod_id() + ". " + WordUtils.capitalize(module.getLib_mod().replaceAll("_", " ")));
         }
 
+        session.close();
         return new ArrayList<>(modules.values());
     }
 }
