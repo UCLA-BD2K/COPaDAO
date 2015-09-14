@@ -127,7 +127,7 @@ public class HPAProtein extends Model {
         this.assaySummary = assaySummary;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensembl_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ensembl_id", cascade = CascadeType.ALL)
     public Set<Antibody> getAntibodies() {
         return antibodies;
     }
