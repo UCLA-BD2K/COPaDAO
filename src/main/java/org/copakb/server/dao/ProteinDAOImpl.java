@@ -97,7 +97,7 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
             proteinCurrent.setSequence(p.getSequence());
             proteinCurrent.setMolecular_weight(p.getMolecular_weight());
             proteinCurrent.setSpecies(p.getSpecies());
-            proteinCurrent.setGene(p.getGene());
+            proteinCurrent.setGenes(p.getGenes());
 
             session.merge(proteinCurrent);
             tx.commit();
@@ -428,38 +428,10 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
     }
 
     @Override
-    public String addGene(Gene gene) throws HibernateException {
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
-
-        Gene existingGene = searchGeneByName(gene.getGene_name());
-        if (existingGene != null) {
-            session.close();
-            return existingGene.getGene_name();
-        }
-
-        String result = (String) session.save(gene);
-        tx.commit();
-
-        session.close();
-        return result;
-    }
-
-    @Override
-    public Gene searchGeneByName(String name) {
+    public Gene searchGene(String ensemblID) {
         Session session = sessionFactory.openSession();
 
-        Gene gene = (Gene) session.get(Gene.class, name);
-
-        session.close();
-        return gene;
-    }
-
-    @Override
-    public Gene2 searchGene(String ensemblID) {
-        Session session = sessionFactory.openSession();
-
-        Gene2 result = (Gene2) session.get(Gene2.class, ensemblID);
+        Gene result = (Gene) session.get(Gene.class, ensemblID);
 
         session.close();
         return result;

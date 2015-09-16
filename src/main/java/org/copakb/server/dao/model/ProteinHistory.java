@@ -15,7 +15,6 @@ public class ProteinHistory {
     private Version version;
     private String sequence;
     private String protein_name;
-    private String chromosome;
     private double molecular_weight;
     private Date delete_date;
 
@@ -24,7 +23,6 @@ public class ProteinHistory {
         this.version = version;
         this.sequence = sequence;
         this.protein_name = protein_name;
-        this.chromosome = chromosome;
         this.molecular_weight = molecular_weight;
         this.delete_date = delete_date;
     }
@@ -65,14 +63,6 @@ public class ProteinHistory {
     }
     public void setProtein_name(String protein_name) {
         this.protein_name = protein_name;
-    }
-
-    @Column(name = "chromosome")
-    public String getChromosome() {
-        return chromosome;
-    }
-    public void setChromosome(String chromosome) {
-        this.chromosome = chromosome;
     }
 
     @Column(name = "molecular_weight")

@@ -133,28 +133,12 @@ public interface ProteinDAO {
     ProteinCurrent searchByPDB(String pdbID);
 
     /**
-     * Add gene information to all relevant protein objects.
-     *
-     * @param gene defined Gene to be added.
-     * @return gene name if successful, empty string otherwise.
-     */
-    String addGene(Gene gene);
-
-    /**
-     * Searches for a gene with the given name.
-     *
-     * @param name Gene name of the protein.
-     * @return Gene object that contains the gene information, disease relevance, and relevant proteins.
-     */
-    Gene searchGeneByName(String name);
-
-    /**
      * Searches for a gene with the given Ensembl ID.
      *
      * @param ensemblID Ensembl ID to search.
      * @return Gene object; null if not found.
      */
-    Gene2 searchGene(String ensemblID);
+    Gene searchGene(String ensemblID);
 
     /**
      * Searches for a protein with a gene with the given ensembl ID.

@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
+ * DiseaseGene model.
  * Created by Kevin on 4/30/2015.
  */
-
 @Entity
 @Table(name = "disease_gene")
-public class DiseaseGene implements Serializable{
+public class DiseaseGene implements Serializable {
     private Disease disease;
     private Gene gene;
     private String perturbation;
@@ -17,33 +17,23 @@ public class DiseaseGene implements Serializable{
     private String pubmed_title;
     private String pubmed_author;
 
-    public DiseaseGene(Disease disease, Gene gene, String perturbation, String pubmed_id, String pubmed_title, String pubmed_author) {
-        this.disease = disease;
-        this.gene = gene;
-        this.perturbation = perturbation;
-        this.pubmed_id = pubmed_id;
-        this.pubmed_title = pubmed_title;
-        this.pubmed_author = pubmed_author;
-    }
-
-    public DiseaseGene() {
-    }
-
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DOID", nullable = false)
     public Disease getDisease() {
         return disease;
     }
+
     public void setDisease(Disease disease) {
         this.disease = disease;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "gene_name")
+    @JoinColumn(name = "ensembl_id")
     public Gene getGene() {
         return gene;
     }
+
     public void setGene(Gene gene) {
         this.gene = gene;
     }
@@ -52,6 +42,7 @@ public class DiseaseGene implements Serializable{
     public String getPerturbation() {
         return perturbation;
     }
+
     public void setPerturbation(String perturbation) {
         this.perturbation = perturbation;
     }
@@ -60,6 +51,7 @@ public class DiseaseGene implements Serializable{
     public String getPubmed_id() {
         return pubmed_id;
     }
+
     public void setPubmed_id(String pubmed_id) {
         this.pubmed_id = pubmed_id;
     }
@@ -68,6 +60,7 @@ public class DiseaseGene implements Serializable{
     public String getPubmed_title() {
         return pubmed_title;
     }
+
     public void setPubmed_title(String pubmed_title) {
         this.pubmed_title = pubmed_title;
     }
@@ -76,6 +69,7 @@ public class DiseaseGene implements Serializable{
     public String getPubmed_author() {
         return pubmed_author;
     }
+
     public void setPubmed_author(String pubmed_author) {
         this.pubmed_author = pubmed_author;
     }

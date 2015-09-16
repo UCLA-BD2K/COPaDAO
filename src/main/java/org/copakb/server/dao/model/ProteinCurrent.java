@@ -24,8 +24,6 @@ public class ProteinCurrent extends Model {
     private String keywords;
     private String feature_table;
     private Species species;
-    private Set<Gene2> gene;
-    private String chromosome;
     private Set<Gene> genes;
     private Set<GoTerms> goTerms;
     private Set<PTM> PTMs;
@@ -143,38 +141,16 @@ public class ProteinCurrent extends Model {
     }
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "protein_gene2", joinColumns = {
-            @JoinColumn(name = "protein_acc", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "ensembl_id",
-                    nullable = false, updatable = false)})
-    public Set<Gene2> getGene() {
-        return gene;
-    }
-
-    public void setGene(Set<Gene2> gene) {
-        this.gene = gene;
-    }
-
-    @Column(name = "chromosome")
-    public String getChromosome() {
-        return chromosome;
-    }
-
-    public void setChromosome(String chromosome) {
-        this.chromosome = chromosome;
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "protein_gene", joinColumns = {
             @JoinColumn(name = "protein_acc", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "gene_name",
+            inverseJoinColumns = {@JoinColumn(name = "ensembl_id",
                     nullable = false, updatable = false)})
     public Set<Gene> getGenes() {
         return genes;
     }
 
-    public void setGenes(Set<Gene> genes) {
-        this.genes = genes;
+    public void setGenes(Set<Gene> gene) {
+        this.genes = gene;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "proteinCurrent")
@@ -251,7 +227,6 @@ public class ProteinCurrent extends Model {
                 ", noncytoplasmatic_domain='" + noncytoplasmatic_domain + '\'' +
                 ", keywords='" + keywords + '\'' +
                 ", feature_table='" + feature_table + '\'' +
-                ", chromosome='" + chromosome + '\'' +
                 ", protein_name='" + protein_name + '\'' +
                 '}';
     }
