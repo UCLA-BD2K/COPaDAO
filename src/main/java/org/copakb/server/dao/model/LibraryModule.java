@@ -1,18 +1,16 @@
 package org.copakb.server.dao.model;
 
-/**
- * Created by vincekyi on 4/27/15.
- */
-
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * LibraryModule model.
+ * Created by vincekyi on 4/27/15.
+ */
 @Entity
 @Table(name = "library_module")
 public class LibraryModule {
-
     private int mod_id;
     private String lib_mod;
     private String instrument;
@@ -21,7 +19,6 @@ public class LibraryModule {
     private String enzyme_specificity;
     private Set<Spectrum> spectra;
     private Species species;
-    private Set<AnalysisTask> tasks;
 
     public LibraryModule(String lib_mod, String instrument, String organelle, Date upload_date, String enzyme_specificity, Species species) {
         this.lib_mod = lib_mod;
@@ -32,13 +29,13 @@ public class LibraryModule {
         this.species = species;
     }
 
-    public LibraryModule(){
+    public LibraryModule() {
 
     }
 
     @Id
-    @Column(name="mod_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "mod_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getMod_id() {
         return mod_id;
     }
@@ -101,10 +98,6 @@ public class LibraryModule {
     public void setSpectra(Set<Spectrum> spectra) {
         this.spectra = spectra;
     }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mod")
-    public Set<AnalysisTask> getAnalysisTask() {return tasks;}
-    public void setAnalysisTask(Set<AnalysisTask> tasks) { this.tasks = tasks;}
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "species_id", nullable = false)
