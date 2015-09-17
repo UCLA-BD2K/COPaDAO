@@ -105,12 +105,4 @@
         <property name="sessionFactory" ref="hibernateSessionFactory"/>
         <constructor-arg name="mongoOps" ref="spectraTemplate"/>
     </bean>
-
-    <bean id="reportsTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg name="mongoDbFactory" ref="reportsDbFactory"/>
-    </bean>
-
-    <bean id="reportsDAO" class="org.copakb.server.dao.ReportDAOImpl">
-        <constructor-arg name="mongoOps" ref="reportsTemplate"/>
-    </bean>
 </beans>
