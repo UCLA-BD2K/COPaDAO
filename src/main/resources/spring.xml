@@ -40,7 +40,6 @@
                 <value>org.copakb.server.dao.model.SpectrumProteinHistory</value>
                 <value>org.copakb.server.dao.model.DBRef</value>
                 <value>org.copakb.server.dao.model.ModuleStatistics</value>
-                <value>org.copakb.server.dao.model.WebStatistics</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -64,10 +63,6 @@
     </bean>
 
     <bean id="diseaseDAO" class="org.copakb.server.dao.DiseaseDAOImpl">
-        <property name="sessionFactory" ref="hibernateSessionFactory"/>
-    </bean>
-
-    <bean id="statisticsDAO" class="org.copakb.server.dao.StatisticsDAOImpl">
         <property name="sessionFactory" ref="hibernateSessionFactory"/>
     </bean>
 

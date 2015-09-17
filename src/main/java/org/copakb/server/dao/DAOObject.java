@@ -16,7 +16,6 @@ public class DAOObject {
     private static ProteinDAO proteinDAO;
     private static DiseaseDAO diseaseDAO;
     private static ReportDAO reportDAO;
-    private static StatisticsDAO statisticsDAO;
     private static ServiceDAO serviceDAO;
     private static SpectrumDAO spectrumDAO;
 
@@ -37,7 +36,6 @@ public class DAOObject {
                     proteinDAO = context.getBean(ProteinDAO.class);
                     diseaseDAO = context.getBean(DiseaseDAO.class);
                     reportDAO = context.getBean(ReportDAO.class);
-                    statisticsDAO = context.getBean(StatisticsDAO.class);
                     serviceDAO = context.getBean(ServiceDAO.class);
                     spectrumDAO = context.getBean(SpectrumDAO.class);
                 }
@@ -60,10 +58,6 @@ public class DAOObject {
 
     public ReportDAO getReportDAO() {
         return reportDAO;
-    }
-
-    public StatisticsDAO getStatisticsDAO() {
-        return statisticsDAO;
     }
 
     public ServiceDAO getServiceDAO() {
