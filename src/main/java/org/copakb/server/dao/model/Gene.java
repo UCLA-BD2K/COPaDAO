@@ -57,7 +57,7 @@ public class Gene {
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "protein_gene2", joinColumns = {
+    @JoinTable(name = "protein_gene", joinColumns = {
             @JoinColumn(name = "ensembl_id", nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "protein_acc",
                     nullable = false, updatable = false)})
@@ -70,7 +70,7 @@ public class Gene {
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "disease_gene2", joinColumns = {
+    @JoinTable(name = "disease_gene", joinColumns = {
             @JoinColumn(name = "gene_symbol", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "DOID",
                     nullable = false, updatable = false)})
