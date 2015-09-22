@@ -11,10 +11,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.DistinctRootEntityResultTransformer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * ServiceDAO implementation.
@@ -77,7 +74,7 @@ public class ServiceDAOImpl extends DAOImpl implements ServiceDAO {
 
         ReferencePeptideBundle result = new ReferencePeptideBundle();
         result.setPeptideID(peptide.getPeptide_id());
-        result.setSpectrumProteins(session.createCriteria(SpectrumProtein.class)
+        List<SpectrumProtein> spectrumProteins = session.createCriteria(SpectrumProtein.class)
                 .add(Restrictions.eq("peptide.peptide_id", peptide.getPeptide_id()))
                 .createAlias("protein", "p")
                 .setProjection(Projections.distinct(Projections.projectionList()
@@ -85,10 +82,20 @@ public class ServiceDAOImpl extends DAOImpl implements ServiceDAO {
                         .add(Projections.property("p.protein_acc"), "protein.protein_acc")
                         .add(Projections.property("p.protein_name"), "protein.protein_name")
                         .add(Projections.property("p.species"), "protein.species")
-                        .add(Projections.property("p.chromosome"), "protein.chromosome")
                         .add(Projections.property("spectrum"), "spectrum")))
                 .setResultTransformer(new AliasToBeanNestedResultTransformer(SpectrumProtein.class))
-                .list());
+                .list();
+
+        // Get genes for proteins
+        for (SpectrumProtein sp : spectrumProteins) {
+            ProteinCurrent p = sp.getProtein();
+            p.setGenes(new HashSet<>(session.createCriteria(Gene.class, "gene")
+                    .createAlias("gene.proteins", "proteins")
+                    .add(Restrictions.eq("proteins.protein_acc", p.getProtein_acc()))
+                    .list()));
+            sp.setProtein(p);
+        }
+        result.setSpectrumProteins(spectrumProteins);
 
         session.close();
         return result;
