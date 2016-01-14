@@ -339,6 +339,20 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
     }
 
     @Override
+    public List<ProteinCurrent> searchByLikeName(String namePrefix) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class)
+                .add(Restrictions.like("protein_name", namePrefix + "%"))
+                .list();
+        session.close();
+
+        return proteins;
+    }
+
+    @Override
     public List<ProteinCurrent> searchBySpecies(int species_id) {
         Session session = sessionFactory.openSession();
 

@@ -85,6 +85,13 @@ public interface ProteinDAO {
     ProteinCurrent searchByName(String proteinName);
 
     /**
+     * Searches all proteins that start with the given name prefix.
+     * @param namePrefix Name prefix.
+     * @return List of all proteins starting with the given name prefix.
+     */
+    List<ProteinCurrent> searchByLikeName(String namePrefix);
+
+    /**
      * Search by species.
      *
      * @param species_id species id that is given by database
