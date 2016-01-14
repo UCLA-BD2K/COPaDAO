@@ -148,11 +148,28 @@ public interface ProteinDAO {
     Gene searchGene(String ensemblID);
 
     /**
+     * Searches for proteins with genes having the given gene symbol.
+     *
+     * @param geneSymbol Gene symbol to search.
+     * @return List of proteins with the given gene.
+     */
+    List<ProteinCurrent> searchByGeneSymbol(String geneSymbol);
+
+    /**
+     * Searches for proteins with genes having the given gene ID.
+     *
+     * @param ensemblID Gene ID to search.
+     * @return List of proteins with the given gene.
+     */
+    List<ProteinCurrent> searchByGeneID(String ensemblID);
+
+    /**
      * Searches for a protein with a gene with the given ensembl ID.
      *
      * @param ensemblID Ensembl id of the protein as given by the www.ensembl.org
      * @return ProteinCurrent object that contains the given Ensembl ID
      */
+    @Deprecated
     ProteinCurrent searchByEnsg(String ensemblID);
 
     /**

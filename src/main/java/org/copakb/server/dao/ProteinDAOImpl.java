@@ -452,6 +452,34 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
     }
 
     @Override
+    public List<ProteinCurrent> searchByGeneSymbol(String geneSymbol) {
+        Session session = sessionFactory.openSession();
+
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class, "protein")
+                .createAlias("protein.genes", "genes")
+                .add(Restrictions.eq("genes.gene_symbol", geneSymbol))
+                .list();
+
+        session.close();
+        return proteins;
+    }
+
+    @Override
+    public List<ProteinCurrent> searchByGeneID(String ensemblID) {
+        Session session = sessionFactory.openSession();
+
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class, "protein")
+                .createAlias("protein.genes", "genes")
+                .add(Restrictions.eq("genes.ensembl_id", ensemblID))
+                .list();
+
+        session.close();
+        return proteins;
+    }
+
+    @Override
     public ProteinCurrent searchByEnsg(String ensemblID) {
         Session session = sessionFactory.openSession();
 
