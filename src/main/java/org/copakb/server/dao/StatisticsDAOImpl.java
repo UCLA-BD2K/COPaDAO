@@ -2,14 +2,16 @@ package org.copakb.server.dao;
 
 import org.copakb.server.dao.model.LibraryModule;
 import org.copakb.server.dao.model.ModuleStatistics;
+import org.copakb.server.dao.model.Spectrum;
+import org.copakb.server.dao.model.SpectrumProtein;
 import org.hibernate.HibernateException;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
-import java.math.BigInteger;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,32 +48,25 @@ public class StatisticsDAOImpl extends DAOImpl implements StatisticsDAO {
         last.setTime(moduleStatistics.getLast_modified());
 
         Calendar current = Calendar.getInstance();
+        // Check if update is necessary
         if (current.get(current.DAY_OF_WEEK) == 1 && current.get(current.DAY_OF_MONTH) != last.get(last.DAY_OF_MONTH)) {
             // Iterate through library modules
             for (LibraryModule module : DAOObject.getInstance().getPeptideDAO().getLibraryModules()) {
-                // Count number of proteins in each module
-                Transaction tx1 = session.beginTransaction();
-                String s = "SELECT COUNT(DISTINCT (protein_acc)) FROM COPADB.spectrum_protein WHERE mod_id = " + module.getMod_id() + ";";
-                SQLQuery query = session.createSQLQuery(s);
-                BigInteger big = (BigInteger) query.list().get(0);
-                int nProteins = big.intValue();
-                tx1.commit();
-
-                // Count number of peptides in each module
-                Transaction tx2 = session.beginTransaction();
-                s = "SELECT COUNT(DISTINCT (peptide_id)) FROM COPADB.spectrum WHERE mod_id = " + module.getMod_id() + ";";
-                query = session.createSQLQuery(s);
-                big = (BigInteger) query.list().get(0);
-                int nPeptides = big.intValue();
-                tx2.commit();
-
-                // Count number of spectra in each module
-                Transaction tx3 = session.beginTransaction();
-                s = "SELECT COUNT(DISTINCT (spectrum_id)) FROM COPADB.spectrum WHERE mod_id = " + module.getMod_id() + ";";
-                query = session.createSQLQuery(s);
-                big = (BigInteger) query.list().get(0);
-                int nSpectrum = big.intValue();
-                tx3.commit();
+                int numProteins = ((Number) session
+                        .createCriteria(SpectrumProtein.class)
+                        .add(Restrictions.eq("mod_id", module.getMod_id()))
+                        .setProjection(Projections.countDistinct("protein_acc")))
+                        .intValue();
+                int numPeptides = ((Number) session
+                        .createCriteria(Spectrum.class)
+                        .add(Restrictions.eq("mod_id", module.getMod_id()))
+                        .setProjection(Projections.countDistinct("peptide_id")))
+                        .intValue();
+                int numSpectra = ((Number) session
+                        .createCriteria(Spectrum.class)
+                        .add(Restrictions.eq("mod_id", module.getMod_id()))
+                        .setProjection(Projections.countDistinct("spectrum_id")))
+                        .intValue();
 
                 Transaction tx = session.beginTransaction();
                 ModuleStatistics ms = (ModuleStatistics) session.get(ModuleStatistics.class, module.getMod_id());
