@@ -359,6 +359,19 @@ public class PeptideDAOImpl extends DAOImpl implements PeptideDAO {
     }
 
     @Override
+    public List<LibraryModule> getLibraryModules() {
+        Session session = sessionFactory.openSession();
+
+        List<LibraryModule> modules = session
+                .createCriteria(LibraryModule.class)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY)
+                .list();
+        session.close();
+
+        return modules;
+    }
+
+    @Override
     public int addPtmType(PTM_type type) {
         PTM_type existingPtm_type = searchPtmType(type.getPtm_type());
         if (existingPtm_type != null) {

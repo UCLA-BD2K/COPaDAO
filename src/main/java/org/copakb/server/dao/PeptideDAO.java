@@ -192,6 +192,12 @@ public interface PeptideDAO {
     LibraryModule searchLibraryModuleWithModule(String lib_mod);
 
     /**
+     * Retrieves all library modules
+     * @return A list of all library modules
+     */
+    List<LibraryModule> getLibraryModules();
+
+    /**
      * Add PTM information to all relevant protein objects
      *
      * @param type defined PTM object to be added
