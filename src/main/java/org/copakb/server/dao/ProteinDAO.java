@@ -92,12 +92,20 @@ public interface ProteinDAO {
     List<ProteinCurrent> searchByLikeName(String namePrefix);
 
     /**
-     * Search by species.
+     * Search for proteins from a given species.
      *
-     * @param species_id species id that is given by database
-     * @return
+     * @param species_id Database species ID to search.
+     * @return A list of proteins from the given species.
      */
     List<ProteinCurrent> searchBySpecies(int species_id);
+
+    /**
+     * Search for proteins from a given species.
+     *
+     * @param speciesName Species name to search.
+     * @return A list of proteins from the given species.
+     */
+    List<ProteinCurrent> searchBySpeciesName(String speciesName);
 
     /**
      * Searches for proteins containing the partial sequence.
