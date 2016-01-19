@@ -86,6 +86,7 @@ public interface ProteinDAO {
 
     /**
      * Searches all proteins that start with the given name prefix.
+     *
      * @param namePrefix Name prefix.
      * @return List of all proteins starting with the given name prefix.
      */
@@ -250,7 +251,7 @@ public interface ProteinDAO {
      * Searches for SpectrumProtein object from the database
      *
      * @param spectrum spectrum
-     * @param protein protein
+     * @param protein  protein
      * @return defined SpectrumProtein object
      */
     SpectrumProtein searchSpectrumProtein(Spectrum spectrum, ProteinCurrent protein);
@@ -285,5 +286,13 @@ public interface ProteinDAO {
      */
     ProteinCurrent getProteinWithPTMs(String uniprotID);
 
-
+    /**
+     * Returns a list of proteins satisfying the search term.
+     * Searches first for partial protein IDs, then species, then partial protein names, then partial gene symbols,
+     * and finally partial gene names.
+     *
+     * @param searchTerm String to search.
+     * @return List of proteins satisfying the search term.
+     */
+    List<ProteinCurrent> smartSearch(String searchTerm);
 }
