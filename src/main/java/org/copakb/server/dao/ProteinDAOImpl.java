@@ -15,7 +15,7 @@ import java.util.List;
  * Created by vincekyi on 5/2/15.
  */
 @SuppressWarnings("unchecked")
-public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
+public class ProteinDAOImpl extends DAOImpl implements ProteinDAO {
     @Override
     public String addProteinCurrent(ProteinCurrent protein) throws HibernateException {
         ProteinCurrent existingProtein = searchByID(protein.getProtein_acc());
@@ -339,12 +339,40 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
     }
 
     @Override
+    public List<ProteinCurrent> searchByLikeName(String namePrefix) {
+        Session session = sessionFactory.openSession();
+
+        // Create query
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class)
+                .add(Restrictions.like("protein_name", namePrefix + "%"))
+                .list();
+        session.close();
+
+        return proteins;
+    }
+
+    @Override
     public List<ProteinCurrent> searchBySpecies(int species_id) {
         Session session = sessionFactory.openSession();
 
         List<ProteinCurrent> proteins = session
                 .createCriteria(ProteinCurrent.class)
                 .add(Restrictions.eq("species_id", species_id))
+                .list();
+        session.close();
+
+        return proteins;
+    }
+
+    @Override
+    public List<ProteinCurrent> searchBySpeciesName(String speciesName) {
+        Session session = sessionFactory.openSession();
+
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class, "protein")
+                .createAlias("protein.species", "species")
+                .add(Restrictions.eq("species.species_name", speciesName))
                 .list();
         session.close();
 
@@ -435,6 +463,34 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
 
         session.close();
         return result;
+    }
+
+    @Override
+    public List<ProteinCurrent> searchByGeneSymbol(String geneSymbol) {
+        Session session = sessionFactory.openSession();
+
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class, "protein")
+                .createAlias("protein.genes", "genes")
+                .add(Restrictions.eq("genes.gene_symbol", geneSymbol))
+                .list();
+
+        session.close();
+        return proteins;
+    }
+
+    @Override
+    public List<ProteinCurrent> searchByGeneID(String ensemblID) {
+        Session session = sessionFactory.openSession();
+
+        List<ProteinCurrent> proteins = session
+                .createCriteria(ProteinCurrent.class, "protein")
+                .createAlias("protein.genes", "genes")
+                .add(Restrictions.eq("genes.ensembl_id", ensemblID))
+                .list();
+
+        session.close();
+        return proteins;
     }
 
     @Override
@@ -711,12 +767,64 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO  {
     public ProteinCurrent getProteinWithPTMs(String uniprotID) {
         Session session = sessionFactory.openSession();
 
-        ProteinCurrent protein =  (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
+        ProteinCurrent protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
         if (protein != null) {
             Hibernate.initialize(protein.getPTMs());
         }
         session.close();
 
         return protein;
+    }
+
+    @Override
+    public List<ProteinCurrent> smartSearch(String searchTerm) {
+        Session session = sessionFactory.openSession();
+
+        List<ProteinCurrent> proteins;
+
+        // Search by partial ID first
+        proteins = session
+                .createCriteria(ProteinCurrent.class)
+                .add(Restrictions.like("protein_acc", "%" + searchTerm + "%"))
+                .list();
+
+        // Search by species name
+        if (proteins == null || proteins.isEmpty()) {
+            proteins = session
+                    .createCriteria(ProteinCurrent.class, "protein")
+                    .createAlias("protein.species", "species")
+                    .add(Restrictions.eq("species.species_name", searchTerm))
+                    .list();
+        }
+
+        // Search by partial protein name
+        if (proteins == null || proteins.isEmpty()) {
+            proteins = session
+                    .createCriteria(ProteinCurrent.class)
+                    .add(Restrictions.like("protein_name", "%" + searchTerm + "%"))
+                    .list();
+        }
+
+        // Search by partial gene symbol
+        if (proteins == null || proteins.isEmpty()) {
+            proteins = session
+                    .createCriteria(ProteinCurrent.class, "protein")
+                    .createAlias("protein.genes", "genes")
+                    .add(Restrictions.like("genes.gene_symbol", "%" + searchTerm + "%"))
+                    .list();
+        }
+
+        // Search by partial gene ID
+        if (proteins == null || proteins.isEmpty()) {
+            proteins = session
+                    .createCriteria(ProteinCurrent.class, "protein")
+                    .createAlias("protein.genes", "genes")
+                    .add(Restrictions.like("genes.ensembl_id", "%" + searchTerm + "%"))
+                    .list();
+        }
+
+        session.close();
+
+        return proteins;
     }
 }

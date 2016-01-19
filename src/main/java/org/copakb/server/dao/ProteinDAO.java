@@ -85,12 +85,28 @@ public interface ProteinDAO {
     ProteinCurrent searchByName(String proteinName);
 
     /**
-     * Search by species.
+     * Searches all proteins that start with the given name prefix.
      *
-     * @param species_id species id that is given by database
-     * @return
+     * @param namePrefix Name prefix.
+     * @return List of all proteins starting with the given name prefix.
+     */
+    List<ProteinCurrent> searchByLikeName(String namePrefix);
+
+    /**
+     * Search for proteins from a given species.
+     *
+     * @param species_id Database species ID to search.
+     * @return A list of proteins from the given species.
      */
     List<ProteinCurrent> searchBySpecies(int species_id);
+
+    /**
+     * Search for proteins from a given species.
+     *
+     * @param speciesName Species name to search.
+     * @return A list of proteins from the given species.
+     */
+    List<ProteinCurrent> searchBySpeciesName(String speciesName);
 
     /**
      * Searches for proteins containing the partial sequence.
@@ -141,11 +157,28 @@ public interface ProteinDAO {
     Gene searchGene(String ensemblID);
 
     /**
+     * Searches for proteins with genes having the given gene symbol.
+     *
+     * @param geneSymbol Gene symbol to search.
+     * @return List of proteins with the given gene.
+     */
+    List<ProteinCurrent> searchByGeneSymbol(String geneSymbol);
+
+    /**
+     * Searches for proteins with genes having the given gene ID.
+     *
+     * @param ensemblID Gene ID to search.
+     * @return List of proteins with the given gene.
+     */
+    List<ProteinCurrent> searchByGeneID(String ensemblID);
+
+    /**
      * Searches for a protein with a gene with the given ensembl ID.
      *
      * @param ensemblID Ensembl id of the protein as given by the www.ensembl.org
      * @return ProteinCurrent object that contains the given Ensembl ID
      */
+    @Deprecated
     ProteinCurrent searchByEnsg(String ensemblID);
 
     /**
@@ -218,7 +251,7 @@ public interface ProteinDAO {
      * Searches for SpectrumProtein object from the database
      *
      * @param spectrum spectrum
-     * @param protein protein
+     * @param protein  protein
      * @return defined SpectrumProtein object
      */
     SpectrumProtein searchSpectrumProtein(Spectrum spectrum, ProteinCurrent protein);
@@ -253,5 +286,13 @@ public interface ProteinDAO {
      */
     ProteinCurrent getProteinWithPTMs(String uniprotID);
 
-
+    /**
+     * Returns a list of proteins satisfying the search term.
+     * Searches first for partial protein IDs, then species, then partial protein names, then partial gene symbols,
+     * and finally partial gene names.
+     *
+     * @param searchTerm String to search.
+     * @return List of proteins satisfying the search term.
+     */
+    List<ProteinCurrent> smartSearch(String searchTerm);
 }
