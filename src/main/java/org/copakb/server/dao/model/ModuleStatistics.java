@@ -21,7 +21,6 @@ public class ModuleStatistics {
 
     @Id
     @Column(name = "mod_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getMod_id() {
         return mod_id;
     }
