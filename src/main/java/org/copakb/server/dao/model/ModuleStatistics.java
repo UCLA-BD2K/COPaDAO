@@ -3,58 +3,30 @@ package org.copakb.server.dao.model;
 import javax.persistence.*;
 import java.util.Date;
 
-
 /**
+ * ModuleStatistics model.
  * Created by Sneha on 7/2/2015.
  */
-
 @Entity
 @Table(name = "module_statistics")
 public class ModuleStatistics {
     private int mod_id;
-    private String species;
-    private String organelle;
     private int num_of_proteins;
     private int num_of_peptides;
     private int num_of_spectra;
     private Date last_modified;
-
-    public ModuleStatistics(int mod_id, String species, String organelle) {
-        this.mod_id = mod_id;
-        this.species = species;
-        this.organelle = organelle;
-    }
 
     public ModuleStatistics() {
     }
 
     @Id
     @Column(name = "mod_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getMod_id() {
         return mod_id;
     }
 
     public void setMod_id(int mod_id) {
         this.mod_id = mod_id;
-    }
-
-    @Column(name = "species")
-    public String getSpecies() {
-        return species;
-    }
-
-    public void setSpecies(String species) {
-        this.species = species;
-    }
-
-    @Column(name = "organelle")
-    public String getOrganelle() {
-        return organelle;
-    }
-
-    public void setOrganelle(String organelle) {
-        this.organelle = organelle;
     }
 
     @Column(name = "num_of_proteins")
@@ -93,5 +65,4 @@ public class ModuleStatistics {
     public void setLast_modified(Date last_modified) {
         this.last_modified = last_modified;
     }
-
 }
