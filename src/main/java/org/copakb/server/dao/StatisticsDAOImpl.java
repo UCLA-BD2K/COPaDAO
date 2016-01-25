@@ -1,5 +1,6 @@
 package org.copakb.server.dao;
 
+import org.copakb.server.dao.model.LibraryModule;
 import org.copakb.server.dao.model.ModuleStatistics;
 import org.copakb.server.dao.model.Spectrum;
 import org.copakb.server.dao.model.SpectrumProtein;
@@ -9,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -44,15 +46,25 @@ public class StatisticsDAOImpl extends DAOImpl implements StatisticsDAO {
 
     @Override
     public List<ModuleStatistics> list() {
-        Session session = sessionFactory.openSession();
-        List<ModuleStatistics> list = session.createCriteria(ModuleStatistics.class).list();
+        // Iterate through library modules
+        List<ModuleStatistics> moduleStatistics = new ArrayList<>();
+        for (LibraryModule module : DAOObject.getInstance().getPeptideDAO().getLibraryModules()) {
+            moduleStatistics.add(getModuleStatistics(module.getMod_id()));
+        }
 
-        session.close();
-        return list;
+        return moduleStatistics;
     }
 
+    /**
+     * Updates a specific module's statistics.
+     *
+     * @param mod_id ID of module to update.
+     * @return Updated module statistics.
+     */
     private ModuleStatistics update(int mod_id) {
         Session session = sessionFactory.openSession();
+
+        // Gather data
         int numProteins = ((Number) session
                 .createCriteria(SpectrumProtein.class, "spectrum")
                 .add(Restrictions.eq("libraryModule.mod_id", mod_id))
@@ -72,19 +84,19 @@ public class StatisticsDAOImpl extends DAOImpl implements StatisticsDAO {
                 .uniqueResult())
                 .intValue();
 
+        // Create module statistics
+        ModuleStatistics moduleStatistics = new ModuleStatistics();
+        moduleStatistics.setMod_id(mod_id);
+        moduleStatistics.setNum_of_proteins(numProteins);
+        moduleStatistics.setNum_of_peptides(numPeptides);
+        moduleStatistics.setNum_of_spectra(numSpectra);
+        moduleStatistics.setLast_modified(new Date());
+
         Transaction tx = session.beginTransaction();
-        ModuleStatistics statistics = (ModuleStatistics) session.get(ModuleStatistics.class, mod_id);
-        if (statistics == null) {
-            statistics = new ModuleStatistics();
-        }
-        statistics.setNum_of_proteins(numProteins);
-        statistics.setNum_of_peptides(numPeptides);
-        statistics.setNum_of_spectra(numSpectra);
-        statistics.setLast_modified(new Date());
-        session.saveOrUpdate(statistics);
+        session.saveOrUpdate(moduleStatistics);
         tx.commit();
 
         session.close();
-        return statistics;
+        return moduleStatistics;
     }
 }
