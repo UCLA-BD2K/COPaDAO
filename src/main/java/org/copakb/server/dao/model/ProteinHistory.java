@@ -40,7 +40,7 @@ public class ProteinHistory {
         this.protein_acc = protein_acc;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "version", nullable = false)
     public Version getVersion() {
         return version;
