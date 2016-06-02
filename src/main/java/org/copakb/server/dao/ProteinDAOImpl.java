@@ -8,6 +8,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -273,17 +274,29 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO {
     public ProteinCurrent searchByID(String uniprotID) {
         Session session = sessionFactory.openSession();
 
-        ProteinCurrent protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
+        ProteinCurrent protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID.toUpperCase());
         session.close();
 
         return protein;
     }
 
     @Override
+    public List<ProteinCurrent> searchByIDs(List<String> uniprotIDs) {
+        Session session = sessionFactory.openSession();
+
+        ArrayList<ProteinCurrent> proteins = new ArrayList<>();
+                for(String uniprotID : uniprotIDs) {
+                    proteins.add((ProteinCurrent) session.get(ProteinCurrent.class, uniprotID));
+                }
+        session.close();
+        return proteins;
+    }
+
+    @Override
     public ProteinCurrent getInitializedProtein(String uniprotID) {
         Session session = sessionFactory.openSession();
 
-        ProteinCurrent protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID);
+        ProteinCurrent protein = (ProteinCurrent) session.get(ProteinCurrent.class, uniprotID.toUpperCase());
         if (protein != null) {
             Hibernate.initialize(protein.getDbRef());
             Hibernate.initialize(protein.getSpecies());

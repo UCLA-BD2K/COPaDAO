@@ -53,6 +53,14 @@ public interface ProteinDAO {
     ProteinCurrent searchByID(String uniprotID);
 
     /**
+     * Searches for all proteins within the given list of Uniprot IDs.
+     *
+     * @param uniprotIDs A list of Uniprot IDs to be searched
+     * @return A list of ProteinCurrent objects that are found with the given Uniprot IDs, empty list if none found.
+     */
+    List<ProteinCurrent> searchByIDs(List<String> uniprotIDs);
+
+    /**
      * Searches for a protein with the given UniProt ID and returns it fully initialized.
      *
      * @param uniprotID UniProt ID of the protein.
