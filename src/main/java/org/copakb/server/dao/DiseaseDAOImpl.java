@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class DiseaseDAOImpl extends DAOImpl implements DiseaseDAO {
     @Override
-    public int addDisease(Disease d) {
+    public String addDisease(Disease d) {
         Disease disease = searchDisease(d.getDOID());
         if (disease != null) {
             return disease.getDOID();
@@ -25,19 +25,19 @@ public class DiseaseDAOImpl extends DAOImpl implements DiseaseDAO {
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
         try {
-            int result = (int) session.save(d);
+            String result = (String) session.save(d);
             tx.commit();
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
+            return "-1";
         } finally {
             session.close();
         }
     }
 
     @Override
-    public Disease searchDisease(int doid) {
+    public Disease searchDisease(String doid) {
         Session session = sessionFactory.openSession();
 
         Disease disease = (Disease) session.get(Disease.class, doid);
@@ -47,7 +47,7 @@ public class DiseaseDAOImpl extends DAOImpl implements DiseaseDAO {
     }
 
     @Override
-    public Disease getInitializedDisease(int doid) {
+    public Disease getInitializedDisease(String doid) {
         Session session = sessionFactory.openSession();
 
         Disease disease = (Disease) session.get(Disease.class, doid);
@@ -60,7 +60,7 @@ public class DiseaseDAOImpl extends DAOImpl implements DiseaseDAO {
     }
 
     @Override
-    public int addDiseaseGene(DiseaseGene d) {
+    public String addDiseaseGene(DiseaseGene d) {
         DiseaseGene diseaseGene = searchDiseaseGene(d.getDisease(), d.getGene());
         if (diseaseGene != null) {
             return diseaseGene.getDisease().getDOID();
@@ -69,12 +69,12 @@ public class DiseaseDAOImpl extends DAOImpl implements DiseaseDAO {
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
         try {
-            session.save(d);
+            String result = (String) session.save(d);
             tx.commit();
-            return 0;
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
+            return "-1";
         } finally {
             session.close();
         }
@@ -91,10 +91,34 @@ public class DiseaseDAOImpl extends DAOImpl implements DiseaseDAO {
                         Restrictions.eq("gene", gene)))
                 .setMaxResults(1)
                 .uniqueResult();
+
         session.close();
 
         return diseaseGene;
     }
+
+    @Override
+    public DiseaseGene getInitializedDiseaseGene(Disease d, Gene g) {
+        Session session = sessionFactory.openSession();
+
+        DiseaseGene dg = (DiseaseGene) session
+                .createCriteria(DiseaseGene.class)
+                .add(Restrictions.and(
+                        Restrictions.eq("disease", d),
+                        Restrictions.eq("gene", g)
+                ))
+                .setMaxResults(1)   // should only be one match
+                .uniqueResult();
+
+        if (dg != null) {
+            Hibernate.initialize(dg.getDiseaseGenePublications());
+        }
+
+        session.close();
+
+        return dg;
+    }
+
     @Override
     public List<Gene> limitedGeneList(int start, int length) {
         Session session = sessionFactory.openSession();

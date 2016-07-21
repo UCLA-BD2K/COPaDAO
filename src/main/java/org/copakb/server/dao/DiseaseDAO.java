@@ -16,7 +16,7 @@ public interface DiseaseDAO {
      * @param d defined disease  object to be added
      * @return disease OMIM id if successful, -1 otherwise
      */
-    int addDisease(Disease d);
+    String addDisease(Disease d);
 
     /**
      * Search for a disease object from the table
@@ -24,7 +24,7 @@ public interface DiseaseDAO {
      * @param doid OMIM disease id
      * @return completed disease object retrieved from the database
      */
-    Disease searchDisease(int doid);
+    Disease searchDisease(String doid);
 
     /**
      * Gets a fully initialized Disease.
@@ -32,7 +32,7 @@ public interface DiseaseDAO {
      * @param doid Disease OMIM ID to search.
      * @return Fully initialized Disease; null if not found.
      */
-    Disease getInitializedDisease(int doid);
+    Disease getInitializedDisease(String doid);
 
     /**
      * Add disease gene information to the database
@@ -40,7 +40,7 @@ public interface DiseaseDAO {
      * @param d defined diseasegene object to be added
      * @return disease OMIM id if successful, -1 otherwise
      */
-    int addDiseaseGene(DiseaseGene d);
+    String addDiseaseGene(DiseaseGene d);
 
     /**
      * Searches for the DiseaseGene information from the database using the disease and gene symbol as the objects.
@@ -51,6 +51,17 @@ public interface DiseaseDAO {
      * @return defined DiseaseGene object with information from the database
      */
     DiseaseGene searchDiseaseGene(Disease disease, Gene gene);
+
+    /**
+     * Searches for the DiseaseGene information from the database using the disease and gene symbol as the objects.
+     * Mapped using the Disease and Gene objects through hibernate, and with all Lazy
+     * associations initialized.
+     *
+     * @param disease Disease to be matched
+     * @param gene Gene to be matched
+     * @return defined DiseaseGene object with information from the database
+     */
+    DiseaseGene getInitializedDiseaseGene(Disease disease, Gene gene);
 
     /**
      * Searches a limited list of Gene objects from the database

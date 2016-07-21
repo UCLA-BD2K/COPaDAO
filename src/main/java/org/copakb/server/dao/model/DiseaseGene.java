@@ -2,6 +2,8 @@ package org.copakb.server.dao.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 /**
  * DiseaseGene model.
@@ -9,17 +11,20 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "disease_gene")
+@IdClass(DiseaseGenePK.class)
 public class DiseaseGene implements Serializable {
-    private Disease disease;
+    private Disease disease;    /* demo db migration, see getter for disease */
     private Gene gene;
     private String perturbation;
-    private String pubmed_id;
-    private String pubmed_title;
-    private String pubmed_author;
+    private String relationship;
+    private String weblink;
+    private String data_source;
+
+    private Set<DiseaseGenePublication> diseaseGenePublications;
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DOID", nullable = false)
+    @JoinColumn(name = "disease_id", nullable = false)
     public Disease getDisease() {
         return disease;
     }
@@ -28,6 +33,7 @@ public class DiseaseGene implements Serializable {
         this.disease = disease;
     }
 
+    @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ensembl_id")
     public Gene getGene() {
@@ -47,30 +53,33 @@ public class DiseaseGene implements Serializable {
         this.perturbation = perturbation;
     }
 
-    @Column(name = "pubmed_id")
-    public String getPubmed_id() {
-        return pubmed_id;
+    @Column(name = "relationship")
+    public String getRelationship() {
+        return relationship;
     }
 
-    public void setPubmed_id(String pubmed_id) {
-        this.pubmed_id = pubmed_id;
+    public void setRelationship(String relationship) {
+        this.relationship = relationship;
     }
 
-    @Column(name = "pubmed_title")
-    public String getPubmed_title() {
-        return pubmed_title;
+    @Column(name = "weblink")
+    public String getWeblink() {
+        return weblink;
     }
 
-    public void setPubmed_title(String pubmed_title) {
-        this.pubmed_title = pubmed_title;
+    public void setWeblink(String weblink) {
+        this.weblink = weblink;
     }
 
-    @Column(name = "pubmed_author")
-    public String getPubmed_author() {
-        return pubmed_author;
+    @Column(name = "data_source")
+    public String getData_source() { return data_source; }
+
+    public void setData_source(String data_source) {
+        this.data_source = data_source;
     }
 
-    public void setPubmed_author(String pubmed_author) {
-        this.pubmed_author = pubmed_author;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diseaseGene")
+    public Set<DiseaseGenePublication> getDiseaseGenePublications() { return diseaseGenePublications; }
+
+    public void setDiseaseGenePublications(Set<DiseaseGenePublication> dgp) { this.diseaseGenePublications = dgp; }
 }

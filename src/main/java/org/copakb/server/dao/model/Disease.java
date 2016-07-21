@@ -12,32 +12,37 @@ import java.util.Set;
 @Entity
 @Table(name = "disease")
 public class Disease extends Model {
-    private int DOID;
+    private String disease_id;
     private String name;
     private String description;
     private boolean heart_disease;
     private Set<Gene> genes;
+    private String notes;
+    private String disease_url;
 
     public Disease() {
 
     }
 
-    public Disease(int DOID, String name, String description, boolean heart_disease, Set<Gene> genes) {
-        this.DOID = DOID;
+    public Disease(String DOID, String name, String description, boolean heart_disease, Set<Gene> genes,
+                   String notes, String disease_url) {
+        this.disease_id = DOID;
         this.name = name;
         this.description = description;
         this.heart_disease = heart_disease;
         this.genes = genes;
+        this.notes = notes;
+        this.disease_url = disease_url;
     }
 
     @Id
-    @Column(name = "DOID")
-    public int getDOID() {
-        return DOID;
+    @Column(name = "disease_id")
+    public String getDOID() {
+        return disease_id;
     }
 
-    public void setDOID(int DOID) {
-        this.DOID = DOID;
+    public void setDOID(String DOID) {
+        this.disease_id = DOID;
     }
 
     @Column(name = "name")
@@ -69,7 +74,7 @@ public class Disease extends Model {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "disease_gene", joinColumns = {
-            @JoinColumn(name = "DOID", nullable = false, updatable = false)},
+            @JoinColumn(name = "disease_id", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "ensembl_id",
                     nullable = false, updatable = false)})
     public Set<Gene> getGenes() {
@@ -80,12 +85,30 @@ public class Disease extends Model {
         this.genes = genes;
     }
 
+    @Column(name = "notes")
+    public String getNotes() {
+        return this.notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    @Column(name = "disease_url")
+    public String getDiseaseUrl() {
+        return this.disease_url;
+    }
+
+    public void setDiseaseUrl(String diseaseUrl) {
+        this.disease_url = diseaseUrl;
+    }
+
     /**
      * Initializes the model's lazy loaded objects.
      */
     @Override
     public Disease initialize() {
-        Disease initialized = DAOObject.getInstance().getDiseaseDAO().getInitializedDisease(DOID);
+        Disease initialized = DAOObject.getInstance().getDiseaseDAO().getInitializedDisease(disease_id);
         if (initialized != null) {
             setGenes(initialized.getGenes());
         }
@@ -96,7 +119,7 @@ public class Disease extends Model {
     @Override
     public String toString() {
         return "Disease{" +
-                "DOID=" + DOID +
+                "disease_id=" + disease_id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", heart_disease='" + heart_disease + '\'' +

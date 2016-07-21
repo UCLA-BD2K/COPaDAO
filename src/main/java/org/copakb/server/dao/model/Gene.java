@@ -71,8 +71,8 @@ public class Gene {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "disease_gene", joinColumns = {
-            @JoinColumn(name = "gene_symbol", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "DOID",
+            @JoinColumn(name = "ensembl_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "disease_id",
                     nullable = false, updatable = false)})
     public Set<Disease> getDiseases() {
         return diseases;
@@ -80,5 +80,16 @@ public class Gene {
 
     public void setDiseases(Set<Disease> diseases) {
         this.diseases = diseases;
+    }
+
+    @Override
+    public String toString() {
+        return "Gene{" +
+                "ensembl_id='" + ensembl_id + '\'' +
+                ", gene_symbol='" + gene_symbol + '\'' +
+                ", chromosome='" + chromosome + '\'' +
+                ", species=" + species +
+                ", diseases=" + diseases +
+                '}';
     }
 }
