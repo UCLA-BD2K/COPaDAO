@@ -17,7 +17,6 @@ public class Disease extends Model {
     private String description;
     private boolean heart_disease;
     private Set<Gene> genes;
-    private String notes;
     private String disease_url;
 
     public Disease() {
@@ -25,13 +24,12 @@ public class Disease extends Model {
     }
 
     public Disease(String DOID, String name, String description, boolean heart_disease, Set<Gene> genes,
-                   String notes, String disease_url) {
+                    String disease_url) {
         this.disease_id = DOID;
         this.name = name;
         this.description = description;
         this.heart_disease = heart_disease;
         this.genes = genes;
-        this.notes = notes;
         this.disease_url = disease_url;
     }
 
@@ -83,15 +81,6 @@ public class Disease extends Model {
 
     public void setGenes(Set<Gene> genes) {
         this.genes = genes;
-    }
-
-    @Column(name = "notes")
-    public String getNotes() {
-        return this.notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 
     @Column(name = "disease_url")

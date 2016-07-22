@@ -21,6 +21,7 @@ public class DiseaseGene implements Serializable {
     private String relationship;
     private String weblink;
     private String data_source;
+    private String notes;
 
     private Set<DiseaseGenePublication> diseaseGenePublications;
 
@@ -79,6 +80,11 @@ public class DiseaseGene implements Serializable {
     public void setData_source(String data_source) {
         this.data_source = data_source;
     }
+
+    @Column(name = "notes")
+    public String getNotes() { return notes; }
+
+    public void setNotes(String notes) { this.notes = notes; }
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "diseaseGene")
     public Set<DiseaseGenePublication> getDiseaseGenePublications() { return diseaseGenePublications; }
