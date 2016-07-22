@@ -1,5 +1,7 @@
 package org.copakb.server.dao.model;
 
+import org.copakb.server.dao.DAOObject;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -78,7 +80,7 @@ public class DiseaseGene implements Serializable {
         this.data_source = data_source;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "diseaseGene")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "diseaseGene")
     public Set<DiseaseGenePublication> getDiseaseGenePublications() { return diseaseGenePublications; }
 
     public void setDiseaseGenePublications(Set<DiseaseGenePublication> dgp) { this.diseaseGenePublications = dgp; }

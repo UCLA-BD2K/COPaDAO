@@ -1,6 +1,9 @@
 package org.copakb.server.dao.model;
 
+import org.copakb.server.dao.DAOObject;
+
 import javax.persistence.*;
+import javax.persistence.criteria.Fetch;
 import java.util.Set;
 
 /**
@@ -16,6 +19,7 @@ public class Gene {
     private Species species;
     private Set<ProteinCurrent> proteins;
     private Set<Disease> diseases;
+    private Set<DiseaseGene> diseaseGenes;
     private Set<HPAProtein> hpaProteins;
 
     @Id
@@ -80,6 +84,18 @@ public class Gene {
 
     public void setDiseases(Set<Disease> diseases) {
         this.diseases = diseases;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "gene")
+    public Set<DiseaseGene> getDiseaseGenes() { return this.diseaseGenes; }
+
+    public void setDiseaseGenes(Set<DiseaseGene> diseaseGenes) {
+        this.diseaseGenes = diseaseGenes;
+    }
+
+    public void initializeDiseaseGenes() {
+        Gene g = DAOObject.getInstance().getProteinDAO().searchGeneInitialized(ensembl_id);
+        setDiseaseGenes(g.getDiseaseGenes());
     }
 
     @Override

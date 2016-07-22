@@ -478,6 +478,19 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO {
         return result;
     }
 
+    public Gene searchGeneInitialized(String ensemblId) {
+        Session session = sessionFactory.openSession();
+
+        Gene result = (Gene) session.get(Gene.class, ensemblId);
+        if (result != null) {
+            Hibernate.initialize(result.getDiseaseGenes());
+            //Hibernate.initialize(result.getDiseases()); // unneeded now, but should include
+        }
+
+        session.close();
+        return result;
+    }
+
     @Override
     public List<ProteinCurrent> searchByGeneSymbol(String geneSymbol) {
         Session session = sessionFactory.openSession();

@@ -165,6 +165,15 @@ public interface ProteinDAO {
     Gene searchGene(String ensemblID);
 
     /**
+     * Searches for a gene with the given Ensembl ID, and initializes
+     * lazy loaded fields.
+     *
+     * @param ensemblId
+     * @return
+     */
+    Gene searchGeneInitialized(String ensemblId);
+
+    /**
      * Searches for proteins with genes having the given gene symbol.
      *
      * @param geneSymbol Gene symbol to search.
