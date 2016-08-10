@@ -93,9 +93,20 @@ public class Gene {
         this.diseaseGenes = diseaseGenes;
     }
 
+    /** To initialize LAZY loaded members **/
     public void initializeDiseaseGenes() {
         Gene g = DAOObject.getInstance().getProteinDAO().searchGeneInitialized(ensembl_id);
         setDiseaseGenes(g.getDiseaseGenes());
+    }
+
+    public void initializeProteinCurrents() {
+        Gene g = DAOObject.getInstance().getProteinDAO().searchGeneInitializedWithProteins(ensembl_id);
+        setProteins(g.getProteins());
+    }
+
+    public void initializeDiseases() {
+        Gene g = DAOObject.getInstance().getProteinDAO().searchGeneInitializedWithDiseases(ensembl_id);
+        setDiseases(g.getDiseases());
     }
 
     @Override

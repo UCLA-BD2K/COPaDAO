@@ -3,6 +3,7 @@ package org.copakb.server.dao;
 import org.copakb.server.dao.model.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * ProteinDAO interface.
@@ -174,6 +175,22 @@ public interface ProteinDAO {
     Gene searchGeneInitialized(String ensemblId);
 
     /**
+     * Searches for a gene with the given Ensembl ID, and initializes
+     * the set of associated proteins.
+     * @param ensemblId
+     * @return
+     */
+    Gene searchGeneInitializedWithProteins(String ensemblId);
+
+    /**
+     * Searches for a gene with the given Ensembl ID, and initializes
+     * the set of associated diseases.
+     * @param ensemblId
+     * @return
+     */
+    Gene searchGeneInitializedWithDiseases(String ensemblId);
+
+    /**
      * Searches for proteins with genes having the given gene symbol.
      *
      * @param geneSymbol Gene symbol to search.
@@ -312,4 +329,27 @@ public interface ProteinDAO {
      * @return List of proteins satisfying the search term.
      */
     List<ProteinCurrent> smartSearch(String searchTerm);
+
+    /**
+     * Returns the number of unique genes for a given species
+     * @param species_id the species to
+     * @return count of unique genes
+     */
+    int getNumUniqueGenesForSpecies(int species_id);
+
+    /**
+     * Retrieves a set of minimal (incomplete) ProteinCurrents for a specified disease_id, optionally
+     * filtered by species id. "Minimal" in the sense that not all fields may be initialized. As of now,
+     * this returns ProteinCurrent instances with at least the protein_acc member set.
+     * @param disease_id the disease id
+     * @param species_id optional species id, -1 if no filtering desired.
+     * @return
+     */
+    Set<ProteinCurrent> getProteinsForDisease(String disease_id, int species_id);
+
+    /**
+     * Returns a list of all species currently recorded in the database.
+     * @return list of Species objects
+     */
+    List<Species> getAllSpecies();
 }

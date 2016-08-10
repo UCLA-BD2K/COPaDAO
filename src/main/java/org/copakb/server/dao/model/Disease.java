@@ -115,4 +115,24 @@ public class Disease extends Model {
                 //", genes=" + getGenes() +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        // two diseases are equal if they have the same disease_id
+        if (o instanceof Disease) {
+            if (((Disease) o).getDOID().equals(this.getDOID())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+
+        // cheating, but for our purposes collisions should be rare
+        return disease_id.hashCode();
+    }
 }

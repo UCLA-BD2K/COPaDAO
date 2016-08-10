@@ -89,7 +89,7 @@ public class ServiceDAOImpl extends DAOImpl implements ServiceDAO {
         // Get genes for proteins
         for (SpectrumProtein sp : spectrumProteins) {
             ProteinCurrent p = sp.getProtein();
-            p.setGenes(new HashSet<>(session.createCriteria(Gene.class, "gene")
+            p.setGenes(new HashSet<Gene>(session.createCriteria(Gene.class, "gene")
                     .createAlias("gene.proteins", "proteins")
                     .add(Restrictions.eq("proteins.protein_acc", p.getProtein_acc()))
                     .list()));

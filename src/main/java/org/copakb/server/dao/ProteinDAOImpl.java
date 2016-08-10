@@ -7,9 +7,12 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.StandardBasicTypes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * ProteinDAO implementation.
@@ -478,6 +481,7 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO {
         return result;
     }
 
+    @Override
     public Gene searchGeneInitialized(String ensemblId) {
         Session session = sessionFactory.openSession();
 
@@ -485,9 +489,37 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO {
         if (result != null) {
             Hibernate.initialize(result.getDiseaseGenes());
             //Hibernate.initialize(result.getDiseases()); // unneeded now, but should include
+            //Hibernate.initialize(result.getProteins();
         }
 
         session.close();
+        return result;
+    }
+
+    @Override
+    public Gene searchGeneInitializedWithProteins(String ensemblId) {
+        Session session = sessionFactory.openSession();
+
+        Gene result = (Gene) session.get(Gene.class, ensemblId);
+        if (result != null) {
+            Hibernate.initialize(result.getProteins());
+        }
+
+        session.close();
+        return result;
+    }
+
+    @Override
+    public Gene searchGeneInitializedWithDiseases(String ensemblId) {
+        Session session = sessionFactory.openSession();
+
+        Gene result = (Gene) session.get(Gene.class, ensemblId);
+        if (result != null) {
+           Hibernate.initialize(result.getDiseases());
+        }
+
+        session.close();
+
         return result;
     }
 
@@ -852,5 +884,76 @@ public class ProteinDAOImpl extends DAOImpl implements ProteinDAO {
         session.close();
 
         return proteins;
+    }
+
+    /** stat computation related - here for now, but perhaps we should make a new DAO class **/
+
+    @Override
+    public int getNumUniqueGenesForSpecies(int species_id) {
+        Session session = sessionFactory.openSession();
+
+        // http://docs.jboss.org/hibernate/core/3.5/reference/en/html/queryhql.html#queryhql-tipstricks
+        // query without returning any results
+        Number num = (Number) session
+                .createQuery("select count(*) from Gene where species_id=" + species_id)
+                .iterate().next();
+
+        session.close();
+
+        return num.intValue();
+    }
+
+    @Override
+    public Set<ProteinCurrent> getProteinsForDisease(String disease_id, int species_id) {
+        Set<ProteinCurrent> proteins = new HashSet<>();
+
+        // difficult relationship to model efficiently using hibernate entities, use programmatic SQL
+        Session session = sessionFactory.openSession();
+        String query = "select pc.protein_acc, pc.protein_name " +
+                "from disease d inner join disease_gene dg on d.disease_id=dg.disease_id " +
+                "inner join gene g on g.ensembl_id=dg.ensembl_id " +
+                "inner join protein_gene pg on pg.ensembl_id=g.ensembl_id " +
+                "inner join protein_current pc on pc.protein_acc=pg.protein_acc " +
+                "where d.disease_id='%s'";
+
+        if (species_id != -1) {
+            query += (" and pc.species_id=" + species_id);
+        }
+
+        query += ";";   // end the query string
+
+        List<Object[]> result = session
+                .createSQLQuery(String.format(query, disease_id))
+                .addScalar("protein_acc", StandardBasicTypes.STRING)
+                .addScalar("protein_name", StandardBasicTypes.STRING)
+                //.addEntity(ProteinCurrent.class)
+                .list();
+
+        // set desired fields for the minimal ProteinCurrent
+        for (Object[] row : result) {
+            ProteinCurrent pc = new ProteinCurrent();
+            pc.setProtein_acc( row[0].toString());
+            pc.setProtein_name(row[1].toString());
+            proteins.add(pc);
+            //proteins.add((ProteinCurrent) row);
+        }
+
+        session.close();
+
+        return proteins;
+    }
+
+    @Override
+    public List<Species> getAllSpecies() {
+        Session session = sessionFactory.openSession();
+
+        List<Species> species = session
+                .createCriteria(Species.class)
+                .addOrder(Order.asc("species_id"))
+                .list();
+
+        session.close();
+
+        return species;
     }
 }
